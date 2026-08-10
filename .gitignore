@@ -1,0 +1,18 @@
+# Ignore frontend node_modules and builds
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+frontend/build/
+
+# Ignore backend vendor and env
+backend/vendor/
+backend/.env
+backend/storage/*.key
+backend/storage/logs/*.log
+backend/storage/framework/views/*
+backend/storage/framework/sessions/*
+backend/storage/framework/cache/*
+backend/bootstrap/cache/*
+
+# Ignore macOS files
+.DS_Store
