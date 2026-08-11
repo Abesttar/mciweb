@@ -315,8 +315,8 @@ function SlideInvoice({ invoices, studentName }: { invoices: Invoice[]; studentN
             {invoices.map((inv) => {
                 const status = getDueStatus(inv.due_date);
                 return (
-                    <div key={inv.id} className="p-4 rounded-xl border border-gray-100 dark:border-gray-700/50 bg-gray-50 dark:bg-gray-800/50">
-                        <div className="flex items-start justify-between gap-3">
+                    <div key={inv.id} className="p-3 sm:p-4 rounded-xl border border-gray-100 dark:border-gray-700/50 bg-gray-50 dark:bg-gray-800/50">
+                        <div className="flex items-start justify-between gap-2 sm:gap-3">
                             <div className="min-w-0 flex-1">
                                 <div className="flex items-center gap-2 mb-1">
                                     <span className="text-xs font-mono text-gray-400">{inv.invoice_number}</span>
@@ -324,9 +324,9 @@ function SlideInvoice({ invoices, studentName }: { invoices: Invoice[]; studentN
                                         {status.label}
                                     </span>
                                 </div>
-                                <p className="text-sm font-semibold text-gray-800 dark:text-white leading-snug line-clamp-1">{inv.payment_type}</p>
-                                <p className="text-xs text-gray-400 mt-0.5">Jatuh tempo: {formatDate(inv.due_date)}</p>
-                                <p className="text-sm font-bold text-gray-900 dark:text-white mt-1">{formatRp(inv.total_amount)}</p>
+                                <p className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-white leading-snug line-clamp-1">{inv.payment_type}</p>
+                                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Jatuh tempo: {formatDate(inv.due_date)}</p>
+                                <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-white mt-1">{formatRp(inv.total_amount)}</p>
                             </div>
                             <button
                                 onClick={() => handleDownload(inv)}
@@ -467,24 +467,24 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
     return (
         <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-700/50 rounded-2xl shadow-sm overflow-hidden">
             {/* Header */}
-            <div className="flex items-center justify-between px-6 pt-5 pb-0">
-                <div className="flex items-center gap-2">
-                    <GraduationCap className="w-5 h-5 text-red-700 dark:text-red-400" />
-                    <h2 className="font-bold text-gray-900 dark:text-white text-base">Akademik Saya</h2>
+            <div className="flex items-center justify-between px-4 sm:px-6 pt-4 sm:pt-5 pb-0">
+                <div className="flex items-center gap-1.5 sm:gap-2">
+                    <GraduationCap className="w-4 h-4 sm:w-5 sm:h-5 text-red-700 dark:text-red-400" />
+                    <h2 className="font-bold text-gray-900 dark:text-white text-sm sm:text-base">Akademik Saya</h2>
                 </div>
                 {/* Navigation arrows */}
                 <div className="flex items-center gap-1">
                     <button
                         onClick={() => setActiveSlide(s => Math.max(0, s - 1))}
                         disabled={activeSlide === 0}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
+                        className="p-1 sm:p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                         onClick={() => setActiveSlide(s => Math.min(SLIDES.length - 1, s + 1))}
                         disabled={activeSlide === SLIDES.length - 1}
-                        className="p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
+                        className="p-1 sm:p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>
@@ -492,20 +492,20 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
             </div>
 
             {/* Tab Pills */}
-            <div className="flex gap-1.5 px-6 pt-4 pb-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
+            <div className="flex gap-1.5 px-4 sm:px-6 pt-3 pb-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {SLIDES.map((s, i) => {
                     const Icon = s.icon;
                     return (
                         <button
                             key={s.id}
                             onClick={() => setActiveSlide(i)}
-                            className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-semibold whitespace-nowrap transition-all shrink-0 border ${
+                            className={`flex items-center gap-1.5 px-2.5 py-1.5 sm:px-3 sm:py-1.5 rounded-full text-[11px] sm:text-xs font-semibold whitespace-nowrap transition-all shrink-0 border ${
                                 activeSlide === i
                                     ? 'bg-red-700 text-white border-red-700 shadow-sm'
                                     : 'bg-white dark:bg-transparent text-gray-500 dark:text-gray-400 border-gray-200 dark:border-gray-700 hover:border-red-300 hover:text-red-700 dark:hover:text-red-400'
                             }`}
                         >
-                            <Icon className="w-3.5 h-3.5" />
+                            <Icon className="w-3 h-3 sm:w-3.5 sm:h-3.5" />
                             {s.label}
                         </button>
                     );
@@ -515,15 +515,15 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
             {/* Slide Content */}
             <div
                 ref={trackRef}
-                className="px-6 py-5"
+                className="px-4 sm:px-6 py-4 sm:py-5"
                 onTouchStart={handleTouchStart}
                 onTouchEnd={handleTouchEnd}
             >
-                <div className="min-h-[300px]">
+                <div className="min-h-[250px] sm:min-h-[300px]">
                     {slideContent[activeSlide]}
                 </div>
                 {SLIDES[activeSlide].href && (
-                    <div className="mt-6 flex justify-end">
+                    <div className="mt-4 sm:mt-6 flex justify-end">
                         <Link 
                             href={SLIDES[activeSlide].href!} 
                             className="flex items-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
@@ -540,7 +540,7 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
                     <button
                         key={i}
                         onClick={() => setActiveSlide(i)}
-                        className={`rounded-full transition-all ${activeSlide === i ? 'w-4 h-1.5 bg-red-600' : 'w-1.5 h-1.5 bg-gray-300 dark:bg-gray-600 hover:bg-red-400'}`}
+                        className={`rounded-full transition-all ${activeSlide === i ? 'w-3 h-1 sm:w-4 sm:h-1.5 bg-red-600' : 'w-1 h-1 sm:w-1.5 sm:h-1.5 bg-gray-300 dark:bg-gray-600 hover:bg-red-400'}`}
                     />
                 ))}
             </div>

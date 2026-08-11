@@ -262,16 +262,16 @@ export default function DashboardPage() {
             )}
 
             {!isAdmin && hasRole('Siswa') && (
-                <div className="space-y-6">
-                    <div className="bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900/50 rounded-2xl p-5 sm:p-8">
-                        <h2 className="text-xl sm:text-2xl font-bold text-red-900 dark:text-red-100 mb-2">{t.welcome}, {user?.name}!</h2>
-                        <p className="text-sm sm:text-base text-red-800 dark:text-red-200 max-w-lg mb-4 sm:mb-6">{t.studentWelcome}</p>
+                <div className="space-y-5 sm:space-y-6">
+                    <div className="bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900/50 rounded-2xl p-4 sm:p-8">
+                        <h2 className="text-lg sm:text-2xl font-bold text-red-900 dark:text-red-100 mb-1 sm:mb-2">{t.welcome}, {user?.name}!</h2>
+                        <p className="text-xs sm:text-base text-red-800 dark:text-red-200 max-w-lg mb-3 sm:mb-6">{t.studentWelcome}</p>
                         
-                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
-                            <Link href="/dashboard/students/profile" className="px-4 py-2 sm:px-5 sm:py-2.5 bg-red-700 text-white rounded-lg font-medium hover:bg-red-800 shadow-sm transition-colors text-center text-sm sm:text-base">
+                        <div className="flex flex-col sm:flex-row gap-2.5 sm:gap-4">
+                            <Link href="/dashboard/students/profile" className="px-4 py-1.5 sm:px-5 sm:py-2.5 bg-red-700 text-white rounded-lg font-medium hover:bg-red-800 shadow-sm transition-colors text-center text-[13px] sm:text-base">
                                 {t.editProfile}
                             </Link>
-                            <Link href="/dashboard/messages" className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800/50 rounded-lg font-medium hover:bg-red-50 dark:bg-red-950/40 shadow-sm transition-colors text-center text-sm sm:text-base">
+                            <Link href="/dashboard/messages" className="px-4 py-1.5 sm:px-5 sm:py-2.5 bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800/50 rounded-lg font-medium hover:bg-red-50 dark:bg-red-950/40 shadow-sm transition-colors text-center text-[13px] sm:text-base">
                                 {t.contactSensei}
                             </Link>
                         </div>
@@ -282,14 +282,14 @@ export default function DashboardPage() {
 
                     {/* Student Learning Roadmap */}
                     {stats?.student?.roadmaps && stats.student.roadmaps.length > 0 && (
-                        <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-700/50 rounded-2xl p-6 shadow-sm mt-8">
-                            <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center">
-                                <Activity className="w-5 h-5 mr-2 text-indigo-600" />
+                        <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-700/50 rounded-2xl p-4 sm:p-6 shadow-sm mt-6 sm:mt-8">
+                            <h3 className="text-base sm:text-lg font-bold text-gray-900 dark:text-white mb-4 sm:mb-6 flex items-center">
+                                <Activity className="w-4 h-4 sm:w-5 sm:h-5 mr-2 text-indigo-600" />
                                 Progress Pembelajaran Roadmap
                             </h3>
-                            <div className="flex overflow-x-auto custom-scrollbar gap-4 pb-4">
+                            <div className="flex overflow-x-auto gap-3 sm:gap-4 pb-4 [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                                 {stats.student.roadmaps.map((r: any) => (
-                                    <div key={r.id} className={`border rounded-xl p-4 min-w-[280px] flex-shrink-0 ${r.status === 'completed' ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/50' : r.status === 'in_progress' ? 'border-blue-200 bg-blue-50/50 dark:border-blue-900/50' : 'border-gray-100 dark:border-gray-700/50'}`}>
+                                    <div key={r.id} className={`border rounded-xl p-3 sm:p-4 min-w-[220px] sm:min-w-[280px] flex-shrink-0 ${r.status === 'completed' ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/50' : r.status === 'in_progress' ? 'border-blue-200 bg-blue-50/50 dark:border-blue-900/50' : 'border-gray-100 dark:border-gray-700/50'}`}>
                                         <h4 className="font-bold text-gray-900 dark:text-white mb-2 truncate" title={r.roadmap_stage?.name}>{r.roadmap_stage?.name}</h4>
                                         <div className="flex justify-between items-center text-sm">
                                             <span className="text-gray-500">{t.status || 'Status'}</span>
