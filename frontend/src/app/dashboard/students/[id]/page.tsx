@@ -261,11 +261,11 @@ export default function StudentDetail() {
             </div>
 
             {/* Profile Header Card */}
-            <div className="bg-white/80 dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-800 rounded-2xl p-6 md:p-8 flex flex-col md:flex-row items-start md:items-center gap-6 relative overflow-hidden">
+            <div className="bg-white/80 dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-800 rounded-2xl p-5 md:p-8 flex flex-col md:flex-row items-center text-center md:text-left gap-5 md:gap-6 relative overflow-hidden">
                 <button 
                     onClick={() => { if (student.user.profile_photo_url) setShowLightbox(true); }}
                     title={student.user.profile_photo_url ? 'Perbesar foto profil' : ''}
-                    className={`w-24 h-24 rounded-full overflow-hidden bg-gradient-to-br from-red-100 to-indigo-100 flex items-center justify-center text-3xl font-bold text-red-800 shadow-inner z-10 ${student.user.profile_photo_url ? 'cursor-pointer hover:ring-4 hover:ring-red-200 transition-all' : ''}`}
+                    className={`w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-gradient-to-br from-red-100 to-indigo-100 flex items-center justify-center text-2xl md:text-3xl font-bold text-red-800 shadow-inner z-10 ${student.user.profile_photo_url ? 'cursor-pointer hover:ring-4 hover:ring-red-200 transition-all' : ''}`}
                 >
                     {student.user.profile_photo_url ? (
                         <img src={student.user.profile_photo_url} alt={student.user.name} className="w-full h-full object-cover" />
@@ -273,24 +273,24 @@ export default function StudentDetail() {
                         getInitials(student.user.name)
                     )}
                 </button>
-                <div className="flex-1 z-10">
-                    <div className="flex items-center gap-3 mb-1">
-                        <h2 className="text-2xl font-bold text-gray-900 dark:text-white">{student.user.name}</h2>
+                <div className="flex-1 z-10 flex flex-col items-center md:items-start">
+                    <div className="flex flex-col md:flex-row items-center md:items-start gap-2 md:gap-3 mb-2">
+                        <h2 className="text-xl md:text-2xl font-bold text-gray-900 dark:text-white">{student.user.name}</h2>
                         <Badge variant={student.status === 'active' ? 'default' : 'secondary'} className="bg-red-50 dark:bg-red-950/40 text-red-800 dark:text-red-200 hover:bg-red-100 dark:bg-red-900/40 border-none px-3 py-1">
                             {student.status.toUpperCase()}
                         </Badge>
                     </div>
-                    <p className="text-gray-500 dark:text-gray-400 mb-4">{student.user.email} &bull; NIS: {student.nis || 'Belum diatur'}</p>
+                    <p className="text-gray-500 dark:text-gray-400 mb-4 text-sm md:text-base">{student.user.email} &bull; NIS: {student.nis || 'Belum diatur'}</p>
                     
-                    <div className="flex flex-wrap gap-4 text-sm font-medium text-gray-600 dark:text-gray-400">
+                    <div className="flex flex-wrap justify-center md:justify-start gap-3 md:gap-4 text-sm font-medium text-gray-600 dark:text-gray-400">
                         {student.enrollments?.length > 0 && (
                             <div className="flex items-center bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-700/50">
-                                <GraduationCap className="w-4 h-4 mr-2 text-gray-400" />
+                                <GraduationCap className="w-4 h-4 mr-1.5 md:mr-2 text-gray-400" />
                                 {student.enrollments[0]?.batch?.name}
                             </div>
                         )}
                         <div className="flex items-center bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl px-3 py-1.5 rounded-lg border border-gray-100 dark:border-gray-700/50">
-                            <Phone className="w-4 h-4 mr-2 text-gray-400" />
+                            <Phone className="w-4 h-4 mr-1.5 md:mr-2 text-gray-400" />
                             {student.phone || 'Belum ada nomor'}
                         </div>
                     </div>
@@ -330,8 +330,8 @@ export default function StudentDetail() {
             )}
 
             {/* Tabs Content */}
-            <div className="mt-8">
-                <div className="relative bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-sm border border-gray-200 dark:border-gray-600/50 rounded-full w-full sm:w-fit p-1.5 flex shadow-sm mb-6 overflow-x-auto overflow-y-hidden custom-scrollbar">
+            <div className="mt-6 md:mt-8">
+                <div className="relative bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-sm border border-gray-200 dark:border-gray-600/50 rounded-2xl sm:rounded-full w-full sm:w-fit p-1.5 flex shadow-sm mb-6 overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                     {['biodata', 'roadmap', 'akademik', 'raport', 'pembayaran', 'dokumen'].map((tab) => (
                         <button
                             key={tab}

@@ -492,7 +492,7 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
             </div>
 
             {/* Tab Pills */}
-            <div className="flex gap-1.5 px-6 pt-4 pb-0 overflow-x-auto custom-scrollbar">
+            <div className="flex gap-1.5 px-6 pt-4 pb-0 overflow-x-auto [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
                 {SLIDES.map((s, i) => {
                     const Icon = s.icon;
                     return (
