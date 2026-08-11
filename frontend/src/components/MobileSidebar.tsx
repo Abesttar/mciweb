@@ -5,7 +5,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import JapaneseOrnament from '@/components/JapaneseOrnament';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import {
     LayoutDashboard, Database, GraduationCap,
     Settings, ChevronDown, ChevronRight, X,
@@ -35,10 +35,14 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
     const { t } = useLanguage();
     const pathname = usePathname();
     const [openGroups, setOpenGroups] = useState<string[]>(['dashboard']);
+    const prevPathname = useRef(pathname);
 
-    // Close sidebar when route changes
+    // Close sidebar when route changes, but not on initial mount
     useEffect(() => {
-        onClose();
+        if (prevPathname.current !== pathname) {
+            onClose();
+            prevPathname.current = pathname;
+        }
     }, [pathname, onClose]);
 
     const toggleGroup = (nameKey: string) => {
