@@ -31,7 +31,7 @@ interface MobileSidebarProps {
 }
 
 export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
-    const { hasPermission, hasRole } = useAuth();
+    const { hasPermission, hasRole, logout } = useAuth();
     const { t } = useLanguage();
     const pathname = usePathname();
     const [openGroups, setOpenGroups] = useState<string[]>(['dashboard']);
