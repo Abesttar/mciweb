@@ -6,11 +6,15 @@ use App\Models\Student;
 use App\Models\User;
 use App\Models\Batch;
 use App\Models\Enrollment;
+use App\Models\Notification;
+use App\Mail\UserInvitationMail;
 use App\Services\NotificationService;
 use App\Traits\EnsuresBatchCapacity;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
+use Illuminate\Validation\Rule;
+use Illuminate\Support\Facades\DB;
 
 class StudentController extends Controller
 {
@@ -56,9 +60,9 @@ class StudentController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
-            'nis' => 'nullable|string|unique:students,nis',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users',
+            'password' => 'required|string|min:8',
+            'nis' => 'nullable|string|max:50|unique:students',
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|string',
             'address' => 'nullable|string',

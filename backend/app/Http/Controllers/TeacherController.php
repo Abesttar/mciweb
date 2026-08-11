@@ -4,9 +4,11 @@ namespace App\Http\Controllers;
 
 use App\Models\Teacher;
 use App\Models\User;
+use App\Mail\UserInvitationMail;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 
 class TeacherController extends Controller
 {
@@ -34,8 +36,8 @@ class TeacherController extends Controller
     {
         $validated = $request->validate([
             'name' => 'required|string|max:255',
-            'email' => 'required|email|unique:users,email',
-            'password' => 'required|string|min:6',
+            'email' => 'required|string|email:rfc,dns|max:255|unique:users',
+            'password' => 'required|string|min:8',
             'nip' => 'nullable|string|unique:teachers,nip',
             'specialization' => 'nullable|string|max:255',
         ]);
@@ -55,6 +57,15 @@ class TeacherController extends Controller
             ]);
 
             $teacher->load('user');
+
+            // Send invitation email (Fail gracefully if SMTP is not configured properly)
+            try {
+                Mail::to($user->email)->send(new UserInvitationMail($user->name, $user->email, $validated['password'], 'Sensei (Guru)'));
+            } catch (\Exception $e) {
+                // Log the error but don't stop the creation process
+                \Log::error('Failed to send teacher invitation email: ' . $e->getMessage());
+            }
+
             return response()->json($teacher, 201);
         });
     }
