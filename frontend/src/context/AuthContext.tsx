@@ -68,7 +68,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         localStorage.setItem('token', token);
         axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
         setUser(userData);
-        router.push('/dashboard');
+        // Use hard redirect to bypass stale browser cache / service worker issues
+        window.location.href = '/dashboard';
     };
 
     const updateUser = (userData: User) => {
