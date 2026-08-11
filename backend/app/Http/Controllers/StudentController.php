@@ -141,6 +141,14 @@ class StudentController extends Controller
             );
 
             $student->load(['user', 'enrollments.batch.teacher.user']);
+
+            // Send invitation email to the new student
+            try {
+                Mail::to($user->email)->send(new UserInvitationMail($user->name, $user->email, $validated['password'], 'Siswa (Kenshusei)'));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send student invitation email: ' . $e->getMessage());
+            }
+
             return response()->json($student, 201);
         });
     }
