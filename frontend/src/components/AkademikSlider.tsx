@@ -89,32 +89,7 @@ const STAGE_NAMES: Record<number, string> = {
     3: 'Biaya pendidikan tahap 2',
 };
 
-// ─── Slide Wrappers ───────────────────────────────────────────────────────────
-function SlideCard({ title, icon: Icon, accent, children, href, hrefLabel }: {
-    title: string; icon: any; accent: string; children: React.ReactNode; href?: string; hrefLabel?: string;
-}) {
-    return (
-        <div className="flex flex-col h-full min-h-[360px]">
-            <div className={`flex items-center justify-between mb-5`}>
-                <div className="flex items-center gap-2">
-                    <div className={`p-2 rounded-xl ${accent}`}>
-                        <Icon className="w-5 h-5" />
-                    </div>
-                    <h3 className="font-bold text-gray-900 dark:text-white text-base">{title}</h3>
-                </div>
-                {href && (
-                    <Link href={href} className="flex items-center gap-1 text-xs font-semibold text-gray-400 hover:text-red-600 dark:hover:text-red-400 transition-colors">
-                        {hrefLabel || 'Lihat Semua'} <ArrowRight className="w-3 h-3" />
-                    </Link>
-                )}
-            </div>
-            <div className="flex-1 overflow-y-auto custom-scrollbar pr-1">
-                {children}
-            </div>
-        </div>
-    );
-}
-
+// ─── Slide Wrappers (Removed) ────────────────────────────────────────────────
 // ─── Slide Jadwal ─────────────────────────────────────────────────────────────
 function groupSchedules(schedules: any[]) {
     const grouped = new Map<string, any>();
