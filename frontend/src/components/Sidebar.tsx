@@ -57,7 +57,7 @@ export default function Sidebar() {
         {
             nameKey: 'academic',
             icon: GraduationCap,
-            show: hasPermission('manage classes') || hasPermission('view own schedules') || hasPermission('input attendance') || hasRole('Sensei'),
+            show: hasPermission('manage classes') || hasPermission('input attendance') || hasRole('Sensei'),
             items: [
                 { nameKey: 'classes', href: '/dashboard/classes', show: hasPermission('manage classes') || hasRole('Sensei') },
 

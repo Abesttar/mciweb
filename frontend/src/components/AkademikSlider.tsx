@@ -115,6 +115,75 @@ function SlideCard({ title, icon: Icon, accent, children, href, hrefLabel }: {
     );
 }
 
+// ─── Slide Jadwal ─────────────────────────────────────────────────────────────
+function groupSchedules(schedules: any[]) {
+    const grouped = new Map<string, any>();
+    
+    schedules.forEach(schedule => {
+        const batchName = schedule.batch?.name || '-';
+        const className = schedule.study_class?.name || '-';
+        const level = schedule.class_level || schedule.batch?.class_level || '-';
+        const teacher = schedule.batch?.teacher?.user?.name || schedule.study_class?.teacher?.user?.name || schedule.study_class?.teacher?.name || '-';
+        const room = schedule.room || '-';
+        const startTime = schedule.start_time?.substring(0, 5) || '';
+        const endTime = schedule.end_time?.substring(0, 5) || '';
+        const month = schedule.schedule_month || '-';
+        
+        const key = `${month}-${batchName}-${className}-${level}-${teacher}-${room}-${startTime}-${endTime}`;
+        
+        if (!grouped.has(key)) {
+            grouped.set(key, { ...schedule, days: [schedule.day_of_week] });
+        } else {
+            grouped.get(key).days.push(schedule.day_of_week);
+        }
+    });
+    
+    return Array.from(grouped.values()).map(g => {
+        const dayOrder: Record<string, number> = { 'Senin': 1, 'Selasa': 2, 'Rabu': 3, 'Kamis': 4, 'Jumat': 5, 'Sabtu': 6, 'Minggu': 7 };
+        g.days.sort((a: string, b: string) => (dayOrder[a] || 99) - (dayOrder[b] || 99));
+        
+        g.formatted_days = g.days.join(', ');
+        
+        const isSeninJumat = g.days.length === 5 && g.days.includes('Senin') && g.days.includes('Jumat') && g.days.includes('Selasa') && g.days.includes('Rabu') && g.days.includes('Kamis');
+        if (isSeninJumat) g.formatted_days = 'Senin - Jumat';
+        
+        return g;
+    });
+}
+
+function SlideJadwal({ schedules }: { schedules: any[] }) {
+    const grouped = groupSchedules(schedules);
+    const formatMonth = (value?: string | null) => value ? new Date(value).toLocaleDateString('id-ID', { month: 'long', year: 'numeric' }) : '-';
+
+    return (
+        <div className="h-full max-h-[300px] overflow-y-auto pr-1 custom-scrollbar">
+            {grouped.length === 0 ? (
+                <p className="text-sm text-gray-400 py-4 text-center">Belum ada data jadwal</p>
+            ) : (
+                <div className="space-y-3">
+                    {grouped.map((g, idx) => (
+                        <div key={idx} className="bg-gray-50 dark:bg-gray-800/50 p-3 rounded-xl border border-gray-100 dark:border-gray-700/50 flex flex-col gap-2">
+                            <div className="flex justify-between items-start">
+                                <span className="font-bold text-gray-900 dark:text-white text-sm">{g.formatted_days}</span>
+                                <span className="text-xs font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300">
+                                    {formatMonth(g.schedule_month)}
+                                </span>
+                            </div>
+                            <div className="grid grid-cols-2 gap-2 text-xs text-gray-600 dark:text-gray-400">
+                                <div><span className="font-semibold block text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Waktu</span>{g.start_time?.substring(0, 5)} - {g.end_time?.substring(0, 5)}</div>
+                                <div><span className="font-semibold block text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Ruangan</span>{g.room || '-'}</div>
+                                <div><span className="font-semibold block text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Batch</span>{g.batch?.name || '-'}</div>
+                                <div><span className="font-semibold block text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Tingkatan</span>{g.class_level || g.batch?.class_level || '-'}</div>
+                                <div className="col-span-2"><span className="font-semibold block text-[10px] text-gray-400 uppercase tracking-wider mb-0.5">Sensei</span>{g.batch?.teacher?.user?.name || g.study_class?.teacher?.user?.name || g.study_class?.teacher?.name || '-'}</div>
+                            </div>
+                        </div>
+                    ))}
+                </div>
+            )}
+        </div>
+    );
+}
+
 // ─── Slide 1: Absensi & Nilai ─────────────────────────────────────────────────
 function SlideAbsensiNilai({ stats }: { stats: any }) {
     const attendances = stats?.attendances || [];
@@ -431,11 +500,13 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
     const [invoices, setInvoices] = useState<Invoice[]>([]);
     const [payments, setPayments] = useState<Payment[]>([]);
     const [enrollments, setEnrollments] = useState<any[]>([]);
+    const [schedules, setSchedules] = useState<any[]>([]);
     const trackRef = useRef<HTMLDivElement>(null);
     const startX = useRef(0);
     const isDragging = useRef(false);
 
     const SLIDES = [
+        { id: 'jadwal',  label: 'Jadwal',            icon: Calendar,      accent: 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300' },
         { id: 'absensi', label: 'Absensi & Nilai',  icon: TrendingUp,    accent: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
         { id: 'raport',  label: 'Raport',            icon: BookOpen,      accent: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
         { id: 'invoice', label: 'Invoice Tagihan',   icon: FileText,      accent: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
@@ -446,6 +517,7 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
         axios.get('/api/invoices/my').then(r => setInvoices(r.data)).catch(() => {});
         axios.get('/api/me/payments').then(r => setPayments(r.data)).catch(() => {});
         axios.get('/api/me/enrollments').then(r => setEnrollments(r.data)).catch(() => {});
+        axios.get('/api/schedules', { params: { per_page: 100 } }).then(r => setSchedules(r.data?.data || r.data)).catch(() => {});
     }, []);
 
     // Swipe support
@@ -459,6 +531,7 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
     };
 
     const slideContent = [
+        <SlideJadwal       key="j" schedules={schedules} />,
         <SlideAbsensiNilai key="a" stats={stats} />,
         <SlideRaport       key="r" enrollments={enrollments} />,
         <SlideInvoice      key="i" invoices={invoices} studentName={studentName} />,

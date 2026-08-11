@@ -70,10 +70,10 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
         {
             nameKey: 'academic',
             icon: GraduationCap,
-            show: hasPermission('manage classes') || hasPermission('view own schedules') || hasPermission('input attendance') || hasRole('Sensei'),
+            show: hasPermission('manage classes') || hasPermission('input attendance') || hasRole('Sensei'),
             items: [
                 { nameKey: 'classes', href: '/dashboard/classes', show: hasPermission('manage classes') || hasRole('Sensei') },
-                { nameKey: 'schedules', href: '/dashboard/schedules', show: hasPermission('manage schedules') || hasPermission('view own schedules') },
+                { nameKey: 'schedules', href: '/dashboard/schedules', show: hasPermission('manage schedules') },
                 { nameKey: 'assignments', href: '/dashboard/assignments', show: hasPermission('input assignments') || hasPermission('manage classes') },
             ]
         },
