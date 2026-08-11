@@ -318,23 +318,24 @@ function SlideInvoice({ invoices, studentName }: { invoices: Invoice[]; studentN
                     <div key={inv.id} className="p-3 sm:p-4 rounded-xl border border-gray-100 dark:border-gray-700/50 bg-gray-50 dark:bg-gray-800/50">
                         <div className="flex items-start justify-between gap-2 sm:gap-3">
                             <div className="min-w-0 flex-1">
-                                <div className="flex items-center gap-2 mb-1">
-                                    <span className="text-xs font-mono text-gray-400">{inv.invoice_number}</span>
-                                    <span className={`text-xs font-semibold px-1.5 py-0.5 rounded-full ${status.cls}`}>
+                                <div className="flex flex-wrap items-center gap-1.5 mb-1.5">
+                                    <span className={`text-[10px] font-bold px-2 py-0.5 rounded-full whitespace-nowrap ${status.cls}`}>
                                         {status.label}
                                     </span>
+                                    <span className="text-[10px] font-mono text-gray-400 truncate">{inv.invoice_number}</span>
                                 </div>
-                                <p className="text-xs sm:text-sm font-semibold text-gray-800 dark:text-white leading-snug line-clamp-1">{inv.payment_type}</p>
-                                <p className="text-[10px] sm:text-xs text-gray-400 mt-0.5">Jatuh tempo: {formatDate(inv.due_date)}</p>
+                                <p className="text-sm font-semibold text-gray-800 dark:text-white leading-tight mb-0.5 line-clamp-2">{inv.payment_type}</p>
+                                <p className="text-[11px] text-gray-500 mb-2">Jatuh tempo: {formatDate(inv.due_date)}</p>
                                 <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-white mt-1">{formatRp(inv.total_amount)}</p>
                             </div>
                             <button
                                 onClick={() => handleDownload(inv)}
                                 disabled={downloading === inv.id}
-                                className="shrink-0 flex items-center gap-1 text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2.5 py-1.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors disabled:opacity-60"
+                                className="shrink-0 flex items-center gap-1 text-[11px] sm:text-xs font-semibold text-amber-700 dark:text-amber-400 bg-amber-50 dark:bg-amber-900/20 px-2 py-1.5 sm:px-2.5 rounded-lg hover:bg-amber-100 dark:hover:bg-amber-900/40 transition-colors disabled:opacity-60"
                             >
                                 <Download className="w-3.5 h-3.5" />
-                                {downloading === inv.id ? '...' : 'Unduh'}
+                                <span className="hidden sm:inline">{downloading === inv.id ? '...' : 'Unduh'}</span>
+                                <span className="sm:hidden">{downloading === inv.id ? '...' : 'Unduh'}</span>
                             </button>
                         </div>
                     </div>
@@ -435,10 +436,10 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
     const isDragging = useRef(false);
 
     const SLIDES = [
-        { id: 'absensi', label: 'Absensi & Nilai',  icon: TrendingUp,    accent: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300', href: studentId ? `/dashboard/students/${studentId}?tab=attendance` : undefined },
-        { id: 'raport',  label: 'Raport',            icon: BookOpen,      accent: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300', href: studentId ? `/dashboard/students/${studentId}?tab=raport` : undefined },
-        { id: 'invoice', label: 'Invoice Tagihan',   icon: FileText,      accent: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300', href: studentId ? `/dashboard/students/${studentId}?tab=payment` : undefined },
-        { id: 'kwitansi',label: 'Kwitansi',          icon: Receipt,       accent: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300', href: studentId ? `/dashboard/students/${studentId}?tab=payment` : undefined },
+        { id: 'absensi', label: 'Absensi & Nilai',  icon: TrendingUp,    accent: 'bg-blue-100 text-blue-700 dark:bg-blue-900/40 dark:text-blue-300' },
+        { id: 'raport',  label: 'Raport',            icon: BookOpen,      accent: 'bg-red-100 text-red-700 dark:bg-red-900/40 dark:text-red-300' },
+        { id: 'invoice', label: 'Invoice Tagihan',   icon: FileText,      accent: 'bg-amber-100 text-amber-700 dark:bg-amber-900/40 dark:text-amber-300' },
+        { id: 'kwitansi',label: 'Kwitansi',          icon: Receipt,       accent: 'bg-emerald-100 text-emerald-700 dark:bg-emerald-900/40 dark:text-emerald-300' },
     ];
 
     useEffect(() => {
@@ -522,16 +523,6 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
                 <div className="min-h-[250px] sm:min-h-[300px]">
                     {slideContent[activeSlide]}
                 </div>
-                {SLIDES[activeSlide].href && (
-                    <div className="mt-4 sm:mt-6 flex justify-end">
-                        <Link 
-                            href={SLIDES[activeSlide].href!} 
-                            className="flex items-center gap-1.5 text-sm font-semibold text-red-600 hover:text-red-700 dark:text-red-400 dark:hover:text-red-300 transition-colors"
-                        >
-                            Lihat Semua <ArrowRight className="w-4 h-4" />
-                        </Link>
-                    </div>
-                )}
             </div>
 
             {/* Dot indicators */}
