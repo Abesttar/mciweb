@@ -5,14 +5,51 @@ import * as React from "react"
 import { cn } from "@/lib/utils"
 
 function Table({ className, ...props }: React.ComponentProps<"table">) {
+  const tableRef = React.useRef<HTMLTableElement>(null)
+
+  React.useEffect(() => {
+    if (!tableRef.current) return;
+    
+    const applyLabels = () => {
+      const table = tableRef.current;
+      if (!table) return;
+      const ths = Array.from(table.querySelectorAll('thead th'));
+      const trs = Array.from(table.querySelectorAll('tbody tr'));
+      
+      trs.forEach(tr => {
+        const tds = Array.from(tr.querySelectorAll('td'));
+        tds.forEach((td, index) => {
+          if (ths[index]) {
+            let label = ths[index].textContent?.trim() || '';
+            // Handle action columns without text
+            if (!label && ths[index].classList.contains('text-right')) {
+               label = 'Aksi';
+            }
+            td.setAttribute('data-label', label);
+          }
+        });
+      });
+    };
+
+    // Apply initially
+    applyLabels();
+    
+    // Observer for dynamic rows (e.g. loading -> data)
+    const observer = new MutationObserver(applyLabels);
+    observer.observe(tableRef.current, { childList: true, subtree: true });
+    
+    return () => observer.disconnect();
+  }, [])
+
   return (
     <div
       data-slot="table-container"
-      className="relative w-full overflow-x-auto"
+      className="relative w-full overflow-x-auto responsive-table-container"
     >
       <table
+        ref={tableRef}
         data-slot="table"
-        className={cn("w-full caption-bottom text-sm", className)}
+        className={cn("w-full caption-bottom text-sm responsive-table", className)}
         {...props}
       />
     </div>
