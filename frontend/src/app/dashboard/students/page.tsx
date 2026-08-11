@@ -229,7 +229,7 @@ export default function StudentsPage() {
 
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-10">
-            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-xl p-6 rounded-3xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm relative overflow-hidden group">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm relative overflow-hidden group">
                 <div className="absolute top-0 right-0 w-64 h-64 bg-red-50 dark:bg-red-950/40 rounded-full blur-3xl opacity-50 pointer-events-none -translate-y-1/2 translate-x-1/3"></div>
                 <div className="absolute -top-10 -right-10 text-red-100 opacity-30 group-hover:opacity-50 transition-all duration-700 group-hover:rotate-12 group-hover:scale-110 pointer-events-none">
                     <JapaneseOrnament type="wave" className="w-64 h-64" />
@@ -294,13 +294,13 @@ export default function StudentsPage() {
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {students.map((s, idx) => (
                                 <Link href={`/dashboard/students/${s.id}`} key={s.id} className="group block h-full">
-                                    <div className="bg-white dark:bg-card rounded-[2rem] border border-red-100 dark:border-red-900/50 dark:border-red-900/50 overflow-hidden hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 relative flex flex-col h-full hover:-translate-y-1">
+                                    <div className="bg-white dark:bg-card rounded-2xl sm:rounded-[2rem] border border-red-100 dark:border-red-900/50 dark:border-red-900/50 overflow-hidden hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 relative flex flex-col h-full hover:-translate-y-1">
                                         {/* Watermark Ornament */}
                                         <div className="absolute -left-12 -bottom-12 w-48 h-48 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-500 z-0 text-red-500">
                                             <JapaneseOrnament type="sakura" className="w-full h-full" />
                                         </div>
 
-                                        <div className="p-6 pb-2 flex-1 relative z-10">
+                                        <div className="p-4 sm:p-6 pb-2 flex-1 relative z-10">
                                             <div className="flex justify-between items-start mb-4">
                                                 <div className="w-14 h-14 rounded-full overflow-hidden bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl shadow-sm border border-gray-100 dark:border-gray-700/50 flex items-center justify-center">
                                                 {s.user.profile_photo_url ? (

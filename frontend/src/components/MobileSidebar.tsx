@@ -8,7 +8,7 @@ import JapaneseOrnament from '@/components/JapaneseOrnament';
 import { useState, useEffect, useRef } from 'react';
 import {
     LayoutDashboard, Database, GraduationCap,
-    Settings, ChevronDown, ChevronRight, X,
+    Settings, ChevronDown, ChevronRight, X, LogOut
 } from 'lucide-react';
 
 interface NavItem {
@@ -105,7 +105,7 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
             />
             
             {/* Sidebar panel */}
-            <aside className={`fixed inset-y-0 left-0 w-72 bg-gradient-to-b from-red-900 to-red-800 dark:from-[#0d1117] dark:to-[#161b22] z-50 md:hidden flex flex-col shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}>
+            <aside className={`fixed inset-y-0 left-0 w-64 sm:w-72 bg-gradient-to-b from-red-900 to-red-800 dark:from-[#0d1117] dark:to-[#161b22] z-50 md:hidden flex flex-col shadow-2xl transform transition-transform duration-300 ease-out ${open ? 'translate-x-0' : '-translate-x-full'}`}>
                 {/* Background pattern */}
                 <div className="absolute inset-0 bg-pattern-seigaiha opacity-[0.07] mix-blend-overlay pointer-events-none"></div>
                 
@@ -200,6 +200,17 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
                             );
                         })}
                         
+                        {/* Logout button for mobile */}
+                        <div className="mt-8 px-4">
+                            <button 
+                                onClick={logout}
+                                className="w-full flex items-center justify-center px-4 py-3 bg-red-950/50 hover:bg-red-950 text-red-100 hover:text-white rounded-xl border border-red-800/50 transition-colors shadow-sm"
+                            >
+                                <LogOut className="w-4 h-4 mr-2" />
+                                <span className="font-semibold">{t.logout || 'Sign out'}</span>
+                            </button>
+                        </div>
+
                         {/* Decorative Bottom Ornament */}
                         <div className="mt-6 mb-4 flex justify-center text-red-500/30">
                             <JapaneseOrnament type="sakura" className="w-16 h-16" />
