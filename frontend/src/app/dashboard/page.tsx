@@ -103,13 +103,13 @@ export default function DashboardPage() {
             {isAdmin && (
                 <>
                     {(hasRole('Sachou') || hasRole('Staff Dokumen')) && (
-                        <div className="bg-gradient-to-br from-indigo-800 via-indigo-700 to-indigo-900 rounded-3xl p-10 shadow-2xl relative overflow-hidden border border-indigo-600/30 mb-8">
+                        <div className="bg-gradient-to-br from-indigo-800 via-indigo-700 to-indigo-900 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden border border-indigo-600/30 mb-8">
                             <div className="absolute inset-0 bg-pattern-seigaiha opacity-20 pointer-events-none mix-blend-overlay"></div>
                             <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-400 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
                             
                             <div className="relative z-10">
-                                <h2 className="text-4xl font-extrabold text-white mb-3 tracking-tight">{t.welcome}, <span className="text-indigo-300">{user?.name} {hasRole('Sachou') ? t.sachouRole : t.staffDokumenRole}</span>!</h2>
-                                <p className="text-indigo-100 max-w-2xl text-lg font-medium leading-relaxed">
+                                <h2 className="text-2xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3 tracking-tight">{t.welcome}, <span className="text-indigo-300">{user?.name} {hasRole('Sachou') ? t.sachouRole : t.staffDokumenRole}</span>!</h2>
+                                <p className="text-indigo-100 max-w-2xl text-base sm:text-lg font-medium leading-relaxed">
                                     {hasRole('Sachou') ? t.sachouWelcome : t.staffDokumenWelcome}
                                 </p>
                             </div>
@@ -119,7 +119,7 @@ export default function DashboardPage() {
                     <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-6">
                         {statCards.map((card, idx) => (
                             <Link key={idx} href={card.href} className="group block h-full">
-                                <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-md rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700/50 p-6 transition-all duration-500 hover:border-red-400 hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden h-full">
+                                <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700/50 p-4 sm:p-6 transition-all duration-500 hover:border-red-400 hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden h-full">
                                     {/* Japanese Ornament Corner */}
                                     <div className="absolute -top-4 -right-4 text-red-100 opacity-50 group-hover:text-red-200 group-hover:opacity-100 transition-all duration-700 group-hover:rotate-45 group-hover:scale-125">
                                         <JapaneseOrnament type={idx % 2 === 0 ? 'sakura' : 'asanoha'} className="w-32 h-32" />
@@ -127,11 +127,11 @@ export default function DashboardPage() {
 
                                     <div className="flex items-start justify-between relative z-10">
                                         <div>
-                                            <p className="text-xs font-bold text-gray-500 dark:text-gray-400 mb-1 tracking-widest uppercase">{card.title}</p>
-                                            <p className="text-4xl font-extrabold text-gray-900 dark:text-white group-hover:text-red-700 dark:text-red-400 transition-colors duration-300">{card.value}</p>
+                                            <p className="text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 mb-1 tracking-widest uppercase">{card.title}</p>
+                                            <p className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-white group-hover:text-red-700 dark:text-red-400 transition-colors duration-300">{card.value}</p>
                                         </div>
-                                        <div className={`p-4 rounded-2xl ${card.color} shadow-inner bg-gradient-to-br from-white/50 to-transparent group-hover:scale-110 transition-transform duration-500`}>
-                                            <card.icon className="w-8 h-8" />
+                                        <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${card.color} shadow-inner bg-gradient-to-br from-white/50 to-transparent group-hover:scale-110 transition-transform duration-500`}>
+                                            <card.icon className="w-6 h-6 sm:w-8 sm:h-8" />
                                         </div>
                                     </div>
                                     <div className="mt-4 flex items-center text-sm font-medium text-red-700 dark:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-200">
@@ -203,14 +203,14 @@ export default function DashboardPage() {
             )}
 
             {!isAdmin && hasRole('Sensei') && (
-                <div className="space-y-8 relative z-10">
-                    <div className="bg-gradient-to-br from-red-800 via-red-700 to-red-900 rounded-3xl p-10 shadow-2xl relative overflow-hidden border border-red-600/30">
+                <div className="space-y-6 sm:space-y-8 relative z-10">
+                    <div className="bg-gradient-to-br from-red-800 via-red-700 to-red-900 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden border border-red-600/30">
                         <div className="absolute inset-0 bg-pattern-seigaiha opacity-20 pointer-events-none mix-blend-overlay"></div>
                         <div className="absolute -top-24 -right-24 w-64 h-64 bg-yellow-400 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
                         
                         <div className="relative z-10">
-                            <h2 className="text-4xl font-extrabold text-white mb-3 tracking-tight">{t.welcome}, <span className="text-yellow-300">{user?.name} 先生</span>!</h2>
-                            <p className="text-red-100 max-w-2xl text-lg font-medium leading-relaxed">{t.senseiWelcome}</p>
+                            <h2 className="text-2xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3 tracking-tight">{t.welcome}, <span className="text-yellow-300">{user?.name} 先生</span>!</h2>
+                            <p className="text-red-100 max-w-2xl text-base sm:text-lg font-medium leading-relaxed">{t.senseiWelcome}</p>
                         </div>
                     </div>
 
@@ -263,15 +263,15 @@ export default function DashboardPage() {
 
             {!isAdmin && hasRole('Siswa') && (
                 <div className="space-y-6">
-                    <div className="bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900/50 rounded-2xl p-8">
-                        <h2 className="text-2xl font-bold text-red-900 dark:text-red-100 mb-2">{t.welcome}, {user?.name}!</h2>
-                        <p className="text-red-800 dark:text-red-200 max-w-lg mb-6">{t.studentWelcome}</p>
+                    <div className="bg-red-50 dark:bg-red-950/40 border border-red-100 dark:border-red-900/50 rounded-2xl p-5 sm:p-8">
+                        <h2 className="text-xl sm:text-2xl font-bold text-red-900 dark:text-red-100 mb-2">{t.welcome}, {user?.name}!</h2>
+                        <p className="text-sm sm:text-base text-red-800 dark:text-red-200 max-w-lg mb-4 sm:mb-6">{t.studentWelcome}</p>
                         
-                        <div className="flex gap-4">
-                            <Link href="/dashboard/students/profile" className="px-5 py-2.5 bg-red-700 text-white rounded-lg font-medium hover:bg-red-800 shadow-sm transition-colors">
+                        <div className="flex flex-col sm:flex-row gap-3 sm:gap-4">
+                            <Link href="/dashboard/students/profile" className="px-4 py-2 sm:px-5 sm:py-2.5 bg-red-700 text-white rounded-lg font-medium hover:bg-red-800 shadow-sm transition-colors text-center text-sm sm:text-base">
                                 {t.editProfile}
                             </Link>
-                            <Link href="/dashboard/messages" className="px-5 py-2.5 bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800/50 rounded-lg font-medium hover:bg-red-50 dark:bg-red-950/40 shadow-sm transition-colors">
+                            <Link href="/dashboard/messages" className="px-4 py-2 sm:px-5 sm:py-2.5 bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl text-red-800 dark:text-red-200 border border-red-200 dark:border-red-800/50 rounded-lg font-medium hover:bg-red-50 dark:bg-red-950/40 shadow-sm transition-colors text-center text-sm sm:text-base">
                                 {t.contactSensei}
                             </Link>
                         </div>

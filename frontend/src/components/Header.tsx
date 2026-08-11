@@ -108,17 +108,17 @@ export default function Header({ onMenuToggle }: HeaderProps) {
 
     return (
         <header className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl/95 backdrop-blur-xl shadow-sm border-b border-gray-200 dark:border-gray-800 z-20 relative transition-all sticky top-0">
-            <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 h-14 sm:h-16 flex items-center justify-between">
+            <div className="max-w-7xl mx-auto px-2 sm:px-6 lg:px-8 h-12 sm:h-16 flex items-center justify-between">
                 <div className="flex items-center gap-2 min-w-0">
                     {/* Hamburger menu for mobile */}
                     <button 
                         onClick={onMenuToggle}
-                        className="md:hidden p-2 text-gray-600 dark:text-gray-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors flex-shrink-0"
+                        className="md:hidden p-1.5 sm:p-2 text-gray-600 dark:text-gray-300 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-lg transition-colors flex-shrink-0"
                         aria-label="Menu"
                     >
-                        <Menu className="h-5 w-5" />
+                        <Menu className="h-4 w-4 sm:h-5 sm:w-5" />
                     </button>
-                    <span className="text-base sm:text-xl font-bold bg-gradient-to-r from-red-800 to-red-600 dark:from-red-500 dark:to-red-400 bg-clip-text text-transparent tracking-tight truncate">
+                    <span className="text-sm sm:text-xl font-bold bg-gradient-to-r from-red-800 to-red-600 dark:from-red-500 dark:to-red-400 bg-clip-text text-transparent tracking-tight truncate">
                         <span className="hidden sm:inline">LPK MIRAI CROWN INDONESIA</span>
                         <span className="sm:hidden">LPK MCI</span>
                     </span>
@@ -131,7 +131,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
                     {/* Language Toggle */}
                     <button 
                         onClick={toggleLanguage}
-                        className="flex items-center space-x-1 px-2 sm:px-3 py-1.5 text-gray-600 dark:text-gray-400 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full border border-gray-200/50 dark:border-gray-700/50 hover:border-red-200 transition-all duration-300 focus:outline-none shadow-sm"
+                        className="flex items-center space-x-1 px-1.5 sm:px-3 py-1 sm:py-1.5 text-gray-600 dark:text-gray-400 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-950/30 rounded-full border border-gray-200/50 dark:border-gray-700/50 hover:border-red-200 transition-all duration-300 focus:outline-none shadow-sm"
                         title={language === 'id' ? 'Switch to Japanese' : 'Ganti ke Bahasa Indonesia'}
                     >
                         <Globe className="h-4 w-4" />
@@ -142,7 +142,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
                     <div className="relative">
                         <button 
                             onClick={() => setShowDropdown(!showDropdown)}
-                            className="relative p-1.5 sm:p-2 text-gray-500 dark:text-gray-400 hover:text-red-700 transition-transform hover:scale-110 focus:outline-none"
+                            className="relative p-1 sm:p-2 text-gray-500 dark:text-gray-400 hover:text-red-700 transition-transform hover:scale-110 focus:outline-none"
                         >
                             <svg xmlns="http://www.w3.org/2000/svg" className="h-5 w-5 sm:h-6 sm:w-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9" />
@@ -216,7 +216,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
                         <div className="relative">
                             <a
                                 href="/dashboard/profile"
-                                className="block h-8 w-8 sm:h-10 sm:w-10 rounded-full bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 overflow-hidden border border-red-100 dark:border-red-900/50 hover:ring-2 hover:ring-red-200 transition"
+                                className="block h-7 w-7 sm:h-10 sm:w-10 rounded-full bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 overflow-hidden border border-red-100 dark:border-red-900/50 hover:ring-2 hover:ring-red-200 transition"
                                 title="Lihat profil"
                             >
                                 {user?.profile_photo_url ? (
