@@ -2,7 +2,7 @@
 
 import { useAuth } from '@/context/AuthContext';
 import { useRouter } from 'next/navigation';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import Header from '@/components/Header';
 import Sidebar from '@/components/Sidebar';
 import MobileSidebar from '@/components/MobileSidebar';
@@ -12,6 +12,10 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
     const { user, isLoading } = useAuth();
     const router = useRouter();
     const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+
+    const handleMobileMenuClose = useCallback(() => {
+        setMobileMenuOpen(false);
+    }, []);
 
     useEffect(() => {
         if (!isLoading && !user) {
@@ -42,7 +46,7 @@ export default function DashboardLayout({ children }: { children: React.ReactNod
             <Header onMenuToggle={() => setMobileMenuOpen(prev => !prev)} />
             
             {/* Mobile Sidebar */}
-            <MobileSidebar open={mobileMenuOpen} onClose={() => setMobileMenuOpen(false)} />
+            <MobileSidebar open={mobileMenuOpen} onClose={handleMobileMenuClose} />
             
             <div className="flex-1 flex overflow-hidden relative z-10">
                 <Sidebar />
