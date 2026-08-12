@@ -73,9 +73,11 @@ export default function ClassGradesPage() {
             }, {});
             setGradesData(existing);
 
-            // Fetch Attendances if it's daily
-            if (gradeType === 'daily') {
-                const attParams = { study_class_id: classId, date, per_page: 500 };
+            // Fetch Attendances for daily, weekly, and level_exam
+            if (gradeType === 'daily' || gradeType === 'weekly' || gradeType === 'level_exam') {
+                const attDate = (gradeType === 'daily' || gradeType === 'weekly') ? date : new Date().toISOString().split('T')[0];
+                const attParams: any = { study_class_id: classId, per_page: 500 };
+                if (gradeType === 'daily' || gradeType === 'weekly') attParams.date = attDate;
                 const attRes = await axios.get('/api/attendances', { params: attParams });
                 const attExisting = attRes.data.data.reduce((acc: any, att: any) => {
                     acc[att.enrollment_id] = att.status;
@@ -165,8 +167,8 @@ export default function ClassGradesPage() {
     const handleSave = async () => {
         setSaving(true);
         try {
-            // 1. Save Attendances if daily
-            if (gradeType === 'daily') {
+            // 1. Save Attendances for daily, weekly, and level_exam
+            if (gradeType === 'daily' || gradeType === 'weekly' || gradeType === 'level_exam') {
                 const payloadAttendances = enrollments
                     .filter(e => attendanceData[e.id])
                     .map(e => ({
@@ -177,7 +179,7 @@ export default function ClassGradesPage() {
                 if (payloadAttendances.length > 0) {
                     await axios.post('/api/attendances/class-bulk', {
                         study_class_id: classId,
-                        date: date,
+                        date: (gradeType === 'daily' || gradeType === 'weekly') ? date : new Date().toISOString().split('T')[0],
                         attendances: payloadAttendances
                     });
                 }
@@ -394,9 +396,8 @@ export default function ClassGradesPage() {
                         <TableRow>
                             <TableHead className="sticky left-0 bg-gray-50 dark:bg-[#1a202c] z-10 w-48">Nama Siswa</TableHead>
                             
-                            {gradeType === 'daily' && (
-                                <TableHead className="w-32">Absensi</TableHead>
-                            )}
+                            {/* Absensi shown for all grade types */}
+                            <TableHead className="w-32">Absensi</TableHead>
 
                             {/* Daily logic components */}
                             {gradeType === 'daily' && columns.map(c => (
@@ -428,22 +429,21 @@ export default function ClassGradesPage() {
                                     {e.student?.user?.name || '-'}
                                 </TableCell>
 
-                                {gradeType === 'daily' && (
-                                    <TableCell>
-                                        <Select 
-                                            value={attendanceData[e.id] || ''} 
-                                            onValueChange={(val) => handleAttendanceChange(e.id, val)}
-                                        >
-                                            <SelectTrigger className="w-28 h-9"><SelectValue placeholder="-" /></SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="Hadir">Hadir</SelectItem>
-                                                <SelectItem value="Sakit">Sakit</SelectItem>
-                                                <SelectItem value="Izin">Izin</SelectItem>
-                                                <SelectItem value="Alpa">Alpa</SelectItem>
-                                            </SelectContent>
-                                        </Select>
-                                    </TableCell>
-                                )}
+                                {/* Absensi shown for all grade types */}
+                                <TableCell>
+                                    <Select 
+                                        value={attendanceData[e.id] || ''} 
+                                        onValueChange={(val) => handleAttendanceChange(e.id, val)}
+                                    >
+                                        <SelectTrigger className="w-28 h-9"><SelectValue placeholder="-" /></SelectTrigger>
+                                        <SelectContent>
+                                            <SelectItem value="Hadir">Hadir</SelectItem>
+                                            <SelectItem value="Sakit">Sakit</SelectItem>
+                                            <SelectItem value="Izin">Izin</SelectItem>
+                                            <SelectItem value="Alpa">Alpa</SelectItem>
+                                        </SelectContent>
+                                    </Select>
+                                </TableCell>
                                 
                                 {gradeType === 'daily' && columns.map(c => (
                                     <TableCell key={c.key}>
