@@ -91,7 +91,7 @@ class StudentController extends Controller
             }
         }
 
-        return DB::transaction(function () use ($validated, $documentPaths) {
+        $student = DB::transaction(function () use ($validated, $documentPaths) {
             if (!empty($validated['batch_id'])) {
                 $this->ensureBatchCanReceiveStudent((int) $validated['batch_id']);
             }
@@ -117,11 +117,11 @@ class StudentController extends Controller
                 'visa_type' => $validated['visa_type'] ?? null,
             ];
 
-            $student = Student::create(array_merge($studentData, $documentPaths));
+            $newStudent = Student::create(array_merge($studentData, $documentPaths));
 
             if (!empty($validated['batch_id'])) {
                 Enrollment::create([
-                    'student_id' => $student->id,
+                    'student_id' => $newStudent->id,
                     'batch_id' => $validated['batch_id'],
                     'status' => 'active',
                 ]);
@@ -140,8 +140,8 @@ class StudentController extends Controller
                 "Akun Anda di LPK Mirai Crown Indonesia telah berhasil dibuat. Selamat datang, {$user->name}! Mulai lengkapi profil Anda."
             );
 
-            $student->load(['user', 'enrollments.batch.teacher.user']);
-            return response()->json($student, 201);
+            $newStudent->load(['user', 'enrollments.batch.teacher.user']);
+            return $newStudent;
         });
 
         // Send invitation email AFTER transaction commits
@@ -153,6 +153,8 @@ class StudentController extends Controller
         } catch (\Exception $e) {
             \Log::error('Failed to send student invitation email: ' . $e->getMessage());
         }
+
+        return response()->json($student, 201);
     }
 
     public function show(Student $student)
