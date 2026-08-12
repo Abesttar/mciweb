@@ -421,9 +421,9 @@ export default function AssignmentsPage() {
                     </DialogHeader>
 
                     {loadingSubmissions ? (
-                        <div className="py-8 text-center text-gray-500">Memuat data...</div>
+                        <div className="py-8 text-center text-gray-500 dark:text-gray-400">Memuat data...</div>
                     ) : submissionsList.length === 0 ? (
-                        <div className="py-8 text-center text-gray-500">Belum ada siswa yang mengumpulkan tugas ini.</div>
+                        <div className="py-8 text-center text-gray-500 dark:text-gray-400">Belum ada siswa yang mengumpulkan tugas ini.</div>
                     ) : (
                         <div className="space-y-4 mt-4">
                             {submissionsList.map(sub => (
@@ -431,7 +431,7 @@ export default function AssignmentsPage() {
                                     <div className="flex items-start justify-between mb-3">
                                         <div>
                                             <p className="font-bold text-gray-900 dark:text-white">{sub.student?.user?.name || 'Siswa'}</p>
-                                            <p className="text-xs text-gray-500">
+                                            <p className="text-xs text-gray-500 dark:text-gray-400">
                                                 Waktu kumpul: {sub.submitted_at ? new Date(sub.submitted_at).toLocaleString('id-ID') : '-'}
                                                 {sub.status === 'late' && <span className="ml-2 text-red-600 font-medium">(Terlambat)</span>}
                                             </p>
@@ -450,7 +450,7 @@ export default function AssignmentsPage() {
                                     </div>
 
                                     {sub.content && (
-                                        <div className="mb-3 bg-white dark:bg-gray-900 p-3 rounded-lg border text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                                        <div className="mb-3 bg-white dark:bg-gray-900 p-3 rounded-lg border text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words">
                                             {sub.content}
                                         </div>
                                     )}

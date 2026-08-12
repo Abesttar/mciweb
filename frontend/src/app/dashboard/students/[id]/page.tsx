@@ -648,7 +648,7 @@ export default function StudentDetail() {
                                     className={`p-1.5 rounded-md transition-all ${
                                         docViewMode === 'card'
                                             ? 'bg-white dark:bg-gray-700 shadow text-indigo-600 dark:text-indigo-400'
-                                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                                            : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300'
                                     }`}
                                     title="Tampilan Kartu"
                                 >
@@ -659,7 +659,7 @@ export default function StudentDetail() {
                                     className={`p-1.5 rounded-md transition-all ${
                                         docViewMode === 'list'
                                             ? 'bg-white dark:bg-gray-700 shadow text-indigo-600 dark:text-indigo-400'
-                                            : 'text-gray-400 hover:text-gray-600 dark:hover:text-gray-300'
+                                            : 'text-gray-400 hover:text-gray-600 dark:text-gray-400 dark:hover:text-gray-300'
                                     }`}
                                     title="Tampilan List"
                                 >
@@ -716,7 +716,7 @@ export default function StudentDetail() {
                                                     <FileText className={`w-5 h-5 ${ filePath ? 'text-emerald-600 dark:text-emerald-400' : 'text-indigo-500' }`} />
                                                 </div>
                                                 <h4 className="font-semibold text-gray-800 dark:text-gray-100 text-sm">{doc.label}</h4>
-                                                <p className={`text-xs mt-0.5 ${ filePath ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 dark:text-gray-500' }`}>
+                                                <p className={`text-xs mt-0.5 ${ filePath ? 'text-emerald-600 dark:text-emerald-400' : 'text-gray-400 dark:text-gray-500 dark:text-gray-400' }`}>
                                                     {filePath ? '✓ Sudah diunggah' : 'Belum diunggah'}
                                                 </p>
                                             </div>

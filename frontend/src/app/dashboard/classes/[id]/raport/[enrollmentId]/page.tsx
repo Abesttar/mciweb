@@ -452,7 +452,7 @@ export default function RaportPage() {
             <div className="flex flex-col items-center justify-center min-h-screen bg-gray-50 dark:bg-gray-900 p-8">
                 <Lock className="w-16 h-16 text-gray-300 mb-4" />
                 <h2 className="text-xl font-bold text-gray-700 dark:text-gray-300 mb-2">Raport Belum Tersedia</h2>
-                <p className="text-gray-500 text-center max-w-sm">Raport kamu belum diterbitkan oleh Sensei. Silakan tunggu notifikasi dari Sensei.</p>
+                <p className="text-gray-500 dark:text-gray-400 text-center max-w-sm">Raport kamu belum diterbitkan oleh Sensei. Silakan tunggu notifikasi dari Sensei.</p>
             </div>
         );
     }
@@ -488,7 +488,7 @@ export default function RaportPage() {
                 {pdfPreviewUrl ? (
                     <iframe src={`${pdfPreviewUrl}#view=FitH&toolbar=0&navpanes=0`} className="absolute inset-0 w-full h-full border-none" />
                 ) : (
-                    <div className="flex flex-col items-center text-gray-500">
+                    <div className="flex flex-col items-center text-gray-500 dark:text-gray-400">
                         <Loader2 className="w-10 h-10 animate-spin mb-2" />
                         <span>Membangun Preview PDF...</span>
                     </div>

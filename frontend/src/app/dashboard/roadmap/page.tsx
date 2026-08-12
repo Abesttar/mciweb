@@ -111,7 +111,7 @@ export default function RoadmapPage() {
                                 <TableCell>{s.order}</TableCell>
                                 <TableCell className="font-medium dark:text-gray-200">{s.name}</TableCell>
                                 <TableCell className="dark:text-gray-300">{s.description || '-'}</TableCell>
-                                <TableCell>{s.is_active ? <span className="text-green-600 dark:text-green-400">{t.active}</span> : <span className="text-gray-400 dark:text-gray-500">{t.inactive}</span>}</TableCell>
+                                <TableCell>{s.is_active ? <span className="text-green-600 dark:text-green-400">{t.active}</span> : <span className="text-gray-400 dark:text-gray-500 dark:text-gray-400">{t.inactive}</span>}</TableCell>
                                 <TableCell className="text-right space-x-2">
                                     <Button variant="outline" size="sm" onClick={() => openStageEdit(s)}>{t.edit}</Button>
                                     <Button variant="destructive" size="sm" onClick={() => { setDeletingStage(s); setDeleteDialogOpen(true); }}>{t.delete}</Button>

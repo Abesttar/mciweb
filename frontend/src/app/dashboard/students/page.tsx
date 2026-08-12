@@ -70,7 +70,7 @@ function RoadmapProgress({ roadmaps }: { roadmaps?: any[] }) {
                 <span className="flex items-center text-xs text-gray-400">
                     <Activity className="w-3 h-3 mr-1" /> Roadmap
                 </span>
-                <span className={`text-[10px] font-semibold px-1.5 rounded-sm ${current?.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : current?.status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
+                <span className={`text-[10px] font-semibold px-1.5 rounded-sm ${current?.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : current?.status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 dark:text-gray-400'}`}>
                     {current?.status === 'completed' ? 'Completed' : current?.status === 'in_progress' ? 'In Progress' : current?.status === 'cancelled' ? 'Canceled' : 'Pending'}
                 </span>
             </div>
@@ -420,7 +420,7 @@ export default function StudentsPage() {
                                                     return (
                                                         <div className="flex flex-col">
                                                             <span className="text-xs font-medium text-gray-900 dark:text-white truncate max-w-[120px]">{current?.roadmap_stage?.name || '-'}</span>
-                                                            <span className={`text-[10px] w-max mt-0.5 font-semibold px-1.5 rounded-sm ${current?.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : current?.status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600'}`}>
+                                                            <span className={`text-[10px] w-max mt-0.5 font-semibold px-1.5 rounded-sm ${current?.status === 'completed' ? 'bg-emerald-100 text-emerald-700' : current?.status === 'in_progress' ? 'bg-blue-100 text-blue-700' : 'bg-gray-100 text-gray-600 dark:text-gray-400'}`}>
                                                                 {current?.status === 'completed' ? 'Completed' : current?.status === 'in_progress' ? 'In Progress' : current?.status === 'cancelled' ? 'Canceled' : 'Pending'}
                                                             </span>
                                                         </div>

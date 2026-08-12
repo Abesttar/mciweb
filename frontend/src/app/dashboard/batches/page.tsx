@@ -115,11 +115,11 @@ export default function BatchesPage() {
 
     const levelColor = (level: string) => {
         switch (level) {
-            case 'shou': return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            case 'shou': return 'bg-gray-100 text-gray-700 dark:text-gray-300 dark:bg-gray-800 dark:text-gray-300';
             case 'chuu': return 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
             case 'kou': return 'bg-indigo-100 text-indigo-700 dark:bg-indigo-900/40 dark:text-indigo-300';
             case 'kelas_kaiwa': return 'bg-purple-100 text-purple-700 dark:bg-purple-900/40 dark:text-purple-300';
-            default: return 'bg-gray-100 text-gray-700 dark:bg-gray-800 dark:text-gray-300';
+            default: return 'bg-gray-100 text-gray-700 dark:text-gray-300 dark:bg-gray-800 dark:text-gray-300';
         }
     };
 
@@ -206,7 +206,7 @@ export default function BatchesPage() {
                                 {/* Footer: Sensei & Actions */}
                                 <div className="flex justify-between items-center pt-4 border-t border-gray-100 dark:border-gray-800 mt-auto">
                                     <div className="flex flex-col">
-                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 mb-0.5">Sensei Pengajar</span>
+                                        <span className="text-[10px] font-bold uppercase tracking-widest text-gray-400 dark:text-gray-500 dark:text-gray-400 mb-0.5">Sensei Pengajar</span>
                                         <span className="font-medium text-gray-900 dark:text-white text-sm">{batch.teacher?.user?.name || 'Belum diatur'}</span>
                                     </div>
                                     <Button 

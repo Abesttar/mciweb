@@ -123,7 +123,7 @@ export default function InvoiceTab({ studentId }: { studentId: string }) {
                                                 Tanggal Invoice: {formatDate(inv.order_date)} &nbsp;·&nbsp; Jatuh Tempo: {formatDate(inv.due_date)}
                                             </p>
                                             {inv.creator && (
-                                                <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                                <p className="text-xs text-gray-400 dark:text-gray-500 dark:text-gray-400 mt-0.5">
                                                     Dibuat oleh: {inv.creator.name}
                                                 </p>
                                             )}

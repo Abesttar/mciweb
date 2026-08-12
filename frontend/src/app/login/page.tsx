@@ -189,7 +189,7 @@ export default function LoginPage() {
                         </form>
                     </div>
 
-                    <p className="text-center text-xs text-gray-500 dark:text-gray-500 mt-8">
+                    <p className="text-center text-xs text-gray-500 dark:text-gray-500 dark:text-gray-400 mt-8">
                         &copy; {new Date().getFullYear()} LPK Mirai Crown Indonesia. All rights reserved.
                     </p>
                 </motion.div>

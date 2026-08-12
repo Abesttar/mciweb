@@ -175,7 +175,7 @@ function SlideAbsensiNilai({ stats }: { stats: any }) {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-5 h-full">
             {/* Absensi */}
             <div>
-                <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Riwayat Absensi</p>
+                <p className="text-xs font-bold text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Riwayat Absensi</p>
                 {attendances.length === 0 ? (
                     <p className="text-sm text-gray-400 py-4 text-center">Belum ada data absensi</p>
                 ) : (
@@ -186,7 +186,7 @@ function SlideAbsensiNilai({ stats }: { stats: any }) {
                                     <Calendar className="w-3 h-3 text-gray-400" />
                                     {formatDate(a.date)}
                                 </span>
-                                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full capitalize ${statusColor[a.status?.toLowerCase()] || 'text-gray-600 bg-gray-100'}`}>
+                                <span className={`text-xs font-semibold px-2 py-0.5 rounded-full capitalize ${statusColor[a.status?.toLowerCase()] || 'text-gray-600 dark:text-gray-400 bg-gray-100'}`}>
                                     {a.status}
                                 </span>
                             </div>
@@ -196,7 +196,7 @@ function SlideAbsensiNilai({ stats }: { stats: any }) {
             </div>
             {/* Nilai */}
             <div>
-                <p className="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider mb-3">Riwayat Nilai</p>
+                <p className="text-xs font-bold text-gray-400 dark:text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Riwayat Nilai</p>
                 {grades.length === 0 ? (
                     <p className="text-sm text-gray-400 py-4 text-center">Belum ada data nilai</p>
                 ) : (
@@ -348,7 +348,7 @@ function SlideInvoice({ invoices, studentName }: { invoices: Invoice[]; studentN
     if (invoices.length === 0) {
         return (
             <div className="flex flex-col items-center justify-center py-12 text-gray-400">
-                <Receipt className="w-12 h-12 mb-3 text-gray-300 dark:text-gray-600" />
+                <Receipt className="w-12 h-12 mb-3 text-gray-300 dark:text-gray-600 dark:text-gray-400" />
                 <p className="text-sm font-medium text-gray-500 dark:text-gray-400">Tidak ada tagihan saat ini</p>
             </div>
         );
@@ -369,7 +369,7 @@ function SlideInvoice({ invoices, studentName }: { invoices: Invoice[]; studentN
                                     <span className="text-[10px] font-mono text-gray-400 truncate">{inv.invoice_number}</span>
                                 </div>
                                 <p className="text-sm font-semibold text-gray-800 dark:text-white leading-tight mb-0.5 line-clamp-2">{inv.payment_type}</p>
-                                <p className="text-[11px] text-gray-500 mb-2">Jatuh tempo: {formatDate(inv.due_date)}</p>
+                                <p className="text-[11px] text-gray-500 dark:text-gray-400 mb-2">Jatuh tempo: {formatDate(inv.due_date)}</p>
                                 <p className="text-sm sm:text-base font-bold text-gray-900 dark:text-white mt-1">{formatRp(inv.total_amount)}</p>
                             </div>
                             <button
@@ -526,14 +526,14 @@ export default function AkademikSlider({ stats, studentName, studentId }: Akadem
                     <button
                         onClick={() => setActiveSlide(s => Math.max(0, s - 1))}
                         disabled={activeSlide === 0}
-                        className="p-1 sm:p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
+                        className="p-1 sm:p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
                     >
                         <ChevronLeft className="w-4 h-4" />
                     </button>
                     <button
                         onClick={() => setActiveSlide(s => Math.min(SLIDES.length - 1, s + 1))}
                         disabled={activeSlide === SLIDES.length - 1}
-                        className="p-1 sm:p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
+                        className="p-1 sm:p-1.5 rounded-lg text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:hover:text-white hover:bg-gray-100 dark:hover:bg-gray-800 disabled:opacity-30 transition-all"
                     >
                         <ChevronRight className="w-4 h-4" />
                     </button>

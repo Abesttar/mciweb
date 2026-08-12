@@ -176,7 +176,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
     const reasonLabel = (reason: string) => {
         if (reason === 'class_level_change') return { label: 'Naik Kelas', color: 'bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400' };
         if (reason === 'batch_transfer') return { label: 'Pindah Batch', color: 'bg-orange-100 text-orange-700 dark:bg-orange-900/30 dark:text-orange-400' };
-        return { label: reason, color: 'bg-gray-100 text-gray-700' };
+        return { label: reason, color: 'bg-gray-100 text-gray-700 dark:text-gray-300' };
     };
 
     return (
@@ -217,7 +217,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
                                         onClick={() => toggleClass(classId)}
                                     >
                                         <div className="flex items-center gap-3">
-                                            {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-500" /> : <ChevronRight className="w-4 h-4 text-gray-500" />}
+                                            {isExpanded ? <ChevronDown className="w-4 h-4 text-gray-500 dark:text-gray-400" /> : <ChevronRight className="w-4 h-4 text-gray-500 dark:text-gray-400" />}
                                             <div>
                                                 <p className="font-bold text-gray-900 dark:text-white">{group.className}</p>
                                                 <p className="text-xs text-gray-500 dark:text-gray-400">
@@ -332,7 +332,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
                     <div className="flex items-center gap-2 mb-6">
                         <Archive className="w-5 h-5 text-amber-500" />
                         <h3 className="text-lg font-bold text-gray-900 dark:text-white">Riwayat Raport</h3>
-                        <span className="ml-auto text-xs text-gray-400 dark:text-gray-500">Raport yang telah diarsipkan otomatis</span>
+                        <span className="ml-auto text-xs text-gray-400 dark:text-gray-500 dark:text-gray-400">Raport yang telah diarsipkan otomatis</span>
                     </div>
 
                     {snapshotsLoading ? (
@@ -364,7 +364,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
                                                             {reason.label}
                                                         </span>
                                                     </div>
-                                                    <p className="text-xs text-gray-400 dark:text-gray-500 mt-0.5">
+                                                    <p className="text-xs text-gray-400 dark:text-gray-500 dark:text-gray-400 mt-0.5">
                                                         {CLASS_LEVEL_LABELS[snap.class_level] ?? snap.class_level} · Diarsipkan {formatDatetime(snap.snapshotted_at)}
                                                         {snap.snapshotted_by && ` oleh ${snap.snapshotted_by}`}
                                                     </p>
@@ -393,7 +393,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
                                                 {/* Attendance summary */}
                                                 {att && (
                                                     <div className="flex gap-4 px-5 py-3 bg-gray-50 dark:bg-gray-800/30 text-xs flex-wrap">
-                                                        <span className="text-gray-500 font-semibold">Kehadiran:</span>
+                                                        <span className="text-gray-500 dark:text-gray-400 font-semibold">Kehadiran:</span>
                                                         <span className="text-green-600 font-medium">Hadir: {att.hadir}</span>
                                                         <span className="text-yellow-600">Izin: {att.izin}</span>
                                                         <span className="text-blue-600">Sakit: {att.sakit}</span>
@@ -419,7 +419,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
                                                                 .map((g, idx) => (
                                                                 <TableRow key={g.id} className="hover:bg-gray-50/50 dark:hover:bg-gray-800/30 opacity-90">
                                                                     <TableCell className="text-xs text-gray-400">{idx + 1}</TableCell>
-                                                                    {isShoChuKou && <TableCell className="text-xs text-gray-500">{formatDate(g.date)}</TableCell>}
+                                                                    {isShoChuKou && <TableCell className="text-xs text-gray-500 dark:text-gray-400">{formatDate(g.date)}</TableCell>}
                                                                     <TableCell>
                                                                         <span className={`text-xs px-1.5 py-0.5 rounded-full font-medium ${
                                                                             g.type === 'daily' ? 'bg-blue-100 text-blue-700' :
@@ -429,7 +429,7 @@ export default function StudentGradesTab({ studentId, enrollments }: { studentId
                                                                             {formatType(g.type)}
                                                                         </span>
                                                                     </TableCell>
-                                                                    {isShoChuKou && <TableCell className="text-xs text-gray-500">{g.chapter || '-'}</TableCell>}
+                                                                    {isShoChuKou && <TableCell className="text-xs text-gray-500 dark:text-gray-400">{g.chapter || '-'}</TableCell>}
                                                                     <TableCell className="text-right">
                                                                         <span className={`font-bold ${getScoreColor(g.score)}`}>
                                                                             {g.score ?? '-'}

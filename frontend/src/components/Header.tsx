@@ -250,7 +250,7 @@ export default function Header({ onMenuToggle }: HeaderProps) {
 
                     <button 
                         onClick={logout}
-                        className="hidden sm:block text-sm bg-gray-50 dark:bg-[#1e2532]/90 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-medium hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:hover:text-white transition-colors"
+                        className="hidden sm:block text-sm bg-gray-50 dark:bg-[#1e2532]/90 text-gray-700 dark:text-gray-300 border border-gray-200 dark:border-gray-600/50 px-3 sm:px-4 py-1.5 sm:py-2 rounded-md font-medium hover:bg-gray-100 dark:hover:bg-gray-700 hover:text-gray-900 dark:text-white dark:hover:text-white transition-colors"
                     >
                         {t.logout || 'Sign out'}
                     </button>

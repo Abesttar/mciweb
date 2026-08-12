@@ -620,9 +620,9 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                             </TableHeader>
                             <TableBody>
                                 {loading ? (
-                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500">Memuat data...</TableCell></TableRow>
+                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500 dark:text-gray-400">Memuat data...</TableCell></TableRow>
                                 ) : payments.length === 0 ? (
-                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500">Belum ada riwayat pembayaran</TableCell></TableRow>
+                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500 dark:text-gray-400">Belum ada riwayat pembayaran</TableCell></TableRow>
                                 ) : (
                                     payments.map((payment) => {
                                         const kwitansiNoRaw = payment.invoice_number ? payment.invoice_number : `INV-${payment.id.toString().padStart(5, '0')}`;
@@ -686,9 +686,9 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                             </TableHeader>
                             <TableBody>
                                 {loading ? (
-                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500">Memuat data...</TableCell></TableRow>
+                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500 dark:text-gray-400">Memuat data...</TableCell></TableRow>
                                 ) : invoices.length === 0 ? (
-                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500">Belum ada invoice dibuat</TableCell></TableRow>
+                                    <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500 dark:text-gray-400">Belum ada invoice dibuat</TableCell></TableRow>
                                 ) : (
                                     invoices.map((inv: any) => {
                                         const today = new Date(); today.setHours(0,0,0,0);
@@ -713,14 +713,14 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                                     </span>
                                                 </TableCell>
                                                 <TableCell className="text-right space-x-1">
-                                                    <Button onClick={() => handleDownloadHistoryInvoice(inv)} variant="ghost" size="icon" className="h-7 w-7 text-gray-500 hover:text-amber-600 hover:bg-amber-50">
+                                                    <Button onClick={() => handleDownloadHistoryInvoice(inv)} variant="ghost" size="icon" className="h-7 w-7 text-gray-500 dark:text-gray-400 hover:text-amber-600 hover:bg-amber-50">
                                                         <Download className="w-3.5 h-3.5" />
                                                     </Button>
                                                     {!isStudent && (
                                                         <Button
                                                             variant="ghost"
                                                             size="icon"
-                                                            className="h-7 w-7 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                                            className="h-7 w-7 text-gray-500 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
                                                             onClick={() => { setDeletingInvoice(inv); setDeleteInvoiceDialogOpen(true); }}
                                                         >
                                                             <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
@@ -842,7 +842,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                         <div className="border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 overflow-hidden relative h-full min-h-[200px]">
                             {kwitansiPreviewLoading && (
                                 <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-black/50">
-                                    <span className="text-gray-500 font-medium animate-pulse">Memperbarui Preview...</span>
+                                    <span className="text-gray-500 dark:text-gray-400 font-medium animate-pulse">Memperbarui Preview...</span>
                                 </div>
                             )}
                             {kwitansiPreviewUrl ? (
@@ -923,7 +923,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                     onChange={(e) => setInvoiceForm({ ...invoiceForm, tax: e.target.value })}
                                     placeholder="Contoh: 110000"
                                 />
-                                <p className="text-xs text-gray-500">Kosongkan jika tidak ada pajak. Akan ditulis -- pada PDF.</p>
+                                <p className="text-xs text-gray-500 dark:text-gray-400">Kosongkan jika tidak ada pajak. Akan ditulis -- pada PDF.</p>
                             </div>
                         </div>
 
@@ -931,7 +931,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                         <div className="border border-gray-200 dark:border-gray-700 rounded-md bg-gray-50 dark:bg-gray-900 overflow-hidden relative h-full min-h-[400px]">
                             {previewLoading && (
                                 <div className="absolute inset-0 z-10 flex items-center justify-center bg-white/50 dark:bg-black/50">
-                                    <span className="text-gray-500 font-medium animate-pulse">Memperbarui Preview...</span>
+                                    <span className="text-gray-500 dark:text-gray-400 font-medium animate-pulse">Memperbarui Preview...</span>
                                 </div>
                             )}
                             {pdfPreviewUrl ? (

@@ -243,7 +243,7 @@ export default function ClassGradesPage() {
         }
     };
 
-    if (loading && !studyClass) return <div className="p-8 text-center text-gray-500">Memuat data...</div>;
+    if (loading && !studyClass) return <div className="p-8 text-center text-gray-500 dark:text-gray-400">Memuat data...</div>;
     if (!studyClass) return <div className="p-8 text-center text-red-500">Kelas tidak ditemukan.</div>;
 
     const classType = studyClass.class_type;
@@ -325,7 +325,7 @@ export default function ClassGradesPage() {
                 <Button variant="ghost" size="icon" onClick={() => router.push('/dashboard/classes')}><ArrowLeft className="w-5 h-5" /></Button>
                 <div>
                     <h1 className="text-2xl font-bold">Absensi & Nilai: {studyClass.name}</h1>
-                    <p className="text-gray-500">Jenis: <span className="uppercase font-semibold">{studyClass.class_type}</span> | Batch: {studyClass.batch?.name}</p>
+                    <p className="text-gray-500 dark:text-gray-400">Jenis: <span className="uppercase font-semibold">{studyClass.class_type}</span> | Batch: {studyClass.batch?.name}</p>
                 </div>
             </div>
 
@@ -422,7 +422,7 @@ export default function ClassGradesPage() {
                     </TableHeader>
                     <TableBody>
                         {enrollments.length === 0 ? (
-                            <TableRow><TableCell colSpan={10} className="text-center py-8 text-gray-500">Belum ada siswa di batch ini.</TableCell></TableRow>
+                            <TableRow><TableCell colSpan={10} className="text-center py-8 text-gray-500 dark:text-gray-400">Belum ada siswa di batch ini.</TableCell></TableRow>
                         ) : enrollments.map((e) => (
                             <TableRow key={e.id}>
                                 <TableCell className="sticky left-0 bg-white dark:bg-[#151a23] z-10 font-medium whitespace-nowrap">

@@ -214,7 +214,7 @@ export default function ClassesPage() {
                                                 return { ...prev, days };
                                             });
                                         }}
-                                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${form.days.includes(day) ? 'bg-red-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 hover:bg-gray-200 dark:bg-[#1e2532] dark:text-gray-400 dark:hover:bg-[#2a3441]'}`}
+                                        className={`px-3 py-1.5 rounded-full text-sm font-medium transition-colors ${form.days.includes(day) ? 'bg-red-600 text-white shadow-sm' : 'bg-gray-100 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:bg-[#1e2532] dark:text-gray-400 dark:hover:bg-[#2a3441]'}`}
                                     >
                                         {day}
                                     </button>

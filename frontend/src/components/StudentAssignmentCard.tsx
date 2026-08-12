@@ -132,7 +132,7 @@ export default function StudentAssignmentCard() {
             );
         }
         return (
-            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 dark:bg-gray-700 dark:text-gray-300">
+            <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-gray-100 text-gray-600 dark:text-gray-400 dark:bg-gray-700 dark:text-gray-300">
                 <Clock className="w-3 h-3" /> {daysLeft} hari lagi
             </span>
         );
@@ -218,7 +218,7 @@ export default function StudentAssignmentCard() {
                                         {assignment.description && (
                                             <div>
                                                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide mb-1">Deskripsi Tugas</p>
-                                                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">{assignment.description}</p>
+                                                <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words bg-gray-50 dark:bg-gray-800/50 p-3 rounded-lg">{assignment.description}</p>
                                             </div>
                                         )}
 
@@ -240,7 +240,7 @@ export default function StudentAssignmentCard() {
                                         {sub && (
                                             <div className="bg-white dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 rounded-lg p-3 space-y-2">
                                                 <p className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wide">Pengumpulan Saya</p>
-                                                {sub.content && <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{sub.content}</p>}
+                                                {sub.content && <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap break-words">{sub.content}</p>}
                                                 {sub.file_path && (
                                                     <a
                                                         href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${sub.file_path}`}
@@ -263,7 +263,7 @@ export default function StudentAssignmentCard() {
                                         {sub?.status === 'graded' && (
                                             <div className="bg-emerald-50 dark:bg-emerald-900/20 border border-emerald-100 dark:border-emerald-800/50 rounded-lg p-3">
                                                 <p className="text-xs font-semibold text-emerald-700 dark:text-emerald-400 uppercase tracking-wide mb-1">Penilaian Sensei</p>
-                                                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{sub.grade ?? '-'}<span className="text-sm font-normal text-gray-500">/100</span></p>
+                                                <p className="text-2xl font-bold text-emerald-700 dark:text-emerald-300">{sub.grade ?? '-'}<span className="text-sm font-normal text-gray-500 dark:text-gray-400">/100</span></p>
                                                 {sub.feedback && <p className="text-sm text-gray-700 dark:text-gray-300 mt-2 italic">&ldquo;{sub.feedback}&rdquo;</p>}
                                             </div>
                                         )}
@@ -289,7 +289,7 @@ export default function StudentAssignmentCard() {
                 {assignments.length > 3 && (
                     <button
                         onClick={() => setShowAll(!showAll)}
-                        className="mt-4 w-full text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-200 text-center py-2 flex items-center justify-center gap-1 transition-colors"
+                        className="mt-4 w-full text-sm text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300 dark:hover:text-gray-200 text-center py-2 flex items-center justify-center gap-1 transition-colors"
                     >
                         {showAll ? <><ChevronUp className="w-4 h-4" /> Sembunyikan</> : <><ChevronDown className="w-4 h-4" /> Lihat {assignments.length - 3} tugas lainnya</>}
                     </button>

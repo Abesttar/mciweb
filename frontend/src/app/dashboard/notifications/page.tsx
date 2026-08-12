@@ -73,7 +73,7 @@ export default function NotificationsPage() {
             
             <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 overflow-hidden">
                 {notifications.length === 0 ? (
-                    <div className="p-8 text-center text-gray-500">Belum ada notifikasi.</div>
+                    <div className="p-8 text-center text-gray-500 dark:text-gray-400">Belum ada notifikasi.</div>
                 ) : (
                     <div className="divide-y divide-gray-100 dark:divide-gray-800">
                         {notifications.map(notif => (

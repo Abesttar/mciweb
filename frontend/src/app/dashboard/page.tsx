@@ -296,13 +296,13 @@ export default function DashboardPage() {
                                     <div key={r.id} className={`border rounded-xl p-3 sm:p-4 min-w-[220px] sm:min-w-[280px] flex-shrink-0 ${r.status === 'completed' ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/50' : r.status === 'in_progress' ? 'border-blue-200 bg-blue-50/50 dark:border-blue-900/50' : 'border-gray-100 dark:border-gray-700/50'}`}>
                                         <h4 className="font-bold text-gray-900 dark:text-white mb-2 truncate" title={r.roadmap_stage?.name}>{r.roadmap_stage?.name}</h4>
                                         <div className="flex justify-between items-center text-sm">
-                                            <span className="text-gray-500">{t.status || 'Status'}</span>
+                                            <span className="text-gray-500 dark:text-gray-400">{t.status || 'Status'}</span>
                                             {r.status === 'completed' ? (
                                                 <span className="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full font-medium text-xs">Selesai</span>
                                             ) : r.status === 'in_progress' ? (
                                                 <span className="bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium text-xs">Sedang Berjalan</span>
                                             ) : (
-                                                <span className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded-full font-medium text-xs">Belum Dimulai</span>
+                                                <span className="bg-gray-100 text-gray-700 dark:text-gray-300 px-2 py-0.5 rounded-full font-medium text-xs">Belum Dimulai</span>
                                             )}
                                         </div>
                                     </div>
@@ -334,17 +334,17 @@ export default function DashboardPage() {
                                             </div>
                                             <div className="space-y-3">
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-500">Dibayar:</span>
+                                                    <span className="text-gray-500 dark:text-gray-400">Dibayar:</span>
                                                     <span className="font-medium text-gray-900 dark:text-white">Rp {data.paid.toLocaleString('id-ID')}</span>
                                                 </div>
                                                 <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-500">Kekurangan:</span>
+                                                    <span className="text-gray-500 dark:text-gray-400">Kekurangan:</span>
                                                     <span className={`font-medium ${data.remaining > 0 ? 'text-red-600' : 'text-emerald-600'}`}>Rp {data.remaining.toLocaleString('id-ID')}</span>
                                                 </div>
                                                 <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
                                                     <div className={`h-2.5 rounded-full transition-all duration-1000 ${data.is_complete ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${data.percentage}%` }}></div>
                                                 </div>
-                                                <p className="text-xs text-right text-gray-500">{data.percentage}%</p>
+                                                <p className="text-xs text-right text-gray-500 dark:text-gray-400">{data.percentage}%</p>
                                             </div>
                                         </div>
                                     );
