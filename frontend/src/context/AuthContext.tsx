@@ -50,12 +50,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
                     localStorage.removeItem('token');
                     delete axios.defaults.headers.common['Authorization'];
                     if (pathname !== '/login') {
-                        router.push('/login');
+                        window.location.href = '/login';
                     }
                 }
             } else {
                 if (pathname !== '/login') {
-                    router.push('/login');
+                    window.location.href = '/login';
                 }
             }
             setIsLoading(false);
@@ -85,7 +85,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             localStorage.removeItem('token');
             delete axios.defaults.headers.common['Authorization'];
             setUser(null);
-            router.push('/login');
+            window.location.href = '/login';
         }
     };
 
