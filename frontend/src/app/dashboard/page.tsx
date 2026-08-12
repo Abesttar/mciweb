@@ -11,6 +11,7 @@ import Link from 'next/link';
 import { Users, BookOpen, GraduationCap, ArrowRight, Activity, Calendar, Clock, Megaphone, CheckSquare, Wallet, CreditCard } from 'lucide-react';
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AkademikSlider from '@/components/AkademikSlider';
+import StudentAssignmentCard from '@/components/StudentAssignmentCard';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -279,6 +280,9 @@ export default function DashboardPage() {
 
                     {/* Akademik Slider */}
                     <AkademikSlider stats={stats} studentName={user?.name || 'Siswa'} studentId={stats?.student?.id || 0} />
+
+                    {/* Assignment Card for Students */}
+                    <StudentAssignmentCard />
 
                     {/* Student Learning Roadmap */}
                     {stats?.student?.roadmaps && stats.student.roadmaps.length > 0 && (

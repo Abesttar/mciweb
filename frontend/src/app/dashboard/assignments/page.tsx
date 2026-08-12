@@ -22,6 +22,7 @@ import {
 } from '@/components/ui/alert-dialog';
 import { useAuth } from '@/context/AuthContext';
 import { useLanguage } from '@/context/LanguageContext';
+import { FileText, ExternalLink, CheckCircle, Clock, AlertCircle, ClipboardList, Star } from 'lucide-react';
 
 interface StudyClass {
     id: number;
@@ -48,6 +49,20 @@ interface Assignment {
     student?: Student;
 }
 
+interface Submission {
+    id: number;
+    assignment_id: number;
+    student_id: number;
+    content: string | null;
+    file_path: string | null;
+    original_filename: string | null;
+    status: 'submitted' | 'graded' | 'late';
+    grade: number | null;
+    feedback: string | null;
+    submitted_at: string | null;
+    student?: { user?: { name: string } };
+}
+
 export default function AssignmentsPage() {
     const { hasPermission } = useAuth();
     const { t } = useLanguage();
@@ -67,6 +82,15 @@ export default function AssignmentsPage() {
     const [file, setFile] = useState<File | null>(null);
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
+    
+    // Submissions State
+    const [submissionsDialogOpen, setSubmissionsDialogOpen] = useState(false);
+    const [activeAssignmentForSubmissions, setActiveAssignmentForSubmissions] = useState<Assignment | null>(null);
+    const [submissionsList, setSubmissionsList] = useState<Submission[]>([]);
+    const [loadingSubmissions, setLoadingSubmissions] = useState(false);
+    const [gradingSubmission, setGradingSubmission] = useState<Submission | null>(null);
+    const [gradingForm, setGradingForm] = useState({ grade: '', feedback: '' });
+    const [submittingGrade, setSubmittingGrade] = useState(false);
 
     const fetchAssignments = useCallback(async () => {
         setLoading(true);
@@ -181,6 +205,47 @@ export default function AssignmentsPage() {
         }
     };
 
+    const fetchSubmissions = async (assignment: Assignment) => {
+        setActiveAssignmentForSubmissions(assignment);
+        setSubmissionsDialogOpen(true);
+        setLoadingSubmissions(true);
+        try {
+            const res = await axios.get('/api/assignment-submissions', { params: { assignment_id: assignment.id } });
+            setSubmissionsList(res.data.data || res.data);
+        } catch (err: any) {
+            toast.error('Gagal memuat daftar pengumpulan');
+        } finally {
+            setLoadingSubmissions(false);
+        }
+    };
+
+    const openGrading = (submission: Submission) => {
+        setGradingSubmission(submission);
+        setGradingForm({
+            grade: submission.grade ? submission.grade.toString() : '',
+            feedback: submission.feedback || '',
+        });
+    };
+
+    const submitGrade = async () => {
+        if (!gradingSubmission) return;
+        setSubmittingGrade(true);
+        try {
+            const res = await axios.put(`/api/assignment-submissions/${gradingSubmission.id}`, {
+                grade: gradingForm.grade ? parseInt(gradingForm.grade) : null,
+                feedback: gradingForm.feedback || null,
+            });
+            toast.success('Nilai berhasil disimpan');
+            setGradingSubmission(null);
+            // Update local list
+            setSubmissionsList(prev => prev.map(s => s.id === gradingSubmission.id ? { ...s, ...res.data } : s));
+        } catch (err: any) {
+            toast.error('Gagal menyimpan nilai');
+        } finally {
+            setSubmittingGrade(false);
+        }
+    };
+
     return (
         <div>
             <div className="flex items-center justify-between mb-6">
@@ -233,6 +298,9 @@ export default function AssignmentsPage() {
                                     </TableCell>
                                     {canManage && (
                                         <TableCell className="text-right space-x-2">
+                                            <Button variant="secondary" size="sm" onClick={() => fetchSubmissions(assignment)} className="bg-amber-100 text-amber-700 hover:bg-amber-200 border-amber-200">
+                                                <ClipboardList className="w-4 h-4 mr-1" /> Pengumpulan
+                                            </Button>
                                             <Button variant="outline" size="sm" onClick={() => openEdit(assignment)}>{t.edit}</Button>
                                             <Button variant="destructive" size="sm" onClick={() => { setDeletingAssignment(assignment); setDeleteDialogOpen(true); }}>{t.delete}</Button>
                                         </TableCell>
@@ -338,6 +406,121 @@ export default function AssignmentsPage() {
                     </AlertDialogFooter>
                 </AlertDialogContent>
             </AlertDialog>
+
+            {/* Submissions Dialog */}
+            <Dialog open={submissionsDialogOpen} onOpenChange={(open) => !open && setSubmissionsDialogOpen(false)}>
+                <DialogContent className="sm:max-w-[700px] max-h-[80vh] overflow-y-auto">
+                    <DialogHeader>
+                        <DialogTitle className="flex items-center gap-2">
+                            <ClipboardList className="w-5 h-5 text-amber-600" />
+                            Daftar Pengumpulan Tugas
+                        </DialogTitle>
+                        <DialogDescription>
+                            {activeAssignmentForSubmissions?.title} ({activeAssignmentForSubmissions?.study_class?.name})
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    {loadingSubmissions ? (
+                        <div className="py-8 text-center text-gray-500">Memuat data...</div>
+                    ) : submissionsList.length === 0 ? (
+                        <div className="py-8 text-center text-gray-500">Belum ada siswa yang mengumpulkan tugas ini.</div>
+                    ) : (
+                        <div className="space-y-4 mt-4">
+                            {submissionsList.map(sub => (
+                                <div key={sub.id} className="border rounded-xl p-4 bg-gray-50 dark:bg-gray-800/50">
+                                    <div className="flex items-start justify-between mb-3">
+                                        <div>
+                                            <p className="font-bold text-gray-900 dark:text-white">{sub.student?.user?.name || 'Siswa'}</p>
+                                            <p className="text-xs text-gray-500">
+                                                Waktu kumpul: {sub.submitted_at ? new Date(sub.submitted_at).toLocaleString('id-ID') : '-'}
+                                                {sub.status === 'late' && <span className="ml-2 text-red-600 font-medium">(Terlambat)</span>}
+                                            </p>
+                                        </div>
+                                        <div>
+                                            {sub.status === 'graded' ? (
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-emerald-100 text-emerald-700">
+                                                    <Star className="w-3 h-3" /> Nilai: {sub.grade}
+                                                </span>
+                                            ) : (
+                                                <span className="inline-flex items-center gap-1 px-2.5 py-1 rounded-full text-xs font-semibold bg-amber-100 text-amber-700">
+                                                    Belum Dinilai
+                                                </span>
+                                            )}
+                                        </div>
+                                    </div>
+
+                                    {sub.content && (
+                                        <div className="mb-3 bg-white dark:bg-gray-900 p-3 rounded-lg border text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">
+                                            {sub.content}
+                                        </div>
+                                    )}
+
+                                    {sub.file_path && (
+                                        <div className="mb-3">
+                                            <a
+                                                href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${sub.file_path}`}
+                                                target="_blank"
+                                                rel="noopener noreferrer"
+                                                className="inline-flex items-center gap-2 text-sm text-blue-600 hover:underline bg-blue-50 dark:bg-blue-900/20 px-3 py-2 rounded-lg border border-blue-100 dark:border-blue-800/50"
+                                            >
+                                                <FileText className="w-4 h-4" />
+                                                {sub.original_filename || 'Lihat Lampiran'}
+                                                <ExternalLink className="w-3 h-3" />
+                                            </a>
+                                        </div>
+                                    )}
+
+                                    <div className="flex justify-end border-t pt-3 mt-2">
+                                        <Button variant="outline" size="sm" onClick={() => openGrading(sub)}>
+                                            {sub.status === 'graded' ? 'Ubah Nilai' : 'Beri Nilai'}
+                                        </Button>
+                                    </div>
+                                </div>
+                            ))}
+                        </div>
+                    )}
+                </DialogContent>
+            </Dialog>
+
+            {/* Grading Dialog */}
+            <Dialog open={!!gradingSubmission} onOpenChange={(open) => !open && setGradingSubmission(null)}>
+                <DialogContent className="sm:max-w-[400px]">
+                    <DialogHeader>
+                        <DialogTitle>Beri Nilai</DialogTitle>
+                        <DialogDescription>
+                            Siswa: {gradingSubmission?.student?.user?.name || 'Siswa'}
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                            <Label htmlFor="grade">Nilai (0-100)</Label>
+                            <Input
+                                id="grade"
+                                type="number"
+                                min="0"
+                                max="100"
+                                value={gradingForm.grade}
+                                onChange={(e) => setGradingForm({ ...gradingForm, grade: e.target.value })}
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label htmlFor="feedback">Komentar / Feedback</Label>
+                            <Textarea
+                                id="feedback"
+                                value={gradingForm.feedback}
+                                onChange={(e) => setGradingForm({ ...gradingForm, feedback: e.target.value })}
+                                placeholder="Komentar untuk siswa..."
+                            />
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setGradingSubmission(null)}>Batal</Button>
+                        <Button onClick={submitGrade} disabled={submittingGrade} className="bg-amber-600 hover:bg-amber-700">
+                            {submittingGrade ? 'Menyimpan...' : 'Simpan Nilai'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

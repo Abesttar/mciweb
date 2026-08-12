@@ -59,6 +59,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('grades-bulk', [GradeController::class, 'batchStore']);
     Route::post('grades-bulk-delete', [GradeController::class, 'batchDestroy']);
     Route::apiResource('assignments', AssignmentController::class);
+    Route::apiResource('assignment-submissions', \App\Http\Controllers\AssignmentSubmissionController::class)->only(['index', 'store', 'show', 'update']);
     
     Route::apiResource('document-types', \App\Http\Controllers\DocumentTypeController::class);
     Route::apiResource('student-documents', \App\Http\Controllers\StudentDocumentController::class);
