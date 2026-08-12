@@ -92,14 +92,15 @@ export default function LoginPage() {
                 >
                     <div className="bg-white/70 dark:bg-[#151a23]/80 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/50 dark:border-gray-800/50 p-8 sm:p-10">
                         {/* Mobile Logo */}
-                        <div className="lg:hidden flex justify-center mb-8">
-                            <div className="bg-white/90 rounded-2xl shadow-lg border border-gray-100 p-4 w-full flex justify-center">
-                                <img
-                                    src="/logo.png"
-                                    alt="LPK Mirai Crown Indonesia"
-                                    className="h-14 w-auto object-contain"
-                                />
-                            </div>
+                        <div className="lg:hidden flex flex-col items-center justify-center mb-8">
+                            <img
+                                src="/logo-login.png"
+                                alt="LPK Mirai Crown Indonesia"
+                                className="w-48 h-auto object-contain"
+                            />
+                            <h2 className="mt-4 text-center font-bold text-gray-900 dark:text-white tracking-widest text-sm uppercase">
+                                LPK Mirai Crown Indonesia
+                            </h2>
                         </div>
 
                         <div className="text-center space-y-2 mb-8">
