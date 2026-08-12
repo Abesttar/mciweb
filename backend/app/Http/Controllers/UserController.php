@@ -99,6 +99,20 @@ class UserController extends Controller
 
         $user->load('roles');
 
+        // Send invitation email to the newly created user (any role)
+        try {
+            \Illuminate\Support\Facades\Mail::to($user->email)->send(
+                new \App\Mail\UserInvitationMail(
+                    $user->name, 
+                    $user->email, 
+                    $validated['password'], 
+                    $validated['role']
+                )
+            );
+        } catch (\Exception $e) {
+            \Log::error('Failed to send user invitation email: ' . $e->getMessage());
+        }
+
         return response()->json($user, 201);
     }
 
