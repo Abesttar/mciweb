@@ -2,6 +2,7 @@
 
 import { useState, useRef, ChangeEvent } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 import axios from '@/lib/axios';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -133,9 +134,11 @@ export default function ProfilePage() {
                                 title={user?.profile_photo_url ? 'Klik untuk memperbesar' : 'Belum ada foto'}
                             >
                                 {user?.profile_photo_url ? (
-                                    <img
+                                    <Image
                                         src={user.profile_photo_url}
                                         alt={user.name}
+                                        width={144}
+                                        height={144}
                                         className="w-full h-full object-cover"
                                     />
                                 ) : (
@@ -350,9 +353,11 @@ export default function ProfilePage() {
                         className="relative max-w-2xl max-h-[85vh] mx-4"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <img
+                        <Image
                             src={user.profile_photo_url}
                             alt={user.name}
+                            width={800}
+                            height={800}
                             className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
                         />
                         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent rounded-b-lg p-4">

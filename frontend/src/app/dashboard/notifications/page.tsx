@@ -70,14 +70,14 @@ export default function NotificationsPage() {
     return (
         <div className="max-w-4xl mx-auto space-y-6">
             <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Semua Notifikasi</h1>
-            
+
             <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 overflow-hidden">
                 {notifications.length === 0 ? (
                     <div className="p-8 text-center text-gray-500 dark:text-gray-400">Belum ada notifikasi.</div>
                 ) : (
                     <div className="divide-y divide-gray-100 dark:divide-gray-800">
                         {notifications.map(notif => (
-                            <div 
+                            <div
                                 key={notif.id}
                                 onClick={() => handleNotifClick(notif)}
                                 className={`flex gap-4 p-4 cursor-pointer hover:bg-gray-50 dark:hover:bg-gray-800/50 transition-colors ${!notif.read_at ? 'bg-red-50/20 dark:bg-red-900/10' : ''}`}
@@ -125,3 +125,4 @@ export default function NotificationsPage() {
         </div>
     );
 }
+

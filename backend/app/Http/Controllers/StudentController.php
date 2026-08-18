@@ -250,7 +250,20 @@ class StudentController extends Controller
 
     public function destroy(Student $student)
     {
-        $student->user->delete(); // cascades to student
+        $user = $student->user;
+
+        DB::transaction(function () use ($student, $user) {
+            // Delete student first (removes FK dependency on user)
+            $student->delete();
+
+            if ($user) {
+                // Detach all Spatie permission roles to clean up model_has_roles
+                // This prevents FK violations on MySQL and orphaned role records
+                $user->roles()->detach();
+                $user->delete();
+            }
+        });
+
         return response()->json(['message' => 'Student deleted successfully']);
     }
 

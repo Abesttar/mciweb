@@ -112,6 +112,7 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
                 {/* Close button + Logo */}
                 <div className="px-4 py-4 border-b border-red-800/50 dark:border-gray-800/50 flex items-center justify-between relative z-10 bg-red-900/50 dark:bg-black/20 backdrop-blur-sm">
                     <div className="flex-1 flex justify-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src="/logo.png" 
                             alt="LPK Mirai Crown Indonesia" 

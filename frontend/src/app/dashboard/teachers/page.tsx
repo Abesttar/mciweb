@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import axios from '@/lib/axios';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -97,7 +98,7 @@ export default function TeachersPage() {
                                 <TableCell className="font-medium">
                                     <div className="flex items-center gap-3">
                                         {teacher.user.profile_photo_url ? (
-                                            <img src={teacher.user.profile_photo_url} alt={teacher.user.name} className="w-8 h-8 rounded-full object-cover border" />
+                                            <Image src={teacher.user.profile_photo_url} alt={teacher.user.name} width={32} height={32} className="w-8 h-8 rounded-full object-cover border" />
                                         ) : (
                                             <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 flex items-center justify-center font-bold text-xs shrink-0">
                                                 {teacher.user.name.substring(0, 2).toUpperCase()}

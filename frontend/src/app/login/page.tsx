@@ -2,6 +2,7 @@
 
 import { useState } from 'react';
 import { useAuth } from '@/context/AuthContext';
+import Image from 'next/image';
 import axios from '@/lib/axios';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -52,9 +53,11 @@ export default function LoginPage() {
                         transition={{ duration: 0.8 }}
                     >
                         <div className="inline-block">
-                            <img
+                            <Image
                                 src="/logo-login.png"
                                 alt="LPK Mirai Crown Indonesia"
+                                width={320}
+                                height={120}
                                 className="w-64 md:w-80 h-auto object-contain"
                             />
                         </div>
@@ -93,9 +96,11 @@ export default function LoginPage() {
                     <div className="bg-white/70 dark:bg-[#151a23]/80 backdrop-blur-2xl rounded-3xl shadow-2xl border border-white/50 dark:border-gray-800/50 p-8 sm:p-10">
                         {/* Mobile Logo */}
                         <div className="lg:hidden flex flex-col items-center justify-center mb-8">
-                            <img
+                            <Image
                                 src="/logo-login.png"
                                 alt="LPK Mirai Crown Indonesia"
+                                width={192}
+                                height={80}
                                 className="w-48 h-auto object-contain"
                             />
                             <h2 className="mt-4 text-center font-bold text-gray-900 dark:text-white tracking-widest text-sm uppercase">

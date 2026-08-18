@@ -93,6 +93,7 @@ export default function Sidebar() {
             <div className="px-4 py-6 border-b border-red-800/50 dark:border-gray-800/50 flex flex-col items-center justify-center relative z-10 bg-red-900/50 dark:bg-black/20 backdrop-blur-sm">
                 <div className="w-full flex justify-center hover:scale-105 transition-transform duration-300">
                     <div className="w-full flex justify-center items-center">
+                        {/* eslint-disable-next-line @next/next/no-img-element */}
                         <img 
                             src="/logo.png" 
                             alt="LPK Mirai Crown Indonesia" 

@@ -118,6 +118,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
     const [invoiceForm, setInvoiceForm] = useState({
         invoice_number: '',
         due_date: '',
+        order_date: new Date().toISOString().split('T')[0],
         payment_type: '',
         tax: '',
     });
@@ -278,6 +279,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
         setInvoiceForm({
             invoice_number: '',
             due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            order_date: new Date().toISOString().split('T')[0],
             payment_type: '',
             tax: '',
         });
@@ -318,7 +320,8 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             page.drawText(invoiceNo, { x: 245, y: 664.5, size: 14, font: fontBold, color: black });
 
             // 2. Tanggal Order
-            const orderDate = new Date().toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
+            const orderDateObj = new Date(invoiceForm.order_date);
+            const orderDate = orderDateObj.toLocaleDateString('id-ID', { day: '2-digit', month: 'long', year: 'numeric' });
             page.drawText(orderDate, { x: 175, y: 631.5, size: 12, font, color: black });
 
             // 3. Tanggal Jatuh Tempo
@@ -423,7 +426,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                 tax_amount: taxAmount,
                 total_amount: totalAmount,
                 due_date: invoiceForm.due_date,
-                order_date: new Date().toISOString().split('T')[0],
+                order_date: invoiceForm.order_date,
             });
 
             setInvoiceDialogOpen(false);
@@ -892,13 +895,23 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                 </div>
                             </div>
 
-                            <div className="grid gap-2">
-                                <Label>Tanggal Jatuh Tempo</Label>
-                                <Input
-                                    type="date"
-                                    value={invoiceForm.due_date}
-                                    onChange={(e) => setInvoiceForm({ ...invoiceForm, due_date: e.target.value })}
-                                />
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                <div className="grid gap-2">
+                                    <Label>Tanggal Pembuatan</Label>
+                                    <Input
+                                        type="date"
+                                        value={invoiceForm.order_date}
+                                        onChange={(e) => setInvoiceForm({ ...invoiceForm, order_date: e.target.value })}
+                                    />
+                                </div>
+                                <div className="grid gap-2">
+                                    <Label>Tanggal Jatuh Tempo</Label>
+                                    <Input
+                                        type="date"
+                                        value={invoiceForm.due_date}
+                                        onChange={(e) => setInvoiceForm({ ...invoiceForm, due_date: e.target.value })}
+                                    />
+                                </div>
                             </div>
 
                             <div className="grid gap-2">

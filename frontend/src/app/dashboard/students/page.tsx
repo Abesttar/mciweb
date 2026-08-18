@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from '@/lib/axios';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
@@ -84,6 +85,7 @@ export default function StudentsPage() {
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
+    const [sortBy, setSortBy] = useState('name_asc');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
     
     // Dialog states
@@ -99,7 +101,7 @@ export default function StudentsPage() {
     const fetchStudents = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await axios.get('/api/students', { params: { search: search || undefined } });
+            const res = await axios.get('/api/students', { params: { search: search || undefined, per_page: 1000 } });
             setStudents(res.data.data);
         } catch (err) { console.error(err); }
         finally { setLoading(false); }
@@ -227,6 +229,37 @@ export default function StudentsPage() {
 
     const getCurrentBatch = (student: Student) => student.enrollments?.[0]?.batch;
 
+    const sortedStudents = [...students].sort((a, b) => {
+        if (sortBy === 'name_asc') {
+            return a.user.name.localeCompare(b.user.name);
+        } else if (sortBy === 'name_desc') {
+            return b.user.name.localeCompare(a.user.name);
+        } else if (sortBy === 'batch_asc') {
+            const batchA = getCurrentBatch(a)?.name || '';
+            const batchB = getCurrentBatch(b)?.name || '';
+            return batchA.localeCompare(batchB);
+        } else if (sortBy === 'payment_desc') {
+            const payA = a.payments_sum_amount || 0;
+            const payB = b.payments_sum_amount || 0;
+            return payB - payA;
+        } else if (sortBy === 'payment_asc') {
+            const payA = a.payments_sum_amount || 0;
+            const payB = b.payments_sum_amount || 0;
+            return payA - payB;
+        } else if (sortBy === 'roadmap') {
+            const getRoadmapStatusScore = (s: Student) => {
+                const roadmaps = s.roadmaps || [];
+                if (roadmaps.length === 0) return 0;
+                const current = roadmaps.find(r => r.status === 'in_progress') || roadmaps.filter(r => r.status === 'completed').pop() || roadmaps[0];
+                if (current?.status === 'completed') return 3;
+                if (current?.status === 'in_progress') return 2;
+                return 1;
+            };
+            return getRoadmapStatusScore(b) - getRoadmapStatusScore(a);
+        }
+        return 0;
+    });
+
     return (
         <div className="space-y-8 animate-in fade-in duration-500 pb-10">
             <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-xl p-4 sm:p-6 rounded-2xl sm:rounded-3xl border border-gray-200/50 dark:border-gray-700/50 shadow-sm relative overflow-hidden group">
@@ -257,8 +290,23 @@ export default function StudentsPage() {
                         className="pl-10 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-500 rounded-xl bg-gray-50/50 dark:bg-gray-800/50"
                     />
                 </div>
-                
-                <div className="flex items-center bg-gray-100 dark:bg-gray-800 p-1 rounded-lg self-end sm:self-auto">
+
+                <div className="flex flex-col sm:flex-row items-center gap-2 w-full sm:w-auto">
+                    <Select value={sortBy} onValueChange={(val) => setSortBy(val || 'name_asc')}>
+                        <SelectTrigger className="w-full sm:w-[180px] bg-gray-50/50 dark:bg-gray-800/50 border-gray-200 dark:border-gray-600/50">
+                            <SelectValue placeholder="Urutkan" />
+                        </SelectTrigger>
+                        <SelectContent>
+                            <SelectItem value="name_asc">Nama (A-Z)</SelectItem>
+                            <SelectItem value="name_desc">Nama (Z-A)</SelectItem>
+                            <SelectItem value="batch_asc">Batch / Kelas</SelectItem>
+                            <SelectItem value="payment_desc">Pembayaran Lunas</SelectItem>
+                            <SelectItem value="payment_asc">Pembayaran Sedikit</SelectItem>
+                            <SelectItem value="roadmap">Roadmap</SelectItem>
+                        </SelectContent>
+                    </Select>
+                    
+                    <div className="flex items-center bg-gray-100 dark:bg-gray-800 p-1 rounded-lg w-full sm:w-auto">
                     <button 
                         onClick={() => setViewMode('grid')}
                         className={`p-2 rounded-md flex items-center transition-all ${viewMode === 'grid' ? 'bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl shadow-sm text-red-700' : 'text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:text-gray-300'}`}
@@ -273,6 +321,7 @@ export default function StudentsPage() {
                     >
                         <List className="w-4 h-4" />
                     </button>
+                    </div>
                 </div>
             </div>
 
@@ -292,7 +341,7 @@ export default function StudentsPage() {
                 <>
                     {viewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                            {students.map((s, idx) => (
+                            {sortedStudents.map((s, idx) => (
                                 <Link href={`/dashboard/students/${s.id}`} key={s.id} className="group block h-full">
                                     <div className="bg-white dark:bg-card rounded-2xl sm:rounded-[2rem] border border-red-100 dark:border-red-900/50 dark:border-red-900/50 overflow-hidden hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 relative flex flex-col h-full hover:-translate-y-1">
                                         {/* Watermark Ornament */}
@@ -304,7 +353,7 @@ export default function StudentsPage() {
                                             <div className="flex justify-between items-start mb-4">
                                                 <div className="w-14 h-14 rounded-full overflow-hidden bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl shadow-sm border border-gray-100 dark:border-gray-700/50 flex items-center justify-center">
                                                 {s.user.profile_photo_url ? (
-                                                    <img src={s.user.profile_photo_url} alt={s.user.name} className="w-full h-full object-cover" />
+                                                    <Image src={s.user.profile_photo_url} alt={s.user.name} width={56} height={56} className="w-full h-full object-cover" />
                                                 ) : (
                                                     <div className="w-full h-full bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 flex items-center justify-center font-bold text-xl">
                                                         {getInitials(s.user.name)}
@@ -373,14 +422,14 @@ export default function StudentsPage() {
                                     </TableRow>
                                 </TableHeader>
                                 <TableBody>
-                                    {students.map((s) => (
+                                    {sortedStudents.map((s) => (
                                         <TableRow key={s.id} className="hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative">
                                             <TableCell>
                                                 <Link href={`/dashboard/students/${s.id}`} className="absolute inset-0 z-0"></Link>
                                                 <div className="flex items-center space-x-3 relative z-10 pointer-events-none">
                                                     <div className="w-10 h-10 rounded-full overflow-hidden bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 flex items-center justify-center font-bold text-sm">
                                                         {s.user.profile_photo_url ? (
-                                                            <img src={s.user.profile_photo_url} alt={s.user.name} className="w-full h-full object-cover" />
+                                                            <Image src={s.user.profile_photo_url} alt={s.user.name} width={40} height={40} className="w-full h-full object-cover" />
                                                         ) : (
                                                             getInitials(s.user.name)
                                                         )}

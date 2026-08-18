@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import axios from '@/lib/axios';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { Button } from '@/components/ui/button';
 import { Input } from '@/components/ui/input';
@@ -182,7 +183,7 @@ export default function UsersPage() {
                                     <TableCell className="font-medium">
                                         <div className="flex items-center gap-3">
                                             {u.profile_photo_url ? (
-                                                <img src={u.profile_photo_url} alt={u.name} className="w-8 h-8 rounded-full object-cover border" />
+                                                <Image src={u.profile_photo_url} alt={u.name} width={32} height={32} className="w-8 h-8 rounded-full object-cover border" />
                                             ) : (
                                                 <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 flex items-center justify-center font-bold text-xs shrink-0">
                                                     {u.name.substring(0, 2).toUpperCase()}

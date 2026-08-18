@@ -32,7 +32,10 @@ class DashboardController extends Controller
         $isSiswa = in_array('Siswa', $roles);
 
         if ($isAdmin) {
+            $data['active_students'] = Student::where('status', 'active')->count();
+            $data['inactive_students'] = Student::where('status', '!=', 'active')->count();
             $data['total_students'] = Student::count();
+            $data['total_batches'] = Batch::count();
             $data['active_batches'] = Batch::where('status', 'active')->count();
             $data['active_teachers'] = Teacher::count();
 

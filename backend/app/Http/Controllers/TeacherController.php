@@ -105,7 +105,20 @@ class TeacherController extends Controller
 
     public function destroy(Teacher $teacher)
     {
-        $teacher->user->delete();
+        $user = $teacher->user;
+
+        DB::transaction(function () use ($teacher, $user) {
+            // Delete teacher first (removes FK dependency on user)
+            $teacher->delete();
+
+            if ($user) {
+                // Detach all Spatie permission roles to clean up model_has_roles
+                // This prevents FK violations on MySQL and orphaned role records
+                $user->roles()->detach();
+                $user->delete();
+            }
+        });
+
         return response()->json(['message' => 'Teacher deleted successfully']);
     }
 }

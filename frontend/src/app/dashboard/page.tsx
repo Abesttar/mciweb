@@ -53,14 +53,21 @@ export default function DashboardPage() {
     const statCards = [
         { 
             title: t.activeStudents || 'Siswa Aktif', 
-            value: stats?.total_students || 0, 
+            value: stats?.active_students || 0, 
             icon: Users, 
             color: 'bg-red-50 text-red-700',
             href: '/dashboard/students'
         },
         { 
+            title: 'Siswa Inaktif', 
+            value: stats?.inactive_students || 0, 
+            icon: Users, 
+            color: 'bg-gray-50 text-gray-700',
+            href: '/dashboard/students'
+        },
+        { 
             title: t.totalBatches || 'Total Angkatan', 
-            value: stats?.active_batches || 0, 
+            value: stats?.total_batches || 0, 
             icon: BookOpen, 
             color: 'bg-blue-50 text-blue-600',
             href: '/dashboard/batches'
@@ -86,6 +93,16 @@ export default function DashboardPage() {
             color: 'bg-emerald-50 text-emerald-600',
             href: '/dashboard/students'
         }
+    ];
+
+    // Accent colors for each card (left border + icon background)
+    const cardAccents = [
+        { border: 'border-l-red-500',     icon: 'bg-red-100/80 dark:bg-red-900/40 text-red-600 dark:text-red-400' },
+        { border: 'border-l-slate-400',   icon: 'bg-slate-100/80 dark:bg-slate-800/60 text-slate-500 dark:text-slate-400' },
+        { border: 'border-l-blue-500',    icon: 'bg-blue-100/80 dark:bg-blue-900/40 text-blue-600 dark:text-blue-400' },
+        { border: 'border-l-amber-500',   icon: 'bg-amber-100/80 dark:bg-amber-900/40 text-amber-600 dark:text-amber-400' },
+        { border: 'border-l-violet-500',  icon: 'bg-violet-100/80 dark:bg-violet-900/40 text-violet-600 dark:text-violet-400' },
+        { border: 'border-l-emerald-500', icon: 'bg-emerald-100/80 dark:bg-emerald-900/40 text-emerald-600 dark:text-emerald-400' },
     ];
 
     return (
@@ -116,28 +133,29 @@ export default function DashboardPage() {
                             </div>
                         </div>
                     )}
-                    {/* Summary Cards */}
-                    <div className="grid grid-cols-1 md:grid-cols-2 sm:grid-cols-2 md:grid-cols-3 xl:grid-cols-5 gap-3 sm:gap-6">
+                    {/* Summary Cards - 3 per row, 2 rows, perfectly symmetric */}
+                    <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 sm:gap-5">
                         {statCards.map((card, idx) => (
                             <Link key={idx} href={card.href} className="group block h-full">
-                                <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-md rounded-2xl sm:rounded-3xl shadow-sm border border-gray-100 dark:border-gray-700/50 p-4 sm:p-6 transition-all duration-500 hover:border-red-400 hover:shadow-2xl hover:-translate-y-2 relative overflow-hidden h-full">
-                                    {/* Japanese Ornament Corner */}
-                                    <div className="absolute -top-4 -right-4 text-red-100 opacity-50 group-hover:text-red-200 group-hover:opacity-100 transition-all duration-700 group-hover:rotate-45 group-hover:scale-125">
-                                        <JapaneseOrnament type={idx % 2 === 0 ? 'sakura' : 'asanoha'} className="w-32 h-32" />
+                                <div className={`bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 border-l-4 ${cardAccents[idx].border} p-5 sm:p-6 transition-all duration-300 hover:shadow-xl hover:-translate-y-1 relative overflow-hidden h-full flex flex-col justify-between`}>
+                                    {/* Ornament */}
+                                    <div className="absolute -bottom-6 -right-6 text-gray-100 dark:text-gray-800/60 opacity-60 pointer-events-none transition-transform duration-700 group-hover:scale-110">
+                                        <JapaneseOrnament type={idx % 2 === 0 ? 'sakura' : 'asanoha'} className="w-28 h-28" />
                                     </div>
 
                                     <div className="flex items-start justify-between relative z-10">
-                                        <div>
-                                            <p className="text-[10px] sm:text-xs font-bold text-gray-500 dark:text-gray-400 mb-1 tracking-widest uppercase">{card.title}</p>
-                                            <p className="text-2xl sm:text-4xl font-extrabold text-gray-900 dark:text-white group-hover:text-red-700 dark:text-red-400 transition-colors duration-300">{card.value}</p>
-                                        </div>
-                                        <div className={`p-3 sm:p-4 rounded-xl sm:rounded-2xl ${card.color} shadow-inner bg-gradient-to-br from-white/50 to-transparent group-hover:scale-110 transition-transform duration-500`}>
-                                            <card.icon className="w-6 h-6 sm:w-8 sm:h-8" />
+                                        <p className="text-[10px] sm:text-xs font-bold text-gray-400 dark:text-gray-500 tracking-widest uppercase leading-tight">{card.title}</p>
+                                        <div className={`p-2.5 sm:p-3 rounded-xl ${cardAccents[idx].icon} group-hover:scale-110 transition-transform duration-300 shrink-0`}>
+                                            <card.icon className="w-5 h-5 sm:w-6 sm:h-6" />
                                         </div>
                                     </div>
-                                    <div className="mt-4 flex items-center text-sm font-medium text-red-700 dark:text-red-400 opacity-0 group-hover:opacity-100 transition-opacity translate-y-2 group-hover:translate-y-0 duration-200">
-                                        <span>{t.viewDetails || 'Lihat Detail'}</span>
-                                        <ArrowRight className="w-4 h-4 ml-1" />
+
+                                    <div className="mt-3 relative z-10">
+                                        <p className="text-3xl sm:text-4xl font-extrabold text-gray-900 dark:text-white tracking-tight">{card.value}</p>
+                                        <div className="mt-3 flex items-center text-xs font-semibold text-gray-400 dark:text-gray-500 group-hover:text-red-600 dark:group-hover:text-red-400 transition-colors duration-200">
+                                            <span>{t.viewDetails || 'Lihat Detail'}</span>
+                                            <ArrowRight className="w-3.5 h-3.5 ml-1 translate-x-0 group-hover:translate-x-1 transition-transform duration-200" />
+                                        </div>
                                     </div>
                                 </div>
                             </Link>

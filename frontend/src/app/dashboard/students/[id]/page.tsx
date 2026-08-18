@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useCallback } from 'react';
 import axios from '@/lib/axios';
+import Image from 'next/image';
 import toast from 'react-hot-toast';
 import { useParams, useRouter, useSearchParams } from 'next/navigation';
 import { useAuth } from '@/context/AuthContext';
@@ -268,7 +269,7 @@ export default function StudentDetail() {
                     className={`w-20 h-20 md:w-24 md:h-24 rounded-full overflow-hidden bg-gradient-to-br from-red-100 to-indigo-100 flex items-center justify-center text-2xl md:text-3xl font-bold text-red-800 shadow-inner z-10 ${student.user.profile_photo_url ? 'cursor-pointer hover:ring-4 hover:ring-red-200 transition-all' : ''}`}
                 >
                     {student.user.profile_photo_url ? (
-                        <img src={student.user.profile_photo_url} alt={student.user.name} className="w-full h-full object-cover" />
+                        <Image src={student.user.profile_photo_url} alt={student.user.name} width={96} height={96} className="w-full h-full object-cover" />
                     ) : (
                         getInitials(student.user.name)
                     )}
@@ -316,9 +317,11 @@ export default function StudentDetail() {
                         className="relative max-w-2xl max-h-[85vh] mx-4"
                         onClick={(e) => e.stopPropagation()}
                     >
-                        <img
+                        <Image
                             src={student.user.profile_photo_url}
                             alt={student.user.name}
+                            width={800}
+                            height={800}
                             className="max-w-full max-h-[85vh] object-contain rounded-lg shadow-2xl"
                         />
                         <div className="absolute bottom-0 inset-x-0 bg-gradient-to-t from-black/60 to-transparent rounded-b-lg p-4">

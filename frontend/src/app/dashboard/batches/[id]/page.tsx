@@ -3,6 +3,7 @@
 import { useState, useEffect, useCallback } from 'react';
 import axios from '@/lib/axios';
 import toast from 'react-hot-toast';
+import Image from 'next/image';
 import { useParams, useRouter } from 'next/navigation';
 import { useLanguage } from '@/context/LanguageContext';
 import { Button } from '@/components/ui/button';
@@ -13,7 +14,7 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AddressSelector } from '@/components/AddressSelector';
-import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRight } from 'lucide-react';
+import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRight, Pencil } from 'lucide-react';
 import JapaneseOrnament from '@/components/JapaneseOrnament';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -32,6 +33,7 @@ export default function BatchDetail() {
     const [savingLevel, setSavingLevel] = useState(false);
     const [savingTeacher, setSavingTeacher] = useState(false);
     const [studentDialogOpen, setStudentDialogOpen] = useState(false);
+    const [editingStudent, setEditingStudent] = useState<any>(null);
     const [savingStudent, setSavingStudent] = useState(false);
     const [studentError, setStudentError] = useState('');
     const [studentForm, setStudentForm] = useState({
@@ -142,6 +144,26 @@ export default function BatchDetail() {
 
     const openStudentDialog = () => {
         resetStudentForm();
+        setEditingStudent(null);
+        setStudentDialogOpen(true);
+    };
+
+    const openEditStudentDialog = (e: React.MouseEvent, s: any) => {
+        e.preventDefault();
+        e.stopPropagation();
+        setEditingStudent(s);
+        setStudentForm({
+            name: s.user.name,
+            email: s.user.email,
+            password: '',
+            nis: s.nis || '',
+            gender: s.gender || '',
+            date_of_birth: s.date_of_birth || '',
+            phone: s.phone || '',
+            address: s.address || '',
+            emergency_contact: s.emergency_contact || '',
+        });
+        setStudentError('');
         setStudentDialogOpen(true);
     };
 
@@ -158,30 +180,49 @@ export default function BatchDetail() {
     };
 
     const addStudentToBatch = async () => {
-        const requiredDocs = ['ijazah', 'ktp', 'akte_kelahiran', 'kk'];
-        const missingDocs = requiredDocs.filter(field => !studentFiles[field]);
-        const oversizedDoc = Object.entries(studentFiles).find(([, file]) => file && file.size > MAX_DOCUMENT_SIZE_BYTES);
+        if (!editingStudent) {
+            const requiredDocs = ['ijazah', 'ktp', 'akte_kelahiran', 'kk'];
+            const missingDocs = requiredDocs.filter(field => !studentFiles[field]);
+            const oversizedDoc = Object.entries(studentFiles).find(([, file]) => file && file.size > MAX_DOCUMENT_SIZE_BYTES);
 
-        if (!studentForm.name || !studentForm.email || !studentForm.password || !studentForm.gender) {
-            setStudentError('Nama, email, password, dan jenis kelamin wajib diisi.');
-            return;
-        }
+            if (!studentForm.name || !studentForm.email || !studentForm.password || !studentForm.gender) {
+                setStudentError('Nama, email, password, dan jenis kelamin wajib diisi.');
+                return;
+            }
 
-        if (missingDocs.length > 0) {
-            setStudentError('Dokumen wajib belum lengkap: ijazah, KTP, akte kelahiran, dan KK harus diunggah.');
-            return;
-        }
+            if (missingDocs.length > 0) {
+                setStudentError('Dokumen wajib belum lengkap: ijazah, KTP, akte kelahiran, dan KK harus diunggah.');
+                return;
+            }
 
-        if (oversizedDoc) {
-            const docLabel = documentFields.find(doc => doc.key === oversizedDoc[0])?.label || 'Dokumen';
-            setStudentError(`${docLabel} terlalu besar. Maksimal ukuran tiap dokumen ${MAX_DOCUMENT_SIZE_MB} MB.`);
-            return;
+            if (oversizedDoc) {
+                const docLabel = documentFields.find(doc => doc.key === oversizedDoc[0])?.label || 'Dokumen';
+                setStudentError(`${docLabel} terlalu besar. Maksimal ukuran tiap dokumen ${MAX_DOCUMENT_SIZE_MB} MB.`);
+                return;
+            }
+        } else {
+            if (!studentForm.name || !studentForm.email) {
+                setStudentError('Nama dan email wajib diisi.');
+                return;
+            }
         }
 
         setSavingStudent(true);
         setStudentError('');
         try {
-            const payload = new FormData();
+            if (editingStudent) {
+                await axios.put(`/api/students/${editingStudent.id}`, {
+                    name: studentForm.name,
+                    email: studentForm.email,
+                    nis: studentForm.nis || null,
+                    date_of_birth: studentForm.date_of_birth || null,
+                    gender: studentForm.gender || null,
+                    address: studentForm.address || null,
+                    phone: studentForm.phone || null,
+                    emergency_contact: studentForm.emergency_contact || null,
+                });
+            } else {
+                const payload = new FormData();
             payload.append('name', studentForm.name);
             payload.append('email', studentForm.email);
             payload.append('password', studentForm.password);
@@ -195,13 +236,14 @@ export default function BatchDetail() {
                 }
             });
 
-            Object.entries(studentFiles).forEach(([key, file]) => {
-                if (file) {
-                    payload.append(key, file);
-                }
-            });
+                Object.entries(studentFiles).forEach(([key, file]) => {
+                    if (file) {
+                        payload.append(key, file);
+                    }
+                });
 
-            await axios.post('/api/students', payload);
+                await axios.post('/api/students', payload);
+            }
             setStudentDialogOpen(false);
             fetchBatch();
         } catch (err: any) {
@@ -391,15 +433,23 @@ export default function BatchDetail() {
                                             <div className="flex justify-between items-start mb-4">
                                                 <div className="w-14 h-14 rounded-full overflow-hidden bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl shadow-sm border border-gray-100 dark:border-gray-700/50 flex items-center justify-center">
                                                     {student.user.profile_photo_url ? (
-                                                        <img src={student.user.profile_photo_url} alt={student.user.name} className="w-full h-full object-cover" />
+                                                        <Image src={student.user.profile_photo_url} alt={student.user.name} width={56} height={56} className="w-full h-full object-cover" />
                                                     ) : (
                                                         <div className="w-full h-full bg-red-100 dark:bg-red-900/40 text-red-700 dark:text-red-400 flex items-center justify-center font-bold text-xl">
                                                             {getInitials(student.user.name)}
                                                         </div>
                                                     )}
                                                 </div>
-                                                <div className="px-3 py-1 bg-red-50 dark:bg-red-950/40 text-red-600 text-xs font-medium rounded-full border border-red-100 dark:border-red-900/50">
-                                                    {student.status || 'active'}
+                                                <div className="flex items-center gap-2">
+                                                    <div className="px-3 py-1 bg-red-50 dark:bg-red-950/40 text-red-600 text-xs font-medium rounded-full border border-red-100 dark:border-red-900/50">
+                                                        {student.status || 'active'}
+                                                    </div>
+                                                    <button 
+                                                        onClick={(e) => openEditStudentDialog(e, student)}
+                                                        className="p-1.5 bg-gray-50 dark:bg-[#1e2532]/90 text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-full transition-colors z-20 relative border border-gray-100 dark:border-gray-800/50"
+                                                    >
+                                                        <Pencil className="w-4 h-4" />
+                                                    </button>
                                                 </div>
                                             </div>
                                             
@@ -478,10 +528,10 @@ export default function BatchDetail() {
             </div>
 
             <Dialog open={studentDialogOpen} onOpenChange={setStudentDialogOpen}>
-                <DialogContent className="sm:max-w-[760px] max-h-[90vh] overflow-y-auto">
+                <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl">
                     <DialogHeader>
-                        <DialogTitle>Tambah Siswa ke {batch.name}</DialogTitle>
-                        <DialogDescription>Lengkapi biodata dan unggah dokumen wajib sebelum siswa masuk angkatan.</DialogDescription>
+                        <DialogTitle className="text-2xl font-bold">{editingStudent ? 'Edit Data Siswa' : 'Tambah Siswa Baru'}</DialogTitle>
+                        <DialogDescription>{editingStudent ? 'Ubah informasi detail siswa.' : 'Isi data dan unggah dokumen untuk mendaftarkan siswa ke angkatan ini.'}</DialogDescription>
                     </DialogHeader>
                     {studentError && <div className="bg-red-50 dark:bg-red-950/40 text-red-600 border border-red-100 dark:border-red-900/50 p-3 rounded-md text-sm">{studentError}</div>}
                     <div className="grid gap-5 py-2">
@@ -498,10 +548,12 @@ export default function BatchDetail() {
                                 <Label>Email *</Label>
                                 <Input type="email" value={studentForm.email} onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })} />
                             </div>
-                            <div className="grid gap-2">
-                                <Label>Password Login *</Label>
-                                <Input type="password" value={studentForm.password} onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })} />
-                            </div>
+                            {!editingStudent && (
+                                <div className="grid gap-2">
+                                    <Label>Password Login *</Label>
+                                    <Input type="password" value={studentForm.password} onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })} />
+                                </div>
+                            )}
                             <div className="grid gap-2">
                                 <Label>Jenis Kelamin *</Label>
                                 <Select value={studentForm.gender} onValueChange={(value) => setStudentForm({ ...studentForm, gender: value ?? '' })}>
@@ -533,26 +585,38 @@ export default function BatchDetail() {
                             </div>
                         </div>
 
-                        <div className="border border-gray-100 dark:border-gray-700/50 rounded-xl p-4">
-                            <div className="flex items-center gap-2 mb-4">
-                                <FileCheck2 className="w-5 h-5 text-red-700 dark:text-red-400" />
-                                <h3 className="font-semibold text-gray-900 dark:text-white">Dokumen Siswa</h3>
+                        {!editingStudent && (
+                            <div className="border border-gray-100 dark:border-gray-700/50 rounded-xl p-4">
+                                <div className="flex items-center gap-2 mb-4">
+                                    <FileCheck2 className="w-5 h-5 text-red-700 dark:text-red-400" />
+                                    <h3 className="font-semibold text-gray-900 dark:text-white">Dokumen Siswa</h3>
+                                </div>
+                                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                                    {documentFields.map((doc) => (
+                                        <div key={doc.key} className="grid gap-2">
+                                            <Label className="flex justify-between items-center text-xs">
+                                                <span>{doc.label}{doc.required ? ' *' : ''}</span>
+                                                {studentFiles[doc.key] && (
+                                                    <span className="text-emerald-600 dark:text-emerald-400 text-[10px] bg-emerald-50 dark:bg-emerald-900/30 px-2 py-0.5 rounded-full font-medium">
+                                                        Terpilih ({(studentFiles[doc.key]!.size / 1024 / 1024).toFixed(1)} MB)
+                                                    </span>
+                                                )}
+                                            </Label>
+                                            <Input
+                                                type="file"
+                                                accept=".pdf,.jpg,.jpeg,.png"
+                                                className="cursor-pointer file:cursor-pointer file:bg-red-50 file:text-red-700 file:border-0 file:mr-4 file:py-1 file:px-3 file:rounded-full file:text-xs file:font-semibold hover:file:bg-red-100 text-xs dark:bg-[#151a23]/90"
+                                                onChange={(e) => {
+                                                    const accepted = handleFileChange(doc.key, e.target.files?.[0] || null, doc.label);
+                                                    if (!accepted) e.target.value = '';
+                                                }}
+                                            />
+                                        </div>
+                                    ))}
+                                </div>
                             </div>
-                            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                                {documentFields.map((doc) => (
-                                    <div key={doc.key} className="grid gap-2">
-                                        <Label>{doc.label}{doc.required ? ' *' : ''}</Label>
-                                        <Input
-                                            type="file"
-                                            onChange={(e) => {
-                                                const accepted = handleFileChange(doc.key, e.target.files?.[0] || null, doc.label);
-                                                if (!accepted) e.target.value = '';
-                                            }}
-                                        />
-                                    </div>
-                                ))}
-                            </div>
-                        </div>
+                        )}
+
                     </div>
                     <DialogFooter>
                         <Button variant="outline" onClick={() => setStudentDialogOpen(false)}>Batal</Button>
