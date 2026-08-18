@@ -32,17 +32,35 @@ class PaymentController extends Controller
         $student = Student::findOrFail($studentId);
         $payments = $student->payments()->get();
         
-        $targets = [
-            1 => 500000,
-            2 => 3500000,
-            3 => 3000000
-        ];
+        $targets = [];
+        $stageNames = [];
+        if ($student->trainingProgram && !empty($student->trainingProgram->stages)) {
+            $index = 1;
+            foreach ($student->trainingProgram->stages as $stage) {
+                $targets[$index] = (float) $stage['amount'];
+                $stageNames[$index] = $stage['name'];
+                $index++;
+            }
+        } else {
+            // Fallback for old data without training program
+            $targets = [
+                1 => 500000,
+                2 => 3500000,
+                3 => 3000000
+            ];
+            $stageNames = [
+                1 => 'Pendaftaran',
+                2 => 'Biaya pendidikan tahap 1',
+                3 => 'Biaya pendidikan tahap 2'
+            ];
+        }
         
         $summary = [];
         
         foreach ($targets as $stage => $target) {
             $paid = $payments->where('stage', $stage)->sum('amount');
             $summary[$stage] = [
+                'name' => $stageNames[$stage],
                 'target' => $target,
                 'paid' => $paid,
                 'remaining' => max(0, $target - $paid),

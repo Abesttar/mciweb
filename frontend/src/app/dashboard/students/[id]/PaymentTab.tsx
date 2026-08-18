@@ -23,15 +23,7 @@ import { generateKwitansiPdf } from '@/lib/pdfGenerator';
 import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 
-const PAYMENT_OPTIONS = [
-    { label: 'Biaya Pendaftaran', amount: 500000 },
-    { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Katakana & Hiragana', amount: 500000 },
-    { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Shou (Dasar)', amount: 1000000 },
-    { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Chuu (Menengah)', amount: 1000000 },
-    { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Kou (Atas)', amount: 1000000 },
-    { label: 'Biaya Pendidikan Tahap 2 : Lulus ujian JFT (N4)', amount: 3000000 },
-    { label: 'Biaya Pendidikan Tahap 2 : Lolos Wawancara Kerja', amount: 3000000 },
-];
+
 
 function getRomanMonth() {
     const romanMonths = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X', 'XI', 'XII'];
@@ -76,15 +68,29 @@ interface PaymentData {
     };
 }
 
-const STAGE_NAMES: Record<number, string> = {
-    1: 'Pendaftaran',
-    2: 'Biaya pendidikan tahap 1',
-    3: 'Biaya pendidikan tahap 2',
-};
+
 
 export default function StudentPaymentTab({ studentId, studentInfo }: { studentId: string, studentInfo: any }) {
     const { hasRole } = useAuth();
     const isStudent = hasRole('Siswa');
+
+    const isReguler = !studentInfo?.training_program || studentInfo?.training_program?.name?.toLowerCase().includes('reguler');
+
+    const paymentOptions: { label: string; amount: number; stageId: number }[] = isReguler 
+        ? [
+            { label: 'Biaya Pendaftaran', amount: 500000, stageId: 1 },
+            { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Katakana & Hiragana', amount: 500000, stageId: 2 },
+            { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Shou (Dasar)', amount: 1000000, stageId: 2 },
+            { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Chuu (Menengah)', amount: 1000000, stageId: 2 },
+            { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Kou (Atas)', amount: 1000000, stageId: 2 },
+            { label: 'Biaya Pendidikan Tahap 2 : Lulus ujian JFT (N4)', amount: 3000000, stageId: 3 },
+            { label: 'Biaya Pendidikan Tahap 2 : Lolos Wawancara Kerja', amount: 3000000, stageId: 3 },
+        ]
+        : studentInfo?.training_program?.stages?.map((stage: { name: string; amount: number }, index: number) => ({
+            label: stage.name,
+            amount: Number(stage.amount),
+            stageId: index + 1
+        })) || [];
 
     const [payments, setPayments] = useState<PaymentData[]>([]);
     const [invoices, setInvoices] = useState<any[]>([]);
@@ -169,7 +175,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                 const amount = Number(form.amount) || 0;
                 const terbilangText = terbilang(amount) + " rupiah";
                 
-                let paymentDesc = form.payment_type || STAGE_NAMES[Number(form.stage)] || '';
+                let paymentDesc = form.payment_type || `Tahap ${form.stage}`;
                 if (!form.is_lunas) {
                     paymentDesc = "Cicilan " + paymentDesc;
                 }
@@ -334,7 +340,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             page.drawText(studentName, { x: 175, y: 589, size: 12, font, color: black });
 
             // Table logic
-            const selectedOption = PAYMENT_OPTIONS.find(opt => opt.label === invoiceForm.payment_type);
+            const selectedOption = paymentOptions.find(opt => opt.label === invoiceForm.payment_type);
             const biayaAmount = selectedOption ? selectedOption.amount : 0;
             const formatRp = (num: number) => `Rp. ${new Intl.NumberFormat('id-ID').format(num)},00`;
 
@@ -414,7 +420,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
 
         try {
             // 2. Simpan ke database & kirim notifikasi ke siswa
-            const selectedOption = PAYMENT_OPTIONS.find(opt => opt.label === invoiceForm.payment_type);
+            const selectedOption = paymentOptions.find(opt => opt.label === invoiceForm.payment_type);
             const biayaAmount = selectedOption ? selectedOption.amount : 0;
             const taxAmount = invoiceForm.tax ? parseFloat(invoiceForm.tax) : 0;
             const totalAmount = biayaAmount + taxAmount;
@@ -520,7 +526,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             const studentName = studentInfo?.name || 'Siswa';
             const terbilangText = terbilang(payment.amount) + " rupiah";
             
-            let paymentDesc = payment.payment_type || STAGE_NAMES[payment.stage];
+            let paymentDesc = payment.payment_type || `Tahap ${payment.stage}`;
             if (!payment.is_lunas) {
                 paymentDesc = "Cicilan " + paymentDesc;
             }
@@ -559,14 +565,15 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             {/* Progress Summary Cards */}
             {summary && (
                 <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                    {[1, 2, 3].map((stageId) => {
+                    {Object.keys(summary.summary).map((stageKey) => {
+                        const stageId = Number(stageKey);
                         const st = summary.summary[stageId];
                         if (!st) return null;
                         return (
                             <div key={stageId} className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700/50 hover-lift relative overflow-hidden">
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
-                                        <p className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-1">{STAGE_NAMES[stageId]}</p>
+                                        <p className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-1">{st.name}</p>
                                         <h4 className="text-xl font-bold text-gray-900 dark:text-white">
                                             Rp {new Intl.NumberFormat('id-ID').format(st.paid)}
                                         </h4>
@@ -791,20 +798,16 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                 <div className="grid gap-2">
                                     <Label>Untuk Pembayaran</Label>
                                     <Select value={form.payment_type} onValueChange={(v) => {
-                                        let stage = '1';
                                         const safeV = v || '';
-                                        const vLower = safeV.toLowerCase();
-                                        if (vLower.includes('tahap 1')) stage = '2';
-                                        if (vLower.includes('tahap 2')) stage = '3';
-                                        
-                                        const opt = PAYMENT_OPTIONS.find(o => o.label === safeV);
+                                        const opt = paymentOptions.find(o => o.label === safeV);
+                                        const stage = opt ? opt.stageId.toString() : '1';
                                         const amount = opt ? opt.amount.toString() : form.amount;
                                         
                                         setForm({ ...form, payment_type: safeV, stage, amount });
                                     }}>
                                         <SelectTrigger><SelectValue placeholder="Pilih jenis biaya" /></SelectTrigger>
                                         <SelectContent>
-                                            {PAYMENT_OPTIONS.map((opt, i) => (
+                                            {paymentOptions.map((opt, i) => (
                                                 <SelectItem key={i} value={opt.label}>{opt.label}</SelectItem>
                                             ))}
                                         </SelectContent>
@@ -919,7 +922,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                 <Select value={invoiceForm.payment_type} onValueChange={(v) => setInvoiceForm({ ...invoiceForm, payment_type: v || '' })}>
                                     <SelectTrigger><SelectValue placeholder="Pilih jenis biaya" /></SelectTrigger>
                                     <SelectContent>
-                                        {PAYMENT_OPTIONS.map((opt, i) => (
+                                        {paymentOptions.map((opt, i) => (
                                             <SelectItem key={i} value={opt.label}>
                                                 {opt.label} - Rp {new Intl.NumberFormat('id-ID').format(opt.amount)}
                                             </SelectItem>

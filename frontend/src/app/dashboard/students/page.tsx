@@ -30,16 +30,27 @@ interface Student {
     gender: string | null;
     status: string;
     payments_sum_amount: number | null;
+    training_program_id: number | null;
+    training_program?: {
+        id: number;
+        name: string;
+        stages: { name: string; amount: number }[];
+    } | null;
     user: { id: number; name: string; email: string; profile_photo_url?: string };
     enrollments?: { id: number; batch?: { id: number; name: string; teacher?: { user?: { name: string } } } }[];
     roadmaps?: { id: number; status: string; roadmap_stage?: { name: string } }[];
 }
 
-const TOTAL_PAYMENT_TARGET = 7000000; // Rp 500.000 + 3.500.000 + 3.000.000
-
-function PaymentProgress({ paidAmount }: { paidAmount: number | null }) {
-    const paid = paidAmount || 0;
-    const pct = Math.min(100, Math.round((paid / TOTAL_PAYMENT_TARGET) * 100));
+function PaymentProgress({ student }: { student: Student }) {
+    const paid = student.payments_sum_amount || 0;
+    
+    // Default fallback if no program is assigned
+    let targetAmount = 7000000;
+    if (student.training_program && student.training_program.stages) {
+        targetAmount = student.training_program.stages.reduce((sum: number, stage: any) => sum + Number(stage.amount), 0);
+    }
+    
+    const pct = Math.min(100, Math.round((paid / (targetAmount || 1)) * 100));
     return (
         <div className="mt-3 pt-3 border-t border-gray-50 dark:border-gray-800/50">
             <div className="flex items-center justify-between mb-1">
@@ -56,7 +67,7 @@ function PaymentProgress({ paidAmount }: { paidAmount: number | null }) {
                     style={{ width: `${pct}%` }}
                 />
             </div>
-            <p className="text-xs text-gray-400 mt-1">Rp {new Intl.NumberFormat('id-ID').format(paid)} / Rp 7.000.000</p>
+            <p className="text-xs text-gray-400 mt-1">Rp {new Intl.NumberFormat('id-ID').format(paid)} / Rp {new Intl.NumberFormat('id-ID').format(targetAmount)}</p>
         </div>
     );
 }
@@ -93,10 +104,11 @@ export default function StudentsPage() {
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [editingStudent, setEditingStudent] = useState<Student | null>(null);
     const [deletingStudent, setDeletingStudent] = useState<Student | null>(null);
-    const [form, setForm] = useState({ name: '', email: '', password: '', nis: '', gender: '', date_of_birth: '', address: '', phone: '', emergency_contact: '', status: 'active', batch_id: '' });
+    const [form, setForm] = useState({ name: '', email: '', password: '', nis: '', gender: '', date_of_birth: '', address: '', phone: '', emergency_contact: '', status: 'active', batch_id: '', training_program_id: '' });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
     const [batches, setBatches] = useState<{ id: number; name: string }[]>([]);
+    const [programs, setPrograms] = useState<{ id: number; name: string }[]>([]);
 
     const fetchStudents = useCallback(async () => {
         setLoading(true);
@@ -107,10 +119,13 @@ export default function StudentsPage() {
         finally { setLoading(false); }
     }, [search]);
 
-    // Fetch batches once
+    // Fetch batches and programs once
     useEffect(() => {
         axios.get('/api/batches').then(res => {
             setBatches(res.data.data || res.data || []);
+        }).catch(() => {});
+        axios.get('/api/training-programs', { params: { active_only: 1 } }).then(res => {
+            setPrograms(res.data || []);
         }).catch(() => {});
     }, []);
 
@@ -122,7 +137,7 @@ export default function StudentsPage() {
 
     const openCreate = () => {
         setEditingStudent(null);
-        setForm({ name: '', email: '', password: '', nis: '', gender: '', date_of_birth: '', address: '', phone: '', emergency_contact: '', status: 'active', batch_id: '' });
+        setForm({ name: '', email: '', password: '', nis: '', gender: '', date_of_birth: '', address: '', phone: '', emergency_contact: '', status: 'active', batch_id: '', training_program_id: '' });
         setError('');
         setDialogOpen(true);
     };
@@ -131,13 +146,13 @@ export default function StudentsPage() {
         e.preventDefault();
         e.stopPropagation();
         setEditingStudent(s);
-        const currentBatchId = s.enrollments?.[0]?.batch?.id?.toString() || '';
         setForm({
             name: s.user.name, email: s.user.email, password: '',
             nis: s.nis || '', gender: s.gender || '', date_of_birth: s.date_of_birth || '',
             address: s.address || '', phone: s.phone || '',
             emergency_contact: s.emergency_contact || '', status: s.status || 'active',
-            batch_id: currentBatchId,
+            batch_id: s.enrollments?.[0]?.batch?.id?.toString() || '',
+            training_program_id: s.training_program_id?.toString() || '',
         });
         setError('');
         setDialogOpen(true);
@@ -162,6 +177,7 @@ export default function StudentsPage() {
                     address: form.address || null, phone: form.phone || null,
                     emergency_contact: form.emergency_contact || null,
                     status: form.status || 'active',
+                    training_program_id: form.training_program_id ? parseInt(form.training_program_id) : null,
                 });
                 // Handle batch enrollment
                 if (form.batch_id && form.batch_id !== 'none') {
@@ -199,6 +215,7 @@ export default function StudentsPage() {
                     address: form.address || null, phone: form.phone || null,
                     emergency_contact: form.emergency_contact || null,
                     status: form.status || 'active',
+                    training_program_id: form.training_program_id ? parseInt(form.training_program_id) : undefined,
                 });
                 // Enroll in batch if selected
                 if (form.batch_id && res.data?.id) {
@@ -390,7 +407,7 @@ export default function StudentsPage() {
                                                     <span className="font-medium text-gray-500 dark:text-gray-400 truncate ml-2 text-right" title={s.user.email}>{s.user.email}</span>
                                                 </div>
                                             </div>
-                                            <PaymentProgress paidAmount={s.payments_sum_amount} />
+                                            <PaymentProgress student={s} />
                                             <RoadmapProgress roadmaps={s.roadmaps} />
                                         </div>
                                         
@@ -451,20 +468,25 @@ export default function StudentsPage() {
                                             <TableCell className="relative z-10 pointer-events-none">{s.phone || '-'}</TableCell>
                                             <TableCell className="relative z-10 pointer-events-none">
                                                 <div className="min-w-[120px]">
-                                                    <div className="flex justify-between text-xs mb-1">
-                                                        <span className="text-gray-500 dark:text-gray-400">Rp {new Intl.NumberFormat('id-ID').format(s.payments_sum_amount || 0)}</span>
-                                                        <span className={`font-bold ${
-                                                            Math.min(100, Math.round(((s.payments_sum_amount || 0) / TOTAL_PAYMENT_TARGET) * 100)) >= 100 ? 'text-green-600' : 'text-red-600'
-                                                        }`}>{Math.min(100, Math.round(((s.payments_sum_amount || 0) / TOTAL_PAYMENT_TARGET) * 100))}%</span>
-                                                    </div>
-                                                    <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
-                                                        <div
-                                                            className={`h-full rounded-full transition-all duration-700 ${
-                                                                Math.min(100, Math.round(((s.payments_sum_amount || 0) / TOTAL_PAYMENT_TARGET) * 100)) >= 100 ? 'bg-green-500' : Math.min(100, Math.round(((s.payments_sum_amount || 0) / TOTAL_PAYMENT_TARGET) * 100)) > 50 ? 'bg-amber-500' : 'bg-red-500'
-                                                            }`}
-                                                            style={{ width: `${Math.min(100, Math.round(((s.payments_sum_amount || 0) / TOTAL_PAYMENT_TARGET) * 100))}%` }}
-                                                        />
-                                                    </div>
+                                                    {(() => {
+                                                        const paid = s.payments_sum_amount || 0;
+                                                        const target = s.training_program?.stages?.reduce((sum: number, stage: any) => sum + Number(stage.amount), 0) || 7000000;
+                                                        const pct = Math.min(100, Math.round((paid / target) * 100));
+                                                        return (
+                                                            <>
+                                                                <div className="flex justify-between text-xs mb-1">
+                                                                    <span className="text-gray-500 dark:text-gray-400">Rp {new Intl.NumberFormat('id-ID').format(paid)}</span>
+                                                                    <span className={`font-bold ${pct >= 100 ? 'text-green-600' : 'text-red-600'}`}>{pct}%</span>
+                                                                </div>
+                                                                <div className="w-full h-1.5 bg-gray-100 dark:bg-gray-800 rounded-full overflow-hidden">
+                                                                    <div
+                                                                        className={`h-full rounded-full transition-all duration-700 ${pct >= 100 ? 'bg-green-500' : pct > 50 ? 'bg-amber-500' : 'bg-red-500'}`}
+                                                                        style={{ width: `${pct}%` }}
+                                                                    />
+                                                                </div>
+                                                            </>
+                                                        );
+                                                    })()}
                                                 </div>
                                             </TableCell>
                                             <TableCell className="relative z-10 pointer-events-none">
@@ -545,6 +567,23 @@ export default function StudentsPage() {
                             />
                         </div>
                         <div className="grid gap-2"><Label>Kontak Darurat (Ortu/Wali)</Label><Input value={form.emergency_contact} onChange={(e) => setForm({ ...form, emergency_contact: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" /></div>
+                        <div className="grid gap-2">
+                            <Label>Program Pelatihan <span className="text-red-500">*</span></Label>
+                            <Select value={form.training_program_id ? String(form.training_program_id) : ''} onValueChange={(value) => setForm({ ...form, training_program_id: value ?? '' })}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
+                                    <SelectValue placeholder="Pilih program...">
+                                        {form.training_program_id 
+                                            ? programs.find(p => p.id.toString() === String(form.training_program_id))?.name 
+                                            : "Pilih program..."}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {programs.map(p => (
+                                        <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
                         <div className="grid gap-2">
                             <Label>Batch / Kelas</Label>
                             <Select value={form.batch_id ? String(form.batch_id) : ''} onValueChange={(value) => setForm({ ...form, batch_id: value ?? '' })}>

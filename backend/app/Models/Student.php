@@ -10,6 +10,7 @@ class Student extends Model
 
     protected $fillable = [
         'user_id', 
+        'training_program_id',
         'nis', 
         'gender', 
         'date_of_birth', 
@@ -84,6 +85,11 @@ class Student extends Model
     public function invoices()
     {
         return $this->hasMany(Invoice::class);
+    }
+
+    public function trainingProgram()
+    {
+        return $this->belongsTo(TrainingProgram::class);
     }
 }
 

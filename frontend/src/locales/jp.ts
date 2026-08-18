@@ -3,6 +3,7 @@ export const jp = {
     dashboard: 'ダッシュボード',
     masterData: 'マスターデータ',
     batches: 'バッチ (期)',
+    programs: 'プログラム',
     subjects: 'クラスレベル',
     teachers: '教師 / 先生',
     companies: '受入企業',

@@ -62,6 +62,7 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
             show: hasPermission('manage batches') || hasPermission('manage students') || hasPermission('manage classes') || hasPermission('manage roadmaps'),
             items: [
                 { nameKey: 'batches', href: '/dashboard/batches', show: hasPermission('manage batches') },
+                { nameKey: 'programs', href: '/dashboard/programs', show: hasPermission('manage batches') },
                 { nameKey: 'students', href: '/dashboard/students', show: hasPermission('manage students') },
                 { nameKey: 'roadmapProgress', href: '/dashboard/roadmap', show: hasPermission('manage roadmaps') },
                 { nameKey: 'teachers', href: '/dashboard/teachers', show: hasPermission('manage students') },

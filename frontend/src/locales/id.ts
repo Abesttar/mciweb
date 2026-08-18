@@ -3,6 +3,7 @@ export const id = {
     dashboard: 'Dasbor',
     masterData: 'Data Master',
     batches: 'Angkatan',
+    programs: 'Program Pelatihan',
     subjects: 'Tingkat Kelas',
     teachers: 'Guru / Sensei',
     companies: 'Perusahaan',

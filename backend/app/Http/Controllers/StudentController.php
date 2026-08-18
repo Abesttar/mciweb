@@ -27,7 +27,7 @@ class StudentController extends Controller
     ];
     public function index(Request $request)
     {
-        $query = Student::with(['user', 'enrollments.batch.teacher.user', 'roadmaps.roadmapStage'])->withSum('payments', 'amount');
+        $query = Student::with(['user', 'trainingProgram', 'enrollments.batch.teacher.user', 'roadmaps.roadmapStage'])->withSum('payments', 'amount');
 
         if ($request->filled('search')) {
             $search = '%' . strtolower($request->search) . '%';
@@ -62,6 +62,7 @@ class StudentController extends Controller
             'name' => 'required|string|max:255',
             'email' => 'required|string|email:rfc,dns|max:255|unique:users',
             'password' => 'required|string|min:8',
+            'training_program_id' => 'required|exists:training_programs,id',
             'nis' => 'nullable|string|max:50|unique:students',
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|string',
@@ -105,6 +106,7 @@ class StudentController extends Controller
 
             $studentData = [
                 'user_id' => $user->id,
+                'training_program_id' => $validated['training_program_id'],
                 'nis' => $validated['nis'] ?? null,
                 'date_of_birth' => $validated['date_of_birth'] ?? null,
                 'gender' => $validated['gender'] ?? null,
@@ -161,6 +163,7 @@ class StudentController extends Controller
     {
         $student->load([
             'user', 
+            'trainingProgram',
             'enrollments.batch.teacher.user',
             'enrollments.studyClass.subject',
             'enrollments.studyClasses.subject',
@@ -191,6 +194,7 @@ class StudentController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|email|unique:users,email,' . $student->user_id,
+            'training_program_id' => 'sometimes|required|exists:training_programs,id',
             'nis' => 'nullable|string|unique:students,nis,' . $student->id,
             'date_of_birth' => 'nullable|date',
             'gender' => 'nullable|string',
@@ -229,6 +233,7 @@ class StudentController extends Controller
             }
 
             $updateData = array_filter([
+                'training_program_id' => $validated['training_program_id'] ?? null,
                 'nis' => $validated['nis'] ?? null,
                 'date_of_birth' => $validated['date_of_birth'] ?? null,
                 'gender' => $validated['gender'] ?? null,

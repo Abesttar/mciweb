@@ -29,6 +29,7 @@ use App\Http\Controllers\PaymentController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\RolePermissionController;
 use App\Http\Controllers\RaportSnapshotController;
+use App\Http\Controllers\TrainingProgramController;
 
 Route::post('/login', [AuthController::class, 'login']);
 
@@ -40,6 +41,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
     // Master Data CRUD
     Route::apiResource('batches', BatchController::class);
+    Route::apiResource('training-programs', TrainingProgramController::class);
     Route::post('students/{student}/documents', [StudentController::class, 'uploadDocument']);
     Route::get('students/{student}/download/{field}', [StudentController::class, 'downloadDocument']);
     Route::get('students/me', [StudentController::class, 'me']);
