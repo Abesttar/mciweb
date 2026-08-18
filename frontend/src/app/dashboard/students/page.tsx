@@ -234,6 +234,10 @@ export default function StudentsPage() {
             return a.user.name.localeCompare(b.user.name);
         } else if (sortBy === 'name_desc') {
             return b.user.name.localeCompare(a.user.name);
+        } else if (sortBy === 'nis_asc') {
+            return (a.nis || '').localeCompare(b.nis || '');
+        } else if (sortBy === 'nis_desc') {
+            return (b.nis || '').localeCompare(a.nis || '');
         } else if (sortBy === 'batch_asc') {
             const batchA = getCurrentBatch(a)?.name || '';
             const batchB = getCurrentBatch(b)?.name || '';
@@ -299,6 +303,8 @@ export default function StudentsPage() {
                         <SelectContent>
                             <SelectItem value="name_asc">Nama (A-Z)</SelectItem>
                             <SelectItem value="name_desc">Nama (Z-A)</SelectItem>
+                            <SelectItem value="nis_asc">NIS (A-Z)</SelectItem>
+                            <SelectItem value="nis_desc">NIS (Z-A)</SelectItem>
                             <SelectItem value="batch_asc">Batch / Kelas</SelectItem>
                             <SelectItem value="payment_desc">Pembayaran Lunas</SelectItem>
                             <SelectItem value="payment_asc">Pembayaran Sedikit</SelectItem>
