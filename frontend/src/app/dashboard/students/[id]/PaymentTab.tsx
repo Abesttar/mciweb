@@ -611,13 +611,13 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
         <div className="space-y-6 animate-in fade-in duration-500 mt-6">
             {/* Progress Summary Cards */}
             {summary && (
-                <div className="flex flex-nowrap overflow-x-auto gap-6 pb-4 custom-scrollbar snap-x">
+                <div className="flex flex-col xl:flex-row gap-4 w-full">
                     {Object.keys(summary.summary).map((stageKey) => {
                         const stageId = Number(stageKey);
                         const st = summary.summary[stageId];
                         if (!st) return null;
                         return (
-                            <div key={stageId} className="min-w-[280px] sm:min-w-[320px] shrink-0 snap-start bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl p-6 shadow-sm border border-gray-100 dark:border-gray-700/50 hover-lift relative overflow-hidden">
+                            <div key={stageId} className="flex-1 bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-700/50 hover-lift relative overflow-hidden">
                                 <div className="flex justify-between items-start mb-4">
                                     <div>
                                         <p className="text-sm font-bold text-gray-500 dark:text-gray-400 mb-1">{st.name}</p>
