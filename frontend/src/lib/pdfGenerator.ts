@@ -25,7 +25,7 @@ export async function generateKwitansiPdf(data: {
     const black = rgb(0, 0, 0);
 
     // Nomor Kwitansi
-    const kwitansiNo = data.kwitansiNoRaw.split('-').pop() || data.kwitansiNoRaw;
+    const kwitansiNo = data.kwitansiNoRaw.split('-').shift() || data.kwitansiNoRaw;
     page.drawText(kwitansiNo, { x: 260, y: 134, size: 10, font, color: black });
 
     // Telah terima dari
