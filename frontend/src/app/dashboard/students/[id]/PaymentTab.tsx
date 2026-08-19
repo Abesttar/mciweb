@@ -132,7 +132,8 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
     useEffect(() => {
         setInvoiceForm(prev => ({
             ...prev,
-            due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0]
+            due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
+            invoice_number: `INV-${new Date().getFullYear()}-${getRomanMonth()}-`
         }));
     }, []);
 
@@ -314,10 +315,8 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             const black = rgb(0, 0, 0);
             const white = rgb(1, 1, 1);
 
-            // 1. Invoice Number (INV-2026-VII-102)
-            const year = new Date().getFullYear();
-            const romanMonth = getRomanMonth();
-            const invoiceNo = `INV-${year}-${romanMonth}-${invoiceForm.invoice_number}`;
+            // 1. Invoice Number (editable by user)
+            const invoiceNo = invoiceForm.invoice_number;
 
             // TULIS TEKS (Koordinat x, y adalah contoh dan perlu disesuaikan dengan template asli)
             // Sistem koordinat PDF: x=0, y=0 di kiri Bawah. 
@@ -411,9 +410,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
 
         if (!pdfPreviewUrl) return;
 
-        const year = new Date().getFullYear();
-        const romanMonth = getRomanMonth();
-        const invoiceNo = `INV-${year}-${romanMonth}-${invoiceForm.invoice_number}`;
+        const invoiceNo = invoiceForm.invoice_number;
         const studentName = studentInfo?.name || 'Siswa';
 
         const toastId = toast.loading('Menyimpan & mengunduh invoice...');
@@ -886,13 +883,10 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                             <div className="grid gap-2">
                                 <Label>Nomor Invoice</Label>
                                 <div className="flex items-center gap-2">
-                                    <span className="bg-gray-100 dark:bg-gray-800 px-3 py-2 border border-gray-200 dark:border-gray-700 rounded-md text-sm font-medium text-gray-600 dark:text-gray-400">
-                                        INV-{new Date().getFullYear()}-{getRomanMonth()}-
-                                    </span>
                                     <Input
                                         value={invoiceForm.invoice_number}
                                         onChange={(e) => setInvoiceForm({ ...invoiceForm, invoice_number: e.target.value })}
-                                        placeholder="102"
+                                        placeholder="INV-2026-VIII-102"
                                         className="flex-1"
                                     />
                                 </div>
