@@ -456,14 +456,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             const black = rgb(0, 0, 0);
             const white = rgb(1, 1, 1);
 
-            const year = new Date(inv.order_date).getFullYear();
-            const romanMonth = getRomanMonth();
-            // In database, invoice_number might just be "101" or "INV-2026-VIII-101".
-            // Let's ensure it has the correct prefix if it's already full
-            let invoiceNo = inv.invoice_number;
-            if (!invoiceNo.startsWith('INV-')) {
-                invoiceNo = `INV-${year}-${romanMonth}-${inv.invoice_number}`;
-            }
+            const invoiceNo = inv.invoice_number;
 
             page.drawText(invoiceNo, { x: 245, y: 664.5, size: 14, font: fontBold, color: black });
 
