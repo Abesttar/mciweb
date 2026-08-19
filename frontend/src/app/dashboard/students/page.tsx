@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect, useCallback } from 'react';
+import { useRouter } from 'next/navigation';
 import axios from '@/lib/axios';
 import toast from 'react-hot-toast';
 import Image from 'next/image';
@@ -93,6 +94,7 @@ function RoadmapProgress({ roadmaps }: { roadmaps?: any[] }) {
 
 export default function StudentsPage() {
     const { t } = useLanguage();
+    const router = useRouter();
     const [students, setStudents] = useState<Student[]>([]);
     const [loading, setLoading] = useState(true);
     const [search, setSearch] = useState('');
@@ -446,10 +448,9 @@ export default function StudentsPage() {
                                 </TableHeader>
                                 <TableBody>
                                     {sortedStudents.map((s) => (
-                                        <TableRow key={s.id} className="hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative">
+                                        <TableRow key={s.id} className="hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative" onClick={() => router.push(`/dashboard/students/${s.id}`)}>
                                             <TableCell>
-                                                <Link href={`/dashboard/students/${s.id}`} className="absolute inset-0 z-0"></Link>
-                                                <div className="flex items-center space-x-3 relative z-10 pointer-events-none">
+                                                <div className="flex items-center space-x-3">
                                                     <div className="w-10 h-10 rounded-full overflow-hidden bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 flex items-center justify-center font-bold text-sm">
                                                         {s.user.profile_photo_url ? (
                                                             <Image src={s.user.profile_photo_url} alt={s.user.name} width={40} height={40} className="w-full h-full object-cover" />
@@ -463,10 +464,10 @@ export default function StudentsPage() {
                                                     </div>
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="relative z-10 pointer-events-none">{s.nis || '-'}</TableCell>
-                                            <TableCell className="relative z-10 pointer-events-none">{getCurrentBatch(s)?.name || '-'}</TableCell>
-                                            <TableCell className="relative z-10 pointer-events-none">{s.phone || '-'}</TableCell>
-                                            <TableCell className="relative z-10 pointer-events-none">
+                                            <TableCell>{s.nis || '-'}</TableCell>
+                                            <TableCell>{getCurrentBatch(s)?.name || '-'}</TableCell>
+                                            <TableCell>{s.phone || '-'}</TableCell>
+                                            <TableCell>
                                                 <div className="min-w-[120px]">
                                                     {(() => {
                                                         const paid = s.payments_sum_amount || 0;
@@ -489,7 +490,7 @@ export default function StudentsPage() {
                                                     })()}
                                                 </div>
                                             </TableCell>
-                                            <TableCell className="relative z-10 pointer-events-none">
+                                            <TableCell>
                                                 {(() => {
                                                     const roadmaps = s.roadmaps || [];
                                                     if (roadmaps.length === 0) return <span className="text-xs text-gray-400">-</span>;
@@ -504,12 +505,12 @@ export default function StudentsPage() {
                                                     );
                                                 })()}
                                             </TableCell>
-                                            <TableCell className="relative z-10 pointer-events-none">
+                                            <TableCell>
                                                 <Badge variant={s.status === 'active' ? 'default' : 'secondary'} className={s.status === 'active' ? 'bg-red-50 text-red-800 hover:bg-red-100 border-none' : ''}>
                                                     {s.status}
                                                 </Badge>
                                             </TableCell>
-                                            <TableCell className="text-right space-x-2 relative z-10">
+                                            <TableCell className="text-right space-x-2" onClick={(e) => e.stopPropagation()}>
                                                 <Button variant="ghost" size="sm" onClick={(e) => openEdit(s, e)} className="h-8 w-8 p-0 text-gray-500 dark:text-gray-400 hover:text-red-700 dark:text-red-400 hover:bg-red-50 dark:bg-red-950/40">
                                                     <Edit className="w-4 h-4" />
                                                 </Button>
