@@ -83,7 +83,7 @@ class PaymentController extends Controller
     public function store(Request $request, $studentId)
     {
         $request->validate([
-            'stage' => 'required|integer|in:1,2,3',
+            'stage' => 'required|integer|min:1',
             'amount' => 'required|numeric|min:1',
             'payment_date' => 'required|date',
             'description' => 'nullable|string|max:255',
@@ -114,7 +114,7 @@ class PaymentController extends Controller
     public function update(Request $request, $id)
     {
         $request->validate([
-            'stage' => 'required|integer|in:1,2,3',
+            'stage' => 'required|integer|min:1',
             'amount' => 'required|numeric|min:1',
             'payment_date' => 'required|date',
             'description' => 'nullable|string|max:255',
