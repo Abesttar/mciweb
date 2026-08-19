@@ -100,11 +100,13 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
     const [dialogOpen, setDialogOpen] = useState(false);
     const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
     const [deletingPayment, setDeletingPayment] = useState<PaymentData | null>(null);
+    const [editingPayment, setEditingPayment] = useState<PaymentData | null>(null);
 
-    // Invoice delete state
+    // Invoice delete & edit state
     const [deleteInvoiceDialogOpen, setDeleteInvoiceDialogOpen] = useState(false);
     const [deletingInvoice, setDeletingInvoice] = useState<any | null>(null);
     const [deletingInvoiceLoading, setDeletingInvoiceLoading] = useState(false);
+    const [editingInvoice, setEditingInvoice] = useState<any | null>(null);
 
     const [form, setForm] = useState({ 
         stage: '1', 
@@ -213,6 +215,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
     }, [form, studentInfo, dialogOpen]);
 
     const openCreate = () => {
+        setEditingPayment(null);
         setForm({
             stage: '1',
             invoice_number: '',
@@ -221,6 +224,22 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             payment_date: new Date().toISOString().split('T')[0],
             description: '',
             is_lunas: true
+        });
+        setError('');
+        setKwitansiPreviewUrl(null);
+        setDialogOpen(true);
+    };
+
+    const handleEditPayment = (payment: PaymentData) => {
+        setEditingPayment(payment);
+        setForm({
+            stage: payment.stage.toString(),
+            invoice_number: payment.invoice_number || 'TIDAK_ADA_INVOICE',
+            payment_type: payment.payment_type || '',
+            amount: payment.amount.toString(),
+            payment_date: new Date(payment.payment_date).toISOString().split('T')[0],
+            description: payment.description || '',
+            is_lunas: payment.is_lunas
         });
         setError('');
         setKwitansiPreviewUrl(null);
@@ -246,8 +265,14 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                 is_lunas: form.is_lunas
             };
 
-            await axios.post(`/api/students/${studentId}/payments`, payload);
+            if (editingPayment) {
+                await axios.put(`/api/payments/${editingPayment.id}`, payload);
+            } else {
+                await axios.post(`/api/students/${studentId}/payments`, payload);
+            }
+            
             setDialogOpen(false);
+            setEditingPayment(null);
             fetchPayments();
         } catch (err: any) {
             setError(err.response?.data?.message || 'Gagal menyimpan data pembayaran');
@@ -285,12 +310,26 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
     };
 
     const handleOpenInvoiceDialog = () => {
+        setEditingInvoice(null);
         setInvoiceForm({
-            invoice_number: '',
+            invoice_number: `INV-${new Date().getFullYear()}-${getRomanMonth()}-`,
             due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             order_date: new Date().toISOString().split('T')[0],
             payment_type: '',
             tax: '',
+        });
+        setPdfPreviewUrl(null);
+        setInvoiceDialogOpen(true);
+    };
+
+    const handleEditInvoice = (inv: any) => {
+        setEditingInvoice(inv);
+        setInvoiceForm({
+            invoice_number: inv.invoice_number,
+            due_date: new Date(inv.due_date).toISOString().split('T')[0],
+            order_date: new Date(inv.order_date).toISOString().split('T')[0],
+            payment_type: inv.payment_type,
+            tax: inv.tax_amount ? inv.tax_amount.toString() : '',
         });
         setPdfPreviewUrl(null);
         setInvoiceDialogOpen(true);
@@ -424,18 +463,32 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             const taxAmount = invoiceForm.tax ? parseFloat(invoiceForm.tax) : 0;
             const totalAmount = biayaAmount + taxAmount;
 
-            await axios.post(`/api/students/${studentId}/invoices`, {
-                invoice_number: invoiceNo,
-                payment_type: invoiceForm.payment_type,
-                amount: biayaAmount,
-                tax_amount: taxAmount,
-                total_amount: totalAmount,
-                due_date: invoiceForm.due_date,
-                order_date: invoiceForm.order_date,
-            });
+            if (editingInvoice) {
+                await axios.put(`/api/invoices/${editingInvoice.id}`, {
+                    invoice_number: invoiceNo,
+                    payment_type: invoiceForm.payment_type,
+                    amount: biayaAmount,
+                    tax_amount: taxAmount,
+                    total_amount: totalAmount,
+                    due_date: invoiceForm.due_date,
+                    order_date: invoiceForm.order_date,
+                });
+                toast.success('Invoice berhasil diperbarui', { id: toastId });
+            } else {
+                await axios.post(`/api/students/${studentId}/invoices`, {
+                    invoice_number: invoiceNo,
+                    payment_type: invoiceForm.payment_type,
+                    amount: biayaAmount,
+                    tax_amount: taxAmount,
+                    total_amount: totalAmount,
+                    due_date: invoiceForm.due_date,
+                    order_date: invoiceForm.order_date,
+                });
+                toast.success('Invoice tersimpan & notifikasi terkirim ke siswa', { id: toastId });
+            }
 
             setInvoiceDialogOpen(false);
-            toast.success('Invoice tersimpan & notifikasi terkirim ke siswa', { id: toastId });
+            setEditingInvoice(null);
             // Refresh invoices
             fetchPayments();
         } catch (err: any) {
@@ -651,9 +704,14 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                                     <Download className="w-3.5 h-3.5" />
                                                 </Button>
                                                 {!isStudent && (
-                                                    <Button variant="outline" size="sm" onClick={() => { setDeletingPayment(payment); setDeleteDialogOpen(true); }} className="h-7 px-2 border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 hover:bg-red-50">
-                                                        Hapus
-                                                    </Button>
+                                                    <>
+                                                        <Button variant="outline" size="sm" onClick={() => handleEditPayment(payment)} className="h-7 px-2 border-amber-200 dark:border-amber-800/50 text-amber-700 dark:text-amber-400 hover:bg-amber-50">
+                                                            <Edit className="w-3.5 h-3.5" />
+                                                        </Button>
+                                                        <Button variant="outline" size="sm" onClick={() => { setDeletingPayment(payment); setDeleteDialogOpen(true); }} className="h-7 px-2 border-red-200 dark:border-red-800/50 text-red-700 dark:text-red-400 hover:bg-red-50">
+                                                            <Trash2 className="w-3.5 h-3.5" />
+                                                        </Button>
+                                                    </>
                                                 )}
                                             </TableCell>
                                         </TableRow>
@@ -710,7 +768,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                                     <span className="text-xs font-mono text-gray-700 dark:text-gray-300">{inv.invoice_number}</span>
                                                     <p className="text-xs text-gray-400 truncate max-w-[120px] mt-0.5" title={inv.payment_type}>{inv.payment_type}</p>
                                                 </TableCell>
-                                                <TableCell className="font-bold text-xs text-gray-900 dark:text-white">
+                                                <TableCell className="font-bold text-xs text-gray-900 dark:white">
                                                     Rp {new Intl.NumberFormat('id-ID').format(inv.total_amount)}
                                                 </TableCell>
                                                 <TableCell>
@@ -723,14 +781,24 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                                         <Download className="w-3.5 h-3.5" />
                                                     </Button>
                                                     {!isStudent && (
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="h-7 w-7 text-gray-500 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
-                                                            onClick={() => { setDeletingInvoice(inv); setDeleteInvoiceDialogOpen(true); }}
-                                                        >
-                                                            <svg xmlns="http://www.w3.org/2000/svg" className="w-3.5 h-3.5" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14H6L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
-                                                        </Button>
+                                                        <>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-7 w-7 text-gray-500 dark:text-gray-400 hover:text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20"
+                                                                onClick={() => handleEditInvoice(inv)}
+                                                            >
+                                                                <Edit className="w-3.5 h-3.5" />
+                                                            </Button>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="icon"
+                                                                className="h-7 w-7 text-gray-500 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20"
+                                                                onClick={() => { setDeletingInvoice(inv); setDeleteInvoiceDialogOpen(true); }}
+                                                            >
+                                                                <Trash2 className="w-3.5 h-3.5" />
+                                                            </Button>
+                                                        </>
                                                     )}
                                                 </TableCell>
                                             </TableRow>
@@ -748,7 +816,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent className="sm:max-w-[900px] h-[90vh] flex flex-col">
                     <DialogHeader>
-                        <DialogTitle>Input Pembayaran</DialogTitle>
+                        <DialogTitle>{editingPayment ? 'Edit Pembayaran' : 'Input Pembayaran'}</DialogTitle>
                         <DialogDescription>
                             Masukkan detail pembayaran siswa di sebelah kiri untuk melihat preview kwitansi di sebelah kanan.
                         </DialogDescription>
@@ -865,7 +933,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                     <div className="flex justify-end gap-2 mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
                         <Button variant="outline" onClick={() => setDialogOpen(false)}>Batal</Button>
                         <Button onClick={handleSave} disabled={saving} className="bg-red-700 hover:bg-red-800 text-white">
-                            {saving ? 'Menyimpan...' : 'Simpan Pembayaran'}
+                            {saving ? 'Menyimpan...' : (editingPayment ? 'Simpan Perubahan' : 'Simpan Pembayaran')}
                         </Button>
                     </div>
                 </DialogContent>
@@ -875,7 +943,10 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             <Dialog open={invoiceDialogOpen} onOpenChange={setInvoiceDialogOpen}>
                 <DialogContent className="sm:max-w-[900px] h-[90vh] flex flex-col">
                     <DialogHeader>
-                        <DialogTitle>Buat Invoice Baru</DialogTitle>
+                        <DialogTitle className="flex items-center gap-2">
+                            <FileText className="w-5 h-5 text-amber-600" />
+                            {editingInvoice ? 'Edit Invoice' : 'Buat Invoice Baru'}
+                        </DialogTitle>
                         <DialogDescription>
                             Isi detail tagihan di sebelah kiri untuk melihat preview PDF secara real-time di sebelah kanan.
                         </DialogDescription>
@@ -961,7 +1032,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                     <div className="flex justify-end gap-2 mt-2 pt-4 border-t border-gray-100 dark:border-gray-800">
                         <Button variant="outline" onClick={() => setInvoiceDialogOpen(false)}>Batal</Button>
                         <Button onClick={handleSaveInvoice} disabled={!pdfPreviewUrl || !invoiceForm.invoice_number || !invoiceForm.payment_type} className="bg-red-700 hover:bg-red-800 text-white flex items-center">
-                            <CheckCircle className="w-4 h-4 mr-2" /> Kirim & Simpan Invoice
+                            <CheckCircle className="w-4 h-4 mr-2" /> {editingInvoice ? 'Simpan Perubahan Invoice' : 'Kirim & Simpan Invoice'}
                         </Button>
                     </div>
                 </DialogContent>

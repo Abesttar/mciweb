@@ -109,6 +109,36 @@ class PaymentController extends Controller
     }
 
     /**
+     * Update the specified payment
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'stage' => 'required|integer|in:1,2,3',
+            'amount' => 'required|numeric|min:1',
+            'payment_date' => 'required|date',
+            'description' => 'nullable|string|max:255',
+            'invoice_number' => 'nullable|string|max:50',
+            'payment_type' => 'nullable|string|max:255',
+            'is_lunas' => 'nullable|boolean',
+        ]);
+
+        $payment = Payment::findOrFail($id);
+        
+        $payment->update([
+            'stage' => $request->stage,
+            'amount' => $request->amount,
+            'payment_date' => $request->payment_date,
+            'description' => $request->description,
+            'invoice_number' => $request->invoice_number,
+            'payment_type' => $request->payment_type,
+            'is_lunas' => $request->boolean('is_lunas', true),
+        ]);
+
+        return response()->json($payment);
+    }
+
+    /**
      * Remove the specified payment
      */
     public function destroy($id)

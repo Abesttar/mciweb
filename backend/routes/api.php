@@ -110,12 +110,14 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('students/{id}/payments', [\App\Http\Controllers\PaymentController::class, 'index']);
     Route::post('students/{id}/payments', [\App\Http\Controllers\PaymentController::class, 'store']);
     Route::get('students/{id}/payment-summary', [\App\Http\Controllers\PaymentController::class, 'summary']);
+    Route::put('payments/{id}', [\App\Http\Controllers\PaymentController::class, 'update']);
     Route::delete('payments/{id}', [\App\Http\Controllers\PaymentController::class, 'destroy']);
 
     // Invoices
     Route::get('students/{id}/invoices', [InvoiceController::class, 'index']);
     Route::post('students/{id}/invoices', [InvoiceController::class, 'store']);
     Route::get('invoices/my', [InvoiceController::class, 'myInvoices']);
+    Route::put('invoices/{id}', [InvoiceController::class, 'update']);
     Route::delete('invoices/{id}', [InvoiceController::class, 'destroy']);
     Route::get('me/payments', [\App\Http\Controllers\PaymentController::class, 'myPayments']);
 });

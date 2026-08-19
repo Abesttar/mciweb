@@ -65,6 +65,36 @@ class InvoiceController extends Controller
     }
 
     /**
+     * Update the specified invoice
+     */
+    public function update(Request $request, $id)
+    {
+        $request->validate([
+            'invoice_number' => 'required|string|max:100',
+            'payment_type'   => 'required|string|max:255',
+            'amount'         => 'required|numeric|min:0',
+            'tax_amount'     => 'nullable|numeric|min:0',
+            'total_amount'   => 'required|numeric|min:0',
+            'due_date'       => 'required|date',
+            'order_date'     => 'required|date',
+        ]);
+
+        $invoice = Invoice::findOrFail($id);
+        
+        $invoice->update([
+            'invoice_number' => $request->invoice_number,
+            'payment_type'   => $request->payment_type,
+            'amount'         => $request->amount,
+            'tax_amount'     => $request->tax_amount ?? 0,
+            'total_amount'   => $request->total_amount,
+            'due_date'       => $request->due_date,
+            'order_date'     => $request->order_date,
+        ]);
+
+        return response()->json($invoice->load('creator:id,name'));
+    }
+
+    /**
      * Ambil semua invoice milik satu siswa (untuk staff)
      */
     public function index($studentId)
