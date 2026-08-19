@@ -41,7 +41,7 @@ export const id = {
     sachouWelcome: 'Pantau perkembangan seluruh operasional LPK, dari pendaftaran siswa, performa kelas, hingga persiapan keberangkatan ke Jepang.',
     staffDokumenWelcome: 'Kelola kelengkapan dokumen keberangkatan, arsip siswa, dan persyaratan pendaftaran secara efisien.',
     sachouRole: 'Sachou',
-    staffDokumenRole: 'Staff Dokumen',
+    staffDokumenRole: 'Staff Akademik',
     save: 'Simpan',
     cancel: 'Batal',
     edit: 'Edit',

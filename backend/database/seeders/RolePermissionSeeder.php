@@ -11,7 +11,7 @@ class RolePermissionSeeder extends Seeder
         app()[\Spatie\Permission\PermissionRegistrar::class]->forgetCachedPermissions();
 
         // Roles
-        $roles = ['Super Admin', 'Admin', 'Sachou', 'Staff Dokumen', 'Sensei', 'Siswa'];
+        $roles = ['Super Admin', 'Admin', 'Sachou', 'Staff Akademik', 'Sensei', 'Siswa'];
         foreach ($roles as $role) {
             Role::firstOrCreate(['name' => $role]);
         }
@@ -58,8 +58,8 @@ class RolePermissionSeeder extends Seeder
         $sachou = Role::where('name', 'Sachou')->first();
         $sachou->syncPermissions(['view dashboard']);
 
-        $staffDokumen = Role::where('name', 'Staff Dokumen')->first();
-        $staffDokumen->syncPermissions([
+        $staffAkademik = Role::where('name', 'Staff Akademik')->first();
+        $staffAkademik->syncPermissions([
             'view dashboard',
             'manage batches',
             'manage students',

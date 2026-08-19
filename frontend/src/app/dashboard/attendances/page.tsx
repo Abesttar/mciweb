@@ -91,7 +91,7 @@ export default function AttendancesPage() {
     const { t } = useLanguage();
     const isStudent = hasRole('Siswa');
     const isSensei = hasRole('Sensei');
-    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Dokumen') || hasRole('Super Admin');
+    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Akademik') || hasRole('Super Admin');
     
     // Tab state: 'calendar', 'input', 'history'
     const [view, setView] = useState<'calendar' | 'input' | 'history'>(isSensei ? 'calendar' : 'history');

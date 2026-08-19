@@ -12,7 +12,7 @@ use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
-    private const CREATABLE_ROLES = ['Admin', 'Sachou', 'Staff Dokumen', 'Sensei', 'Siswa'];
+    private const CREATABLE_ROLES = ['Admin', 'Sachou', 'Staff Akademik', 'Sensei', 'Siswa'];
 
     public function index(Request $request)
     {
@@ -43,7 +43,7 @@ class UserController extends Controller
 
                 $query->whereIn('id', $studentUserIds);
             } else {
-                $query->role(['Staff Dokumen', 'Sensei', 'Siswa']);
+                $query->role(['Staff Akademik', 'Sensei', 'Siswa']);
             }
         }
 

@@ -39,7 +39,7 @@ export default function Sidebar() {
         );
     };
 
-    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Dokumen') || hasRole('Super Admin');
+    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Akademik') || hasRole('Super Admin');
 
     // Consolidated Navigation Structure
     const navigationGroups: NavGroup[] = [

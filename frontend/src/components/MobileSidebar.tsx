@@ -53,7 +53,7 @@ export default function MobileSidebar({ open, onClose }: MobileSidebarProps) {
         );
     };
 
-    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Dokumen') || hasRole('Super Admin');
+    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Akademik') || hasRole('Super Admin');
 
     const navigationGroups: NavGroup[] = [
         {

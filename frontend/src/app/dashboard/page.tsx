@@ -48,7 +48,7 @@ export default function DashboardPage() {
         );
     }
 
-    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Dokumen') || hasRole('Super Admin');
+    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Akademik') || hasRole('Super Admin');
 
     const statCards = [
         { 
@@ -120,7 +120,7 @@ export default function DashboardPage() {
             
             {isAdmin && (
                 <>
-                    {(hasRole('Sachou') || hasRole('Staff Dokumen')) && (
+                    {(hasRole('Sachou') || hasRole('Staff Akademik')) && (
                         <div className="bg-gradient-to-br from-indigo-800 via-indigo-700 to-indigo-900 rounded-2xl sm:rounded-3xl p-6 sm:p-10 shadow-2xl relative overflow-hidden border border-indigo-600/30 mb-8">
                             <div className="absolute inset-0 bg-pattern-seigaiha opacity-20 pointer-events-none mix-blend-overlay"></div>
                             <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-400 rounded-full blur-3xl opacity-20 pointer-events-none"></div>

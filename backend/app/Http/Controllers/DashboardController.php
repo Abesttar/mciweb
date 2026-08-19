@@ -27,7 +27,7 @@ class DashboardController extends Controller
         $data = [];
 
         $roles = $user->roles->pluck('name')->toArray();
-        $isAdmin = count(array_intersect($roles, ['Admin', 'Sachou', 'Super Admin', 'Staff Dokumen'])) > 0;
+        $isAdmin = count(array_intersect($roles, ['Admin', 'Sachou', 'Super Admin', 'Staff Akademik'])) > 0;
         $isSensei = in_array('Sensei', $roles);
         $isSiswa = in_array('Siswa', $roles);
 

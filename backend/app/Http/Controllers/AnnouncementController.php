@@ -16,7 +16,7 @@ class AnnouncementController extends Controller
         $query = Announcement::with(['createdBy', 'targets'])->orderBy('created_at', 'desc');
 
         // Filter based on role
-        if ($user->hasRole('Admin') || $user->hasRole('Sachou') || $user->hasRole('Super Admin') || $user->hasRole('Staff Dokumen')) {
+        if ($user->hasRole('Admin') || $user->hasRole('Sachou') || $user->hasRole('Super Admin') || $user->hasRole('Staff Akademik')) {
             // Can see all
         } else if ($user->hasRole('Sensei')) {
             $query->whereHas('targets', function($q) {
@@ -61,10 +61,10 @@ class AnnouncementController extends Controller
     {
         $user = $request->user();
 
-        // Super Admin, Staff Dokumen can create any announcement
+        // Super Admin, Staff Akademik can create any announcement
         // Sachou can create any announcement (same as admin)
         // Sensei can only create announcements targeting their own batch students
-        $canCreate = $user->hasAnyRole(['Super Admin', 'Admin', 'Staff Dokumen', 'Sachou']);
+        $canCreate = $user->hasAnyRole(['Super Admin', 'Admin', 'Staff Akademik', 'Sachou']);
         $isSensei = $user->hasRole('Sensei');
 
         if (!$canCreate && !$isSensei) {
