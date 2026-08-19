@@ -27,10 +27,16 @@ export async function generateKwitansiPdf(data: {
     // Nomor Kwitansi
     // Format baru: "001-INV-VI-2026" → ambil bagian pertama (angka)
     // Format lama: "INV-2026-VIII-101" → ambil bagian terakhir (angka)
-    const parts = data.kwitansiNoRaw.split('-');
-    const kwitansiNo = /^\d/.test(data.kwitansiNoRaw)
-        ? (parts.shift() || data.kwitansiNoRaw)
-        : (parts.pop() || data.kwitansiNoRaw);
+    // Tanpa invoice: "-" → gunakan langsung
+    let kwitansiNo: string;
+    if (data.kwitansiNoRaw === '-') {
+        kwitansiNo = '-';
+    } else {
+        const parts = data.kwitansiNoRaw.split('-');
+        kwitansiNo = /^\d/.test(data.kwitansiNoRaw)
+            ? (parts.shift() || data.kwitansiNoRaw)
+            : (parts.pop() || data.kwitansiNoRaw);
+    }
     page.drawText(kwitansiNo, { x: 260, y: 134, size: 10, font, color: black });
 
     // Telah terima dari

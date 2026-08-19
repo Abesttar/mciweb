@@ -181,7 +181,9 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                     paymentDesc = "Cicilan " + paymentDesc;
                 }
                 
-                const kwitansiNoRaw = form.invoice_number ? form.invoice_number : `INV-PREVIEW`;
+                const kwitansiNoRaw = (form.invoice_number && form.invoice_number !== 'TIDAK_ADA_INVOICE')
+                    ? form.invoice_number
+                    : '-';
 
                 const bytes = await generateKwitansiPdf({
                     is_lunas: form.is_lunas,
@@ -239,7 +241,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                 amount: parseFloat(form.amount),
                 payment_date: form.payment_date,
                 description: form.description || null,
-                invoice_number: form.invoice_number || null,
+                invoice_number: (form.invoice_number && form.invoice_number !== 'TIDAK_ADA_INVOICE') ? form.invoice_number : null,
                 payment_type: form.payment_type || null,
                 is_lunas: form.is_lunas
             };
@@ -762,6 +764,10 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                     <Select 
                                         value={form.invoice_number} 
                                         onValueChange={(v) => {
+                                            if (v === 'TIDAK_ADA_INVOICE') {
+                                                setForm({ ...form, invoice_number: 'TIDAK_ADA_INVOICE' });
+                                                return;
+                                            }
                                             const inv = invoices.find(i => i.invoice_number === v);
                                             if (inv) {
                                                 let stage = '1';
@@ -782,6 +788,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                     >
                                         <SelectTrigger><SelectValue placeholder="Pilih Invoice yang tersedia (Opsional)" /></SelectTrigger>
                                         <SelectContent>
+                                            <SelectItem value="TIDAK_ADA_INVOICE">— Tidak Ada Invoice —</SelectItem>
                                             {invoices.length === 0 && <SelectItem value="none" disabled>Belum ada invoice</SelectItem>}
                                             {invoices.map((inv, i) => (
                                                 <SelectItem key={i} value={inv.invoice_number}>{inv.invoice_number} - {inv.payment_type}</SelectItem>
