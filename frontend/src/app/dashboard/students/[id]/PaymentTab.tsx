@@ -537,7 +537,9 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            const kwitansiNo = kwitansiNoRaw.split('-').shift() || kwitansiNoRaw;
+            const kwitansiNo = /^\d/.test(kwitansiNoRaw)
+                ? (kwitansiNoRaw.split('-').shift() || kwitansiNoRaw)
+                : (kwitansiNoRaw.split('-').pop() || kwitansiNoRaw);
             a.download = `Kwitansi_${studentName}_${kwitansiNo}.pdf`;
             a.click();
             window.URL.revokeObjectURL(url);
@@ -626,7 +628,9 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                 ) : (
                                     payments.map((payment) => {
                                         const kwitansiNoRaw = payment.invoice_number ? payment.invoice_number : `INV-${payment.id.toString().padStart(5, '0')}`;
-                                        const kwitansiNo = kwitansiNoRaw.split('-').shift() || kwitansiNoRaw;
+                                        const kwitansiNo = /^\d/.test(kwitansiNoRaw)
+                                            ? (kwitansiNoRaw.split('-').shift() || kwitansiNoRaw)
+                                            : (kwitansiNoRaw.split('-').pop() || kwitansiNoRaw);
                                         return (
                                         <TableRow key={payment.id} className="hover:bg-gray-50/50 dark:bg-gray-800/50 transition-colors">
                                             <TableCell className="font-medium text-gray-900 dark:text-white text-xs">
