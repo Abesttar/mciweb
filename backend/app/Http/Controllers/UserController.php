@@ -139,7 +139,13 @@ class UserController extends Controller
             $user->name = $validated['name'];
         }
         
+        $emailChanged = false;
+        $oldEmail = $user->email;
+        
         if (isset($validated['email'])) {
+            if ($validated['email'] !== $oldEmail) {
+                $emailChanged = true;
+            }
             $user->email = $validated['email'];
         }
 
@@ -162,6 +168,14 @@ class UserController extends Controller
         }
 
         $user->load('roles');
+
+        if ($emailChanged && isset($validated['email'])) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($validated['email'])->send(new \App\Mail\EmailUpdatedMail($user->name, $validated['email']));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send email updated notification: ' . $e->getMessage());
+            }
+        }
 
         return response()->json($user);
     }

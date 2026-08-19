@@ -224,8 +224,15 @@ class StudentController extends Controller
             }
         }
 
-        return DB::transaction(function () use ($validated, $documentPaths, $student) {
+        $result = DB::transaction(function () use ($validated, $documentPaths, $student) {
+            $emailChanged = false;
+            $oldEmail = $student->user->email;
+            
             if (isset($validated['name']) || isset($validated['email'])) {
+                if (isset($validated['email']) && $validated['email'] !== $oldEmail) {
+                    $emailChanged = true;
+                }
+                
                 $student->user->update(array_filter([
                     'name' => $validated['name'] ?? null,
                     'email' => $validated['email'] ?? null,
@@ -249,8 +256,24 @@ class StudentController extends Controller
             $student->update(array_merge($updateData, $documentPaths));
 
             $student->load('user');
-            return response()->json($student);
+            
+            return [
+                'student' => $student,
+                'emailChanged' => $emailChanged,
+                'newEmail' => $validated['email'] ?? null,
+                'userName' => $student->user->name,
+            ];
         });
+
+        if ($result['emailChanged'] && $result['newEmail']) {
+            try {
+                \Illuminate\Support\Facades\Mail::to($result['newEmail'])->send(new \App\Mail\EmailUpdatedMail($result['userName'], $result['newEmail']));
+            } catch (\Exception $e) {
+                \Log::error('Failed to send email updated notification: ' . $e->getMessage());
+            }
+        }
+
+        return response()->json($result['student']);
     }
 
     public function destroy(Student $student)
