@@ -576,7 +576,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                 paymentDesc = "Cicilan " + paymentDesc;
             }
             
-            const kwitansiNoRaw = payment.invoice_number ? payment.invoice_number : `INV-${payment.id.toString().padStart(5, '0')}`;
+            const kwitansiNoRaw = payment.invoice_number ? payment.invoice_number : '-';
             
             const bytes = await generateKwitansiPdf({
                 is_lunas: !!payment.is_lunas,
@@ -682,7 +682,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                     <TableRow><TableCell colSpan={4} className="text-center py-6 text-gray-500 dark:text-gray-400">Belum ada riwayat pembayaran</TableCell></TableRow>
                                 ) : (
                                     payments.map((payment) => {
-                                        const kwitansiNoRaw = payment.invoice_number ? payment.invoice_number : `INV-${payment.id.toString().padStart(5, '0')}`;
+                                        const kwitansiNoRaw = payment.invoice_number ? payment.invoice_number : '-';
                                         const kwitansiNo = /^\d/.test(kwitansiNoRaw)
                                             ? (kwitansiNoRaw.split('-').shift() || kwitansiNoRaw)
                                             : (kwitansiNoRaw.split('-').pop() || kwitansiNoRaw);
