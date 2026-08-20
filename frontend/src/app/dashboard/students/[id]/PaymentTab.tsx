@@ -74,10 +74,15 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
     const { hasRole } = useAuth();
     const isStudent = hasRole('Siswa');
 
-    const isReguler = !studentInfo?.training_program || studentInfo?.training_program?.name?.toLowerCase().includes('reguler');
+    const hasDynamicStages = studentInfo?.training_program && Array.isArray(studentInfo.training_program.stages) && studentInfo.training_program.stages.length > 0;
 
-    const paymentOptions: { label: string; amount: number; stageId: number }[] = isReguler 
-        ? [
+    const paymentOptions: { label: string; amount: number; stageId: number }[] = hasDynamicStages
+        ? studentInfo.training_program.stages.map((stage: { name: string; amount: number }, index: number) => ({
+            label: stage.name,
+            amount: Number(stage.amount),
+            stageId: index + 1
+        }))
+        : [
             { label: 'Biaya Pendaftaran', amount: 500000, stageId: 1 },
             { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Katakana & Hiragana', amount: 500000, stageId: 2 },
             { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Shou (Dasar)', amount: 1000000, stageId: 2 },
@@ -85,12 +90,7 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
             { label: 'Biaya Pendidikan Tahap 1 : Pendidikan Kelas Kou (Atas)', amount: 1000000, stageId: 2 },
             { label: 'Biaya Pendidikan Tahap 2 : Lulus ujian JFT (N4)', amount: 3000000, stageId: 3 },
             { label: 'Biaya Pendidikan Tahap 2 : Lolos Wawancara Kerja', amount: 3000000, stageId: 3 },
-        ]
-        : studentInfo?.training_program?.stages?.map((stage: { name: string; amount: number }, index: number) => ({
-            label: stage.name,
-            amount: Number(stage.amount),
-            stageId: index + 1
-        })) || [];
+        ];
 
     const [payments, setPayments] = useState<PaymentData[]>([]);
     const [invoices, setInvoices] = useState<any[]>([]);
@@ -839,8 +839,14 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                                             const inv = invoices.find(i => i.invoice_number === v);
                                             if (inv) {
                                                 let stage = '1';
-                                                if (inv.payment_type && inv.payment_type.toLowerCase().includes('tahap 1')) stage = '2';
-                                                if (inv.payment_type && inv.payment_type.toLowerCase().includes('tahap 2')) stage = '3';
+                                                
+                                                const opt = paymentOptions.find(o => o.label === inv.payment_type);
+                                                if (opt) {
+                                                    stage = opt.stageId.toString();
+                                                } else {
+                                                    if (inv.payment_type && inv.payment_type.toLowerCase().includes('tahap 1')) stage = '2';
+                                                    if (inv.payment_type && inv.payment_type.toLowerCase().includes('tahap 2')) stage = '3';
+                                                }
 
                                                 setForm({ 
                                                     ...form, 
