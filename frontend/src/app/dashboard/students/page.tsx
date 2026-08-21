@@ -41,6 +41,7 @@ interface Student {
     user: { id: number; name: string; email: string; profile_photo_url?: string };
     roadmaps?: { id: number; status: string; roadmap_stage?: { name: string } }[];
     class_level: string | null;
+    enrollments?: { id: number; batch?: { id: number; name: string } }[];
 }
 
 function PaymentProgress({ student }: { student: Student }) {

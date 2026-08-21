@@ -2019,3 +2019,6 @@ Import traces:
  GET /dashboard/alumni 200 in 315ms (next.js: 2ms, application-code: 313ms)
 ⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
 ⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+✓ Compiled in 536ms
+ GET /dashboard/alumni 200 in 204ms (next.js: 130ms, application-code: 74ms)
+ GET /dashboard/alumni 200 in 37ms (next.js: 3ms, application-code: 34ms)
