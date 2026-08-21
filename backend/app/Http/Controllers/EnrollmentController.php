@@ -36,7 +36,13 @@ class EnrollmentController extends Controller
         
         if ($request->filled('class_level')) {
             $query->whereHas('student', function ($q) use ($request) {
-                $q->where('class_level', $request->class_level);
+                $q->where('class_level', $request->class_level)
+                  ->where('status', 'active'); // Exclude inactive/alumni students
+            });
+        } elseif (!$request->filled('include_inactive')) {
+            // By default, exclude inactive/graduated students unless explicitly requested
+            $query->whereHas('student', function ($q) {
+                $q->where('status', 'active');
             });
         }
         

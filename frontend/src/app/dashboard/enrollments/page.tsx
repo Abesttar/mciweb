@@ -63,7 +63,7 @@ export default function EnrollmentsPage() {
     const fetchEnrollments = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await axios.get('/api/enrollments', { params: { search: search || undefined } });
+            const res = await axios.get('/api/enrollments', { params: { search: search || undefined, include_inactive: 1 } });
             setEnrollments(res.data.data);
         } catch (err) {
             console.error(err);
