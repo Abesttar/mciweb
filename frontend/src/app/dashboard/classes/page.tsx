@@ -11,12 +11,12 @@ import { Label } from '@/components/ui/label';
 import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, DialogTitle } from '@/components/ui/dialog';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { AlertDialog, AlertDialogAction, AlertDialogCancel, AlertDialogContent, AlertDialogDescription, AlertDialogFooter, AlertDialogHeader, AlertDialogTitle } from '@/components/ui/alert-dialog';
-import { Search } from 'lucide-react';
+import { Search, Archive, ArchiveRestore } from 'lucide-react';
 
 interface Batch { id: number; name: string; }
 interface Teacher { id: number; nip?: string; user: { name: string }; }
 interface StudyClass {
-    id: number; name: string; class_type: string; batch_id: number; subject_id?: number; teacher_id: number; schedule_info?: string;
+    id: number; name: string; class_type: string; batch_id: number; subject_id?: number; teacher_id: number; schedule_info?: string; is_archived: boolean;
     batch?: Batch; teacher?: Teacher & { user: { name: string } };
 }
 
@@ -38,12 +38,14 @@ export default function ClassesPage() {
     const [form, setForm] = useState({ name: '', class_type: 'shou', batch_id: '', teacher_id: '', days: [] as string[], startTime: '08:00', endTime: '15:30' });
     const [saving, setSaving] = useState(false);
     const [error, setError] = useState('');
+    const [activeTab, setActiveTab] = useState('Semua');
+    const [showArchived, setShowArchived] = useState(false);
 
     const fetchClasses = useCallback(async () => {
         setLoading(true);
-        try { const res = await axios.get('/api/study-classes', { params: { search: search || undefined } }); setClasses(res.data.data); }
+        try { const res = await axios.get('/api/study-classes', { params: { search: search || undefined, is_archived: showArchived ? 1 : 0 } }); setClasses(res.data.data); }
         catch (err) { console.error(err); } finally { setLoading(false); }
-    }, [search]);
+    }, [search, showArchived]);
 
     const fetchOptions = async () => {
         try {
@@ -79,7 +81,13 @@ export default function ClassesPage() {
                  }
              }
         }
-        setForm({ name: c.name, class_type: c.class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toString(), days, startTime, endTime }); 
+        setForm({ 
+            name: c.name, 
+            class_type: c.class_type || 'shou', 
+            batch_id: c.batch_id ? c.batch_id.toString() : 'none', 
+            teacher_id: c.teacher_id ? c.teacher_id.toString() : '', 
+            days, startTime, endTime 
+        }); 
         setError(''); setDialogOpen(true); 
     };
 
@@ -100,6 +108,20 @@ export default function ClassesPage() {
         catch (err: any) { toast.error(err.response?.data?.message || 'Gagal menghapus'); }
     };
 
+    const handleArchiveToggle = async (c: StudyClass) => {
+        try { 
+            await axios.put(`/api/study-classes/${c.id}`, { is_archived: !c.is_archived }); 
+            toast.success(c.is_archived ? 'Kelas berhasil dipulihkan' : 'Kelas berhasil diarsipkan');
+            fetchClasses(); 
+        }
+        catch (err: any) { toast.error(err.response?.data?.message || 'Gagal mengubah status arsip'); }
+    };
+
+    const filteredClasses = classes.filter(c => {
+        if (activeTab === 'Semua') return true;
+        return c.class_type.toLowerCase() === activeTab.toLowerCase();
+    });
+
     return (
         <div className="space-y-6 animate-in fade-in duration-500 pb-10">
             <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-4">
@@ -110,36 +132,66 @@ export default function ClassesPage() {
                 {canManage && <Button onClick={openCreate} className="shadow-sm">+ {t.addClass}</Button>}
             </div>
 
-            <div className="flex justify-between items-center bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700/50">
-                <div className="relative w-full max-w-sm">
-                    <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
-                        <Search className="h-4 w-4 text-gray-400" />
+            <div className="flex flex-col md:flex-row justify-between items-start md:items-center bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl p-2 rounded-lg shadow-sm border border-gray-100 dark:border-gray-700/50 gap-4">
+                <div className="flex overflow-x-auto hide-scrollbar gap-1 px-1">
+                    {['Semua', 'Shou', 'Chuu', 'Kou', 'JFT', 'Kaiwa'].map(tab => (
+                        <button
+                            key={tab}
+                            onClick={() => setActiveTab(tab)}
+                            className={`px-4 py-1.5 rounded-md text-sm font-medium whitespace-nowrap transition-colors ${activeTab === tab ? 'bg-red-50 text-red-700 dark:bg-red-900/30 dark:text-red-400' : 'text-gray-500 hover:text-gray-700 hover:bg-gray-50 dark:text-gray-400 dark:hover:bg-gray-800'}`}
+                        >
+                            {tab}
+                        </button>
+                    ))}
+                </div>
+                
+                <div className="flex items-center gap-4 w-full md:w-auto">
+                    <div className="flex items-center gap-2">
+                        <Label htmlFor="archive-toggle" className="text-sm font-medium cursor-pointer">{showArchived ? 'Lihat Arsip' : 'Lihat Aktif'}</Label>
+                        <button
+                            id="archive-toggle"
+                            role="switch"
+                            aria-checked={showArchived}
+                            onClick={() => setShowArchived(!showArchived)}
+                            className={`relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-red-500 focus-visible:ring-offset-2 ${showArchived ? 'bg-amber-500' : 'bg-gray-200 dark:bg-gray-700'}`}
+                        >
+                            <span className={`inline-block h-4 w-4 transform rounded-full bg-white transition-transform ${showArchived ? 'translate-x-6' : 'translate-x-1'}`} />
+                        </button>
                     </div>
-                    <Input 
-                        placeholder={t.searchClass} 
-                        value={search} 
-                        onChange={(e) => setSearch(e.target.value)} 
-                        className="pl-10 border-0 focus-visible:ring-0 bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl dark:text-white w-full" 
-                    />
+
+                    <div className="relative w-full md:max-w-[200px]">
+                        <div className="absolute inset-y-0 left-0 pl-3 flex items-center pointer-events-none">
+                            <Search className="h-4 w-4 text-gray-400" />
+                        </div>
+                        <Input 
+                            placeholder={t.searchClass} 
+                            value={search} 
+                            onChange={(e) => setSearch(e.target.value)} 
+                            className="pl-9 h-9 border-0 focus-visible:ring-0 bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl dark:text-white w-full" 
+                        />
+                    </div>
                 </div>
             </div>
 
             {loading ? (
                 <div className="text-center py-12 text-gray-500 dark:text-gray-400">{t.loading}</div>
-            ) : classes.length === 0 ? (
+            ) : filteredClasses.length === 0 ? (
                 <div className="text-center py-16 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#151a23]/90 rounded-xl shadow-sm border border-gray-100 dark:border-gray-700/50">
                     <div className="mb-4 inline-flex items-center justify-center w-12 h-12 rounded-full bg-gray-100 dark:bg-gray-800">
                         <svg className="w-6 h-6 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M12 6.253v13m0-13C10.832 5.477 9.246 5 7.5 5S4.168 5.477 3 6.253v13C4.168 18.477 5.754 18 7.5 18s3.332.477 4.5 1.253m0-13C13.168 5.477 14.754 5 16.5 5c1.747 0 3.332.477 4.5 1.253v13C19.832 18.477 18.247 18 16.5 18c-1.746 0-3.332.477-4.5 1.253"></path></svg>
                     </div>
-                    <p>{t.noClassFound}</p>
+                    <p>{activeTab !== 'Semua' ? `Belum ada kelas untuk kategori ${activeTab}` : t.noClassFound}</p>
                 </div>
             ) : (
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-                    {classes.map((c) => (
-                        <div key={c.id} className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-700/50 rounded-xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col h-full">
+                    {filteredClasses.map((c) => (
+                        <div key={c.id} className={`bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border ${c.is_archived ? 'border-amber-200 dark:border-amber-900/50' : 'border-gray-100 dark:border-gray-700/50'} rounded-xl p-5 shadow-sm hover:shadow-md transition-all group flex flex-col h-full`}>
                             <div className="flex justify-between items-start mb-4">
                                 <div>
-                                    <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-1" title={c.name}>{c.name}</h3>
+                                    <div className="flex items-center gap-2">
+                                        <h3 className="font-semibold text-lg text-gray-900 dark:text-white line-clamp-1" title={c.name}>{c.name}</h3>
+                                        {c.is_archived && <span className="inline-flex px-1.5 py-0.5 rounded bg-amber-100 text-amber-700 text-[10px] font-bold uppercase">Arsip</span>}
+                                    </div>
                                     <p className="text-sm text-gray-500 dark:text-gray-400 mt-1 flex items-center">
                                         <svg className="w-3.5 h-3.5 mr-1" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
                                         {c.batch?.name || '-'}
@@ -177,6 +229,11 @@ export default function ClassesPage() {
                                     {isAdmin && (
                                         <Button variant="outline" size="icon" className="h-9 w-9 text-gray-600 dark:text-gray-400 hover:text-red-600 hover:bg-red-50 dark:hover:bg-red-950/30 dark:border-gray-700" onClick={() => { setDeleting(c); setDeleteDialogOpen(true); }} title="Hapus Kelas">
                                             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"></path></svg>
+                                        </Button>
+                                    )}
+                                    {isAdmin && (
+                                        <Button variant="outline" size="icon" className="h-9 w-9 text-gray-600 dark:text-gray-400 hover:text-amber-600 hover:bg-amber-50 dark:hover:bg-amber-950/30 dark:border-gray-700" onClick={() => handleArchiveToggle(c)} title={c.is_archived ? "Pulihkan dari Arsip" : "Arsipkan Kelas"}>
+                                            {c.is_archived ? <ArchiveRestore className="w-4 h-4" /> : <Archive className="w-4 h-4" />}
                                         </Button>
                                     )}
                                 </div>
@@ -253,14 +310,17 @@ export default function ClassesPage() {
                             </Select>
                         </div>
                         <div className="grid gap-2">
-                            <Label>{t.batch} *</Label>
-                            <Select value={form.batch_id ? String(form.batch_id) : ''} onValueChange={(v) => setForm({ ...form, batch_id: v ?? '' })}>
+                            <Label>{t.batch} {form.class_type === 'kaiwa' ? '(Opsional)' : '*'}</Label>
+                            <Select value={form.batch_id ? String(form.batch_id) : (form.class_type === 'kaiwa' ? 'none' : '')} onValueChange={(v) => setForm({ ...form, batch_id: v === 'none' ? '' : v })}>
                                 <SelectTrigger>
                                     <SelectValue placeholder={t.selectBatch}>
                                         {form.batch_id ? batches.find(b => b.id.toString() === String(form.batch_id))?.name : t.selectBatch}
                                     </SelectValue>
                                 </SelectTrigger>
-                                <SelectContent>{batches.map(b => <SelectItem key={b.id} value={b.id.toString()}>{b.name}</SelectItem>)}</SelectContent>
+                                <SelectContent>
+                                    {form.class_type === 'kaiwa' && <SelectItem value="none">— Tanpa Batch —</SelectItem>}
+                                    {batches.map(b => <SelectItem key={b.id} value={b.id.toString()}>{b.name}</SelectItem>)}
+                                </SelectContent>
                             </Select>
                         </div>
                         {/* Sensei dropdown hanya ditampilkan untuk Admin, Sensei otomatis di-assign backend */}

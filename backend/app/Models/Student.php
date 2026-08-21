@@ -11,6 +11,7 @@ class Student extends Model
     protected $fillable = [
         'user_id', 
         'training_program_id',
+        'class_level',
         'nis', 
         'gender', 
         'date_of_birth', 

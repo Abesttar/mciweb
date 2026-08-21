@@ -1,0 +1,2021 @@
+
+> frontend@0.1.0 dev
+> next dev
+
+▲ Next.js 16.2.10 (Turbopack)
+- Local:         http://localhost:3000
+- Network:       http://192.168.1.22:3000
+✓ Ready in 815ms
+
+ GET / 307 in 759ms (next.js: 301ms, application-code: 458ms)
+ GET /dashboard 200 in 361ms (next.js: 59ms, application-code: 302ms)
+[browser] Failed to load user AxiosError: Request failed with status code 401
+[browser] Failed to load user AxiosError: Request failed with status code 401
+[browser] Failed to load user AxiosError: Request failed with status code 401
+ GET /login 200 in 286ms (next.js: 61ms, application-code: 224ms)
+[browser] Image with src "/logo-login.png" has either width or height modified, but not the other. If you use CSS to change the size of your image, also include the styles 'width: "auto"' or 'height: "auto"' to maintain the aspect ratio. ([native code])
+ GET /dashboard 200 in 53ms (next.js: 4ms, application-code: 49ms)
+ GET /dashboard/students 200 in 81ms (next.js: 51ms, application-code: 30ms)
+[browser] Uncaught ReferenceError: Can't find variable: editingStudent
+    at StudentsPage (src/app/dashboard/students/page.tsx:541:69)
+  539 | ...ntent className="sm:max-w-[550px] rounded-2xl">
+  540 | ...ogHeader>
+> 541 | ...DialogTitle className="text-xl font-bold">{editingStudent ? 'Edit Data Siswa' : 'Tamba...
+      |                                               ^
+  542 | ...DialogDescription>{editingStudent ? 'Ubah informasi detail siswa.' : 'Lengkapi form un...
+  543 | ...logHeader>
+  544 | ...r && <div className="bg-red-50 dark:bg-red-950/40 text-red-600 p-3 rounded-lg text-sm ...
+ GET /dashboard/students? 200 in 152ms (next.js: 3ms, application-code: 149ms)
+[browser] Uncaught ReferenceError: Can't find variable: editingStudent
+    at StudentsPage (src/app/dashboard/students/page.tsx:541:69)
+  539 | ...ntent className="sm:max-w-[550px] rounded-2xl">
+  540 | ...ogHeader>
+> 541 | ...DialogTitle className="text-xl font-bold">{editingStudent ? 'Edit Data Siswa' : 'Tamba...
+      |                                               ^
+  542 | ...DialogDescription>{editingStudent ? 'Ubah informasi detail siswa.' : 'Lengkapi form un...
+  543 | ...logHeader>
+  544 | ...r && <div className="bg-red-50 dark:bg-red-950/40 text-red-600 p-3 rounded-lg text-sm ...
+ GET /dashboard? 200 in 46ms (next.js: 3ms, application-code: 43ms)
+ GET /dashboard/students 200 in 27ms (next.js: 7ms, application-code: 20ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 99ms (next.js: 66ms, application-code: 33ms)
+ GET /dashboard/batches/6 200 in 777ms (next.js: 746ms, application-code: 31ms)
+ GET /dashboard/batches 200 in 31ms (next.js: 6ms, application-code: 25ms)
+ GET /dashboard/batches/5 200 in 38ms (next.js: 14ms, application-code: 24ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/students 200 in 38ms (next.js: 10ms, application-code: 27ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/students/40 200 in 708ms (next.js: 678ms, application-code: 31ms)
+ GET /dashboard/students 200 in 33ms (next.js: 10ms, application-code: 23ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/classes 200 in 102ms (next.js: 69ms, application-code: 33ms)
+ GET /dashboard/classes 200 in 25ms (next.js: 2ms, application-code: 22ms)
+ GET /dashboard/classes/11/grades 200 in 570ms (next.js: 445ms, application-code: 125ms)
+ GET /dashboard/classes 200 in 24ms (next.js: 3ms, application-code: 21ms)
+ GET /dashboard/classes/11/grades 200 in 70ms (next.js: 7ms, application-code: 62ms)
+ GET /dashboard/classes 200 in 25ms (next.js: 3ms, application-code: 22ms)
+ GET /dashboard/classes/12/grades 200 in 59ms (next.js: 7ms, application-code: 53ms)
+ GET /dashboard/classes 200 in 27ms (next.js: 4ms, application-code: 23ms)
+ GET /dashboard/classes/10/grades 200 in 53ms (next.js: 5ms, application-code: 48ms)
+ GET /dashboard/classes 200 in 19ms (next.js: 2ms, application-code: 16ms)
+ GET /dashboard/classes/12/grades 200 in 56ms (next.js: 5ms, application-code: 51ms)
+ GET /dashboard/classes 200 in 36ms (next.js: 11ms, application-code: 25ms)
+ GET /dashboard/students 200 in 39ms (next.js: 13ms, application-code: 26ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/students/69 200 in 33ms (next.js: 8ms, application-code: 25ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 31ms (next.js: 6ms, application-code: 26ms)
+ GET /dashboard/students/69?tab=akademik 200 in 39ms (next.js: 3ms, application-code: 36ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 74ms (next.js: 14ms, application-code: 60ms)
+ GET /dashboard/students/69?tab=biodata 200 in 36ms (next.js: 3ms, application-code: 33ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 27ms (next.js: 5ms, application-code: 22ms)
+ GET /dashboard/students/69?tab=akademik 200 in 31ms (next.js: 3ms, application-code: 28ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 25ms (next.js: 4ms, application-code: 21ms)
+ GET /dashboard/students/69?tab=biodata 200 in 56ms (next.js: 5ms, application-code: 52ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 30ms (next.js: 6ms, application-code: 25ms)
+ GET /dashboard/students/69?tab=akademik 200 in 44ms (next.js: 3ms, application-code: 42ms)
+ GET /dashboard/students/69?tab=raport 200 in 40ms (next.js: 6ms, application-code: 34ms)
+ GET /dashboard/students/69?tab=akademik 200 in 52ms (next.js: 4ms, application-code: 48ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 32ms (next.js: 6ms, application-code: 25ms)
+ GET /dashboard/students/69?tab=biodata 200 in 153ms (next.js: 3ms, application-code: 150ms)
+ GET /dashboard/students/69?tab=roadmap 200 in 27ms (next.js: 5ms, application-code: 22ms)
+ GET /dashboard/students/69?tab=raport 200 in 38ms (next.js: 6ms, application-code: 32ms)
+ GET /dashboard/students/69?tab=pembayaran 200 in 42ms (next.js: 7ms, application-code: 34ms)
+ GET /dashboard/students/69?tab=raport 200 in 38ms (next.js: 4ms, application-code: 34ms)
+ GET /dashboard/students/69?tab=raport 200 in 29ms (next.js: 5ms, application-code: 24ms)
+ GET /dashboard/students 200 in 32ms (next.js: 10ms, application-code: 22ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+✓ Compiled in 232ms
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/teachers 200 in 67ms (next.js: 44ms, application-code: 23ms)
+ GET /dashboard/roadmap 200 in 161ms (next.js: 53ms, application-code: 108ms)
+ GET /dashboard/programs 200 in 76ms (next.js: 51ms, application-code: 25ms)
+ GET /dashboard/batches 200 in 30ms (next.js: 10ms, application-code: 21ms)
+✓ Compiled in 169ms
+ GET /dashboard/batches 200 in 114ms (next.js: 2ms, application-code: 111ms)
+ GET /dashboard/classes 200 in 34ms (next.js: 13ms, application-code: 21ms)
+ GET /dashboard/classes/12/grades 200 in 64ms (next.js: 8ms, application-code: 55ms)
+ GET /dashboard/classes 200 in 38ms (next.js: 14ms, application-code: 23ms)
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:82:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:174:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:138:33)
+  80 | ...
+  81 | ...
+> 82 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  83 | ...
+  84 | ...
+  85 | ...
+✓ Compiled in 4.1s
+⨯ ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  [90m196 |[0m                             </div>
+  [90m197 |[0m                             
+[31m[1m>[0m [90m198 |[0m                             <div className=[32m"space-y-3 mb-6 flex-grow"[0m>
+  [90m    |[0m                                  [31m[1m^^^^^^^^^[0m
+  [90m199 |[0m                                 <div className=[32m"flex items-center text-sm text-gray-700 d...[0m
+  [90m200 |[0m                                     <div className=[32m"w-8 h-8 rounded-full bg-orange-100 da...[0m
+  [90m201 |[0m                                         <svg className=[32m"w-4 h-4"[0m fill=[32m"none"[0m stroke=[32m"curr...[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+⨯ ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  [90m196 |[0m                             </div>
+  [90m197 |[0m                             
+[31m[1m>[0m [90m198 |[0m                             <div className=[32m"space-y-3 mb-6 flex-grow"[0m>
+  [90m    |[0m                                  [31m[1m^^^^^^^^^[0m
+  [90m199 |[0m                                 <div className=[32m"flex items-center text-sm text-gray-700 d...[0m
+  [90m200 |[0m                                     <div className=[32m"w-8 h-8 rounded-full bg-orange-100 da...[0m
+  [90m201 |[0m                                         <svg className=[32m"w-4 h-4"[0m fill=[32m"none"[0m stroke=[32m"curr...[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+ GET /dashboard/classes 500 in 445ms (next.js: 217ms, application-code: 227ms)
+ GET /dashboard/classes 500 in 453ms (next.js: 438ms, application-code: 15ms)
+⨯ ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  [90m196 |[0m                             </div>
+  [90m197 |[0m                             
+[31m[1m>[0m [90m198 |[0m                             <div className=[32m"space-y-3 mb-6 flex-grow"[0m>
+  [90m    |[0m                                  [31m[1m^^^^^^^^^[0m
+  [90m199 |[0m                                 <div className=[32m"flex items-center text-sm text-gray-700 d...[0m
+  [90m200 |[0m                                     <div className=[32m"w-8 h-8 rounded-full bg-orange-100 da...[0m
+  [90m201 |[0m                                         <svg className=[32m"w-4 h-4"[0m fill=[32m"none"[0m stroke=[32m"curr...[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+ GET /dashboard/classes 500 in 28ms (next.js: 17ms, application-code: 11ms)
+[browser] Uncaught Error: ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./src/app/dashboard/classes/page.tsx:198:34)
+    at <unknown> (Error: (./src/app/dashboard/classes/page.tsx:198:34)
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+⨯ ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  [90m196 |[0m                             </div>
+  [90m197 |[0m                             
+[31m[1m>[0m [90m198 |[0m                             <div className=[32m"space-y-3 mb-6 flex-grow"[0m>
+  [90m    |[0m                                  [31m[1m^^^^^^^^^[0m
+  [90m199 |[0m                                 <div className=[32m"flex items-center text-sm text-gray-700 d...[0m
+  [90m200 |[0m                                     <div className=[32m"w-8 h-8 rounded-full bg-orange-100 da...[0m
+  [90m201 |[0m                                         <svg className=[32m"w-4 h-4"[0m fill=[32m"none"[0m stroke=[32m"curr...[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+ GET /dashboard/classes 500 in 34ms (next.js: 20ms, application-code: 14ms)
+[browser] Uncaught Error: ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./src/app/dashboard/classes/page.tsx:198:34)
+    at <unknown> (Error: (./src/app/dashboard/classes/page.tsx:198:34)
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+⨯ ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  [90m196 |[0m                             </div>
+  [90m197 |[0m                             
+[31m[1m>[0m [90m198 |[0m                             <div className=[32m"space-y-3 mb-6 flex-grow"[0m>
+  [90m    |[0m                                  [31m[1m^^^^^^^^^[0m
+  [90m199 |[0m                                 <div className=[32m"flex items-center text-sm text-gray-700 d...[0m
+  [90m200 |[0m                                     <div className=[32m"w-8 h-8 rounded-full bg-orange-100 da...[0m
+  [90m201 |[0m                                         <svg className=[32m"w-4 h-4"[0m fill=[32m"none"[0m stroke=[32m"curr...[0m
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+ GET /dashboard/classes 500 in 18ms (next.js: 8ms, application-code: 11ms)
+[browser] Uncaught Error: ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./src/app/dashboard/classes/page.tsx:198:34)
+    at <unknown> (Error: (./src/app/dashboard/classes/page.tsx:198:34)
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+[browser] ./src/app/dashboard/classes/page.tsx:198:34
+Expected '</', got 'ident'
+  196 |                             </div>
+  197 |                             
+> 198 |                             <div className="space-y-3 mb-6 flex-grow">
+      |                                  ^^^^^^^^^
+  199 |                                 <div className="flex items-center text-sm text-gray-700 d...
+  200 |                                     <div className="w-8 h-8 rounded-full bg-orange-100 da...
+  201 |                                         <svg className="w-4 h-4" fill="none" stroke="curr...
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/classes/page.tsx [Client Component Browser]
+    ./src/app/dashboard/classes/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/classes/page.tsx [Client Component SSR]
+    ./src/app/dashboard/classes/page.tsx [Server Component] 
+ GET /dashboard/classes 200 in 3.8s (next.js: 2.2s, application-code: 1593ms)
+ GET /dashboard/classes 200 in 398ms (next.js: 148ms, application-code: 250ms)
+✓ Finished filesystem cache database compaction in 10.4s
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:84:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:220:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:181:41)
+  82 | ...
+  83 | ...
+> 84 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  85 | ...
+  86 | ...
+  87 | ...
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:84:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:220:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:181:41)
+  82 | ...
+  83 | ...
+> 84 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  85 | ...
+  86 | ...
+  87 | ...
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:84:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:220:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:181:41)
+  82 | ...
+  83 | ...
+> 84 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  85 | ...
+  86 | ...
+  87 | ...
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:84:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:220:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:181:41)
+  82 | ...
+  83 | ...
+> 84 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  85 | ...
+  86 | ...
+  87 | ...
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:84:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:220:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:181:41)
+  82 | ...
+  83 | ...
+> 84 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  85 | ...
+  86 | ...
+  87 | ...
+[browser] Uncaught TypeError: null is not an object (evaluating 'c.batch_id.toString')
+    at openEdit (src/app/dashboard/classes/page.tsx:84:89)
+    at button (unknown)
+    at <unknown> (src/app/dashboard/classes/page.tsx:220:37)
+    at map ([native code])
+    at ClassesPage (src/app/dashboard/classes/page.tsx:181:41)
+  82 | ...
+  83 | ...
+> 84 | ....class_type || 'shou', batch_id: c.batch_id.toString(), teacher_id: c.teacher_id.toStri...
+     |                                               ^
+  85 | ...
+  86 | ...
+  87 | ...
+✓ Compiled in 339ms
+ GET /dashboard/classes/7/grades 200 in 213ms (next.js: 57ms, application-code: 157ms)
+ GET /dashboard/classes 200 in 49ms (next.js: 9ms, application-code: 40ms)
+ GET /dashboard/classes/7/grades 200 in 66ms (next.js: 8ms, application-code: 58ms)
+ GET /dashboard/batches 200 in 61ms (next.js: 39ms, application-code: 23ms)
+ GET /dashboard/batches/2 200 in 55ms (next.js: 32ms, application-code: 23ms)
+ GET /dashboard/students 200 in 75ms (next.js: 40ms, application-code: 34ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+✓ Compiled in 2.3s
+✓ Compiled in 116ms
+ GET /dashboard/students 200 in 267ms (next.js: 15ms, application-code: 252ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 42ms (next.js: 10ms, application-code: 32ms)
+ GET /dashboard/batches/6 200 in 43ms (next.js: 15ms, application-code: 27ms)
+ GET /dashboard/students 200 in 40ms (next.js: 12ms, application-code: 28ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/classes 200 in 32ms (next.js: 8ms, application-code: 24ms)
+✓ Compiled in 3.3s
+✓ Compiled in 0ms
+ GET /dashboard/classes 200 in 432ms (next.js: 183ms, application-code: 249ms)
+ GET /dashboard/classes 200 in 138ms (next.js: 96ms, application-code: 42ms)
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m16 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+  [90m17 |[0m [36mimport[0m { [33mArrowLeft[0m, [33mUsers[0m, [33mCalendar[0m, [33mMapPin[0m, [33mGraduationCap[0m, [33mUserPlus[0m, [33mFileCheck2[0m, [33mArrowRig..[0m.
+[31m[1m>[0m [90m18 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m19 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m20 |[0m [36mimport[0m [33mLink[0m [36mfrom[0m [32m'next/link'[0m;
+  [90m21 |[0m [36mimport[0m { motion } [36mfrom[0m [32m'framer-motion'[0m;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+✓ Compiled in 1175ms
+ GET /dashboard/classes 500 in 57ms (next.js: 16ms, application-code: 41ms)
+ GET /dashboard/classes 500 in 54ms (next.js: 23ms, application-code: 31ms)
+[browser] Uncaught Error: ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/dashboard/batches/[id]/page.tsx:18:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/dashboard/batches/[id]/page.tsx:18:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/classes 500 in 27ms (next.js: 13ms, application-code: 14ms)
+[browser] Uncaught Error: ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+⨯ ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  [90m20 |[0m [36mimport[0m [33mJapaneseOrnament[0m [36mfrom[0m [32m'@/components/JapaneseOrnament'[0m;
+  [90m21 |[0m [36mimport[0m { [33mAddressSelector[0m } [36mfrom[0m [32m'@/components/AddressSelector'[0m;
+[31m[1m>[0m [90m22 |[0m [36mimport[0m { [33mCheckbox[0m } [36mfrom[0m [32m'@/components/ui/checkbox'[0m;
+  [90m   |[0m [31m[1m^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^[0m
+  [90m23 |[0m
+  [90m24 |[0m [36minterface[0m [33mStudent[0m {
+  [90m25 |[0m     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+ GET /dashboard/classes 500 in 27ms (next.js: 11ms, application-code: 16ms)
+[browser] Uncaught Error: ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+ GET /dashboard/classes 500 in 28ms (next.js: 15ms, application-code: 13ms)
+[browser] Uncaught Error: ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+ GET /dashboard/classes 500 in 18ms (next.js: 5ms, application-code: 13ms)
+[browser] Uncaught Error: ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found
+
+
+    at <unknown> (Error: ./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+    at <unknown> (Error: (./src/app/dashboard/students/page.tsx:22:1)
+    at <unknown> (https://nextjs.org/docs/messages/module-not-found)
+[browser] ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/students/page.tsx:22:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  20 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  21 | import { AddressSelector } from '@/components/AddressSelector';
+> 22 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  23 |
+  24 | interface Student {
+  25 |     id: number;
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/students/page.tsx [Client Component Browser]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/students/page.tsx [Client Component SSR]
+    ./src/app/dashboard/students/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:18:1
+Module not found: Can't resolve '@/components/ui/checkbox'
+  16 | import { AddressSelector } from '@/components/AddressSelector';
+  17 | import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRig...
+> 18 | import { Checkbox } from '@/components/ui/checkbox';
+     | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  19 | import JapaneseOrnament from '@/components/JapaneseOrnament';
+  20 | import Link from 'next/link';
+  21 | import { motion } from 'framer-motion';
+
+Import map: aliased to relative './src/components/ui/checkbox' inside of [project]/
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+https://nextjs.org/docs/messages/module-not-found 
+✓ Compiled in 1692ms
+ GET /dashboard/classes 200 in 686ms (next.js: 193ms, application-code: 493ms)
+ GET /dashboard/classes 200 in 174ms (next.js: 80ms, application-code: 94ms)
+ GET /dashboard/batches 200 in 101ms (next.js: 34ms, application-code: 67ms)
+ GET /dashboard/batches/7 200 in 52ms (next.js: 28ms, application-code: 23ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 32ms (next.js: 7ms, application-code: 25ms)
+ GET /dashboard/batches/5 200 in 28ms (next.js: 8ms, application-code: 21ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+✓ Compiled in 236ms
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 34ms (next.js: 12ms, application-code: 22ms)
+ GET /dashboard/batches/3 200 in 54ms (next.js: 17ms, application-code: 37ms)
+ GET /dashboard/batches 200 in 27ms (next.js: 3ms, application-code: 24ms)
+ GET /dashboard/batches/5 200 in 41ms (next.js: 13ms, application-code: 27ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 32ms (next.js: 5ms, application-code: 27ms)
+ GET /dashboard/batches/5 200 in 43ms (next.js: 15ms, application-code: 28ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 27ms (next.js: 5ms, application-code: 22ms)
+ GET /dashboard/classes 200 in 52ms (next.js: 13ms, application-code: 39ms)
+ GET /dashboard/classes/10/grades 200 in 195ms (next.js: 44ms, application-code: 150ms)
+ GET /dashboard/classes/10/raport/71 200 in 796ms (next.js: 720ms, application-code: 76ms)
+ GET /dashboard/classes 200 in 32ms (next.js: 6ms, application-code: 26ms)
+ GET /dashboard/classes/11/grades 200 in 73ms (next.js: 6ms, application-code: 67ms)
+ GET /dashboard/classes/11/raport/40 200 in 84ms (next.js: 10ms, application-code: 74ms)
+✓ Compiled in 1860ms
+✓ Compiled in 234ms
+⚠ Fast Refresh had to perform a full reload when ./src/locales/id.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload when ./src/locales/id.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+✓ Compiled in 1019ms
+ GET /dashboard/classes/11/raport/40 200 in 254ms (next.js: 52ms, application-code: 202ms)
+ GET /dashboard/classes/11/grades 200 in 259ms (next.js: 12ms, application-code: 247ms)
+⚠ Fast Refresh had to perform a full reload when ./src/locales/jp.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+⚠ Fast Refresh had to perform a full reload when ./src/locales/jp.ts changed. Read more: https://nextjs.org/docs/messages/fast-refresh-reload
+✓ Compiled in 235ms
+ GET /dashboard/classes/11/raport/40 200 in 336ms (next.js: 12ms, application-code: 325ms)
+ GET /dashboard/classes/11/grades 200 in 342ms (next.js: 85ms, application-code: 257ms)
+ GET /dashboard/classes/11/grades 200 in 1800ms (next.js: 1433ms, application-code: 367ms)
+ GET /dashboard/classes/11/grades 200 in 1264ms (next.js: 1006ms, application-code: 258ms)
+ GET /dashboard/classes/11/grades 200 in 1265ms (next.js: 959ms, application-code: 306ms)
+ GET /dashboard/classes/11/grades 200 in 1274ms (next.js: 1062ms, application-code: 212ms)
+ GET /dashboard/classes/11/grades 200 in 1286ms (next.js: 1126ms, application-code: 160ms)
+ GET /dashboard/classes/11/grades 200 in 1306ms (next.js: 1196ms, application-code: 110ms)
+ GET /dashboard/classes/11/grades 200 in 368ms (next.js: 38ms, application-code: 330ms)
+ GET /dashboard/classes/11/grades 200 in 340ms (next.js: 71ms, application-code: 269ms)
+ GET /dashboard/classes/11/grades 200 in 341ms (next.js: 158ms, application-code: 182ms)
+ GET /dashboard/classes/11/grades 200 in 284ms (next.js: 141ms, application-code: 142ms)
+ GET /dashboard/classes/11/grades 200 in 282ms (next.js: 212ms, application-code: 70ms)
+ GET /dashboard/classes/11/grades 200 in 287ms (next.js: 180ms, application-code: 106ms)
+ GET /dashboard/classes/11/grades 200 in 205ms (next.js: 5ms, application-code: 200ms)
+ GET /dashboard/classes/11/grades 200 in 168ms (next.js: 9ms, application-code: 159ms)
+ GET /dashboard/classes/11/grades 200 in 165ms (next.js: 33ms, application-code: 132ms)
+ GET /dashboard/classes/11/grades 200 in 109ms (next.js: 37ms, application-code: 72ms)
+ GET /dashboard/classes/11/grades 200 in 113ms (next.js: 11ms, application-code: 102ms)
+ GET /dashboard/classes/11/grades 200 in 113ms (next.js: 68ms, application-code: 45ms)
+ GET /dashboard/classes/11/grades 200 in 182ms (next.js: 4ms, application-code: 178ms)
+ GET /dashboard/classes/11/grades 200 in 155ms (next.js: 7ms, application-code: 149ms)
+ GET /dashboard/classes/11/grades 200 in 153ms (next.js: 28ms, application-code: 125ms)
+ GET /dashboard/classes/11/grades 200 in 98ms (next.js: 6ms, application-code: 91ms)
+ GET /dashboard/classes/11/grades 200 in 100ms (next.js: 32ms, application-code: 68ms)
+ GET /dashboard/classes/11/grades 200 in 72ms (next.js: 31ms, application-code: 42ms)
+ GET /dashboard/classes/11/grades 200 in 193ms (next.js: 7ms, application-code: 186ms)
+ GET /dashboard/classes/11/grades 200 in 152ms (next.js: 30ms, application-code: 122ms)
+ GET /dashboard/classes/11/grades 200 in 155ms (next.js: 5ms, application-code: 150ms)
+ GET /dashboard/classes/11/grades 200 in 106ms (next.js: 5ms, application-code: 102ms)
+ GET /dashboard/classes/11/grades 200 in 84ms (next.js: 26ms, application-code: 58ms)
+ GET /dashboard/classes/11/grades 200 in 87ms (next.js: 4ms, application-code: 83ms)
+ GET /dashboard/classes/11/grades 200 in 261ms (next.js: 11ms, application-code: 250ms)
+ GET /dashboard/classes/11/grades 200 in 264ms (next.js: 44ms, application-code: 219ms)
+ GET /dashboard/classes/11/grades 200 in 262ms (next.js: 85ms, application-code: 177ms)
+ GET /dashboard/classes/11/grades 200 in 188ms (next.js: 48ms, application-code: 140ms)
+ GET /dashboard/classes/11/grades 200 in 138ms (next.js: 6ms, application-code: 132ms)
+ GET /dashboard/classes/11/grades 200 in 138ms (next.js: 37ms, application-code: 101ms)
+ GET /dashboard/classes/11/grades 200 in 367ms (next.js: 4ms, application-code: 363ms)
+ GET /dashboard/classes/11/grades 200 in 328ms (next.js: 8ms, application-code: 320ms)
+ GET /dashboard/classes/11/grades 200 in 327ms (next.js: 55ms, application-code: 272ms)
+ GET /dashboard/classes/11/grades 200 in 284ms (next.js: 83ms, application-code: 201ms)
+ GET /dashboard/classes/11/grades 200 in 153ms (next.js: 18ms, application-code: 135ms)
+ GET /dashboard/classes/11/grades 200 in 153ms (next.js: 62ms, application-code: 91ms)
+ GET /dashboard/classes/11/grades 200 in 330ms (next.js: 7ms, application-code: 323ms)
+ GET /dashboard/classes/11/grades 200 in 214ms (next.js: 12ms, application-code: 202ms)
+ GET /dashboard/classes/11/grades 200 in 215ms (next.js: 43ms, application-code: 172ms)
+ GET /dashboard/classes/11/grades 200 in 180ms (next.js: 36ms, application-code: 143ms)
+ GET /dashboard/classes/11/grades 200 in 148ms (next.js: 10ms, application-code: 138ms)
+ GET /dashboard/classes/11/grades 200 in 148ms (next.js: 40ms, application-code: 107ms)
+ GET /dashboard/classes/11/grades 200 in 225ms (next.js: 4ms, application-code: 221ms)
+ GET /dashboard/classes/11/grades 200 in 186ms (next.js: 5ms, application-code: 181ms)
+ GET /dashboard/classes/11/grades 200 in 156ms (next.js: 6ms, application-code: 150ms)
+ GET /dashboard/classes/11/grades 200 in 125ms (next.js: 6ms, application-code: 119ms)
+ GET /dashboard/classes/11/grades 200 in 134ms (next.js: 4ms, application-code: 130ms)
+ GET /dashboard/classes/11/grades 200 in 135ms (next.js: 34ms, application-code: 101ms)
+ GET /dashboard/classes/11/grades 200 in 222ms (next.js: 5ms, application-code: 217ms)
+ GET /dashboard/classes/11/grades 200 in 187ms (next.js: 9ms, application-code: 178ms)
+ GET /dashboard/classes/11/grades 200 in 152ms (next.js: 6ms, application-code: 145ms)
+ GET /dashboard/classes/11/grades 200 in 123ms (next.js: 8ms, application-code: 114ms)
+ GET /dashboard/classes/11/grades 200 in 90ms (next.js: 5ms, application-code: 85ms)
+ GET /dashboard/classes/11/grades 200 in 178ms (next.js: 34ms, application-code: 144ms)
+ GET /dashboard/classes/11/grades 200 in 231ms (next.js: 38ms, application-code: 193ms)
+ GET /dashboard/classes/11/grades 200 in 233ms (next.js: 7ms, application-code: 226ms)
+ GET /dashboard/classes/11/grades 200 in 142ms (next.js: 6ms, application-code: 136ms)
+ GET /dashboard/classes/11/grades 200 in 115ms (next.js: 6ms, application-code: 109ms)
+ GET /dashboard/classes/11/grades 200 in 143ms (next.js: 33ms, application-code: 111ms)
+ GET /dashboard/classes/11/grades 200 in 146ms (next.js: 4ms, application-code: 142ms)
+ GET /dashboard/classes/11/grades 200 in 213ms (next.js: 6ms, application-code: 207ms)
+ GET /dashboard/classes/11/grades 200 in 213ms (next.js: 34ms, application-code: 179ms)
+ GET /dashboard/classes/11/grades 200 in 152ms (next.js: 6ms, application-code: 146ms)
+ GET /dashboard/classes/11/grades 200 in 117ms (next.js: 8ms, application-code: 109ms)
+ GET /dashboard/classes/11/grades 200 in 76ms (next.js: 6ms, application-code: 70ms)
+ GET /dashboard/classes/11/grades 200 in 75ms (next.js: 34ms, application-code: 42ms)
+✓ Compiled in 980ms
+ GET /dashboard/students 200 in 52ms (next.js: 25ms, application-code: 27ms)
+[browser] Uncaught ReferenceError: Can't find variable: sortedStudents
+    at StudentsPage (src/app/dashboard/students/page.tsx:452:30)
+  450 |                     {viewMode === 'grid' ? (
+  451 |                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl...
+> 452 |                             {sortedStudents.map((s, idx) => (
+      |                              ^
+  453 |                                 <Link href={`/dashboard/students/${s.id}`} key={s.id} cla...
+  454 |                                     <div className="bg-white dark:bg-card rounded-2xl sm:...
+  455 |                                         {/* Bulk Selection Checkbox */}
+✓ Compiled in 101ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/students 200 in 338ms (next.js: 8ms, application-code: 330ms)
+[browser] Uncaught ReferenceError: Can't find variable: filteredStudents
+    at StudentsPage (src/app/dashboard/students/page.tsx:405:17)
+  403 |                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-r...
+  404 |                 </div>
+> 405 |             ) : filteredStudents.length === 0 ? (
+      |                 ^
+  406 |                 <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl round...
+  407 |                     <div className="flex-1">
+  408 |                             <h1 className="text-3xl font-bold tracking-tight text-gray-90...
+✓ Compiled in 135ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/students 200 in 74ms (next.js: 16ms, application-code: 58ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:797:49
+Expected '</', got 'jsx text'
+  795 |                                     <SelectItem value="inactive">Non-Aktif (Berhenti / Lu...
+  796 |                                     <SelectItem value="graduated">Alumni (Lolos Job / Ber...
+> 797 |                                 </SelectContent>
+      |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 798 |                             </Select>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  799 |                         </div>
+  800 |                         <div className="grid gap-2">
+  801 |                             <Label>Alamat Tinggal</Label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component] 
+ GET /dashboard/students 500 in 89ms (next.js: 70ms, application-code: 19ms)
+ GET /dashboard/students 500 in 93ms (next.js: 33ms, application-code: 60ms)
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:797:49
+Expected '</', got 'jsx text'
+  795 |                                     <SelectItem value="inactive">Non-Aktif (Berhenti / Lu...
+  796 |                                     <SelectItem value="graduated">Alumni (Lolos Job / Ber...
+> 797 |                                 </SelectContent>
+      |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 798 |                             </Select>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  799 |                         </div>
+  800 |                         <div className="grid gap-2">
+  801 |                             <Label>Alamat Tinggal</Label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component] 
+ GET /dashboard/students 500 in 24ms (next.js: 7ms, application-code: 17ms)
+[browser] Uncaught Error: ./src/app/dashboard/batches/[id]/page.tsx:797:49
+Expected '</', got 'jsx text'
+  795 |                                     <SelectItem value="inactive">Non-Aktif (Berhenti / Lu...
+  796 |                                     <SelectItem value="graduated">Alumni (Lolos Job / Ber...
+> 797 |                                 </SelectContent>
+      |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 798 |                             </Select>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  799 |                         </div>
+  800 |                         <div className="grid gap-2">
+  801 |                             <Label>Alamat Tinggal</Label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+
+    at <unknown> (Error: ./src/app/dashboard/batches/[id]/page.tsx:797:49)
+    at <unknown> (Error: (./src/app/dashboard/batches/[id]/page.tsx:797:49)
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:797:49
+Expected '</', got 'jsx text'
+  795 |                                     <SelectItem value="inactive">Non-Aktif (Berhenti / Lu...
+  796 |                                     <SelectItem value="graduated">Alumni (Lolos Job / Ber...
+> 797 |                                 </SelectContent>
+      |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 798 |                             </Select>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  799 |                         </div>
+  800 |                         <div className="grid gap-2">
+  801 |                             <Label>Alamat Tinggal</Label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component] 
+[browser] ./src/app/dashboard/batches/[id]/page.tsx:797:49
+Expected '</', got 'jsx text'
+  795 |                                     <SelectItem value="inactive">Non-Aktif (Berhenti / Lu...
+  796 |                                     <SelectItem value="graduated">Alumni (Lolos Job / Ber...
+> 797 |                                 </SelectContent>
+      |                                                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+> 798 |                             </Select>
+      | ^^^^^^^^^^^^^^^^^^^^^^^^^^^^
+  799 |                         </div>
+  800 |                         <div className="grid gap-2">
+  801 |                             <Label>Alamat Tinggal</Label>
+
+Parsing ecmascript source code failed
+
+Import traces:
+  Client Component Browser:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component Browser]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component]
+
+  Client Component SSR:
+    ./src/app/dashboard/batches/[id]/page.tsx [Client Component SSR]
+    ./src/app/dashboard/batches/[id]/page.tsx [Server Component] 
+✓ Compiled in 127ms
+ GET /dashboard/students 200 in 489ms (next.js: 137ms, application-code: 352ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+○ Compiling /dashboard/alumni ...
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+[browser] Failed to fetch RSC payload for http://localhost:3000/dashboard/alumni. Falling back to browser navigation. TypeError: Load failed
+ GET /dashboard/alumni 200 in 3.3s (next.js: 3.1s, application-code: 194ms)
+ GET /dashboard/students 200 in 23ms (next.js: 4ms, application-code: 19ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/alumni 200 in 38ms (next.js: 5ms, application-code: 33ms)
+ GET /dashboard/batches 200 in 72ms (next.js: 36ms, application-code: 36ms)
+ GET /dashboard/batches/1 200 in 70ms (next.js: 32ms, application-code: 38ms)
+ GET /dashboard/batches 200 in 20ms (next.js: 2ms, application-code: 18ms)
+ GET /dashboard/batches/2 200 in 29ms (next.js: 5ms, application-code: 24ms)
+ GET /dashboard/batches 200 in 31ms (next.js: 2ms, application-code: 28ms)
+ GET /dashboard/batches/3 200 in 32ms (next.js: 6ms, application-code: 27ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 28ms (next.js: 3ms, application-code: 25ms)
+ GET /dashboard/batches/1 200 in 30ms (next.js: 5ms, application-code: 25ms)
+ GET /dashboard/batches 200 in 32ms (next.js: 4ms, application-code: 28ms)
+ GET /dashboard/batches/2 200 in 30ms (next.js: 5ms, application-code: 25ms)
+✓ Compiled in 298ms
+ GET /dashboard/alumni 200 in 32ms (next.js: 10ms, application-code: 21ms)
+ GET /dashboard/students/25 200 in 76ms (next.js: 37ms, application-code: 39ms)
+ GET /dashboard/students 200 in 29ms (next.js: 4ms, application-code: 25ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 35ms (next.js: 10ms, application-code: 25ms)
+ GET /dashboard/batches/1 200 in 51ms (next.js: 21ms, application-code: 31ms)
+ GET /dashboard/batches 200 in 39ms (next.js: 11ms, application-code: 28ms)
+ GET /dashboard/batches/2 200 in 40ms (next.js: 13ms, application-code: 27ms)
+ GET /dashboard/batches 200 in 33ms (next.js: 7ms, application-code: 27ms)
+ GET /dashboard/batches/3 200 in 26ms (next.js: 5ms, application-code: 21ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 33ms (next.js: 11ms, application-code: 23ms)
+ GET /dashboard/batches/4 200 in 36ms (next.js: 9ms, application-code: 27ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 29ms (next.js: 8ms, application-code: 21ms)
+ GET /dashboard/batches/5 200 in 32ms (next.js: 9ms, application-code: 24ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/teachers 200 in 68ms (next.js: 41ms, application-code: 27ms)
+ GET /dashboard/classes 200 in 63ms (next.js: 36ms, application-code: 27ms)
+ GET /dashboard/classes/11/grades 200 in 126ms (next.js: 34ms, application-code: 92ms)
+ GET /dashboard/classes 200 in 34ms (next.js: 3ms, application-code: 30ms)
+ GET /dashboard/classes/10/grades 200 in 167ms (next.js: 7ms, application-code: 160ms)
+ GET /dashboard/classes 200 in 26ms (next.js: 3ms, application-code: 23ms)
+ GET /dashboard/classes/8/grades 200 in 59ms (next.js: 5ms, application-code: 54ms)
+ GET /dashboard/classes/8/raport/62 200 in 125ms (next.js: 38ms, application-code: 87ms)
+ GET /dashboard/classes 200 in 32ms (next.js: 11ms, application-code: 21ms)
+ GET /dashboard/classes/9/grades 200 in 116ms (next.js: 6ms, application-code: 109ms)
+ GET /dashboard/classes/9/raport/49 200 in 75ms (next.js: 5ms, application-code: 69ms)
+ GET /dashboard/classes 200 in 22ms (next.js: 3ms, application-code: 19ms)
+ GET /dashboard/classes/9/grades 200 in 48ms (next.js: 5ms, application-code: 43ms)
+ GET /dashboard/classes 200 in 37ms (next.js: 12ms, application-code: 25ms)
+ GET /dashboard/roadmap 200 in 66ms (next.js: 44ms, application-code: 22ms)
+ GET /dashboard/alumni 200 in 20ms (next.js: 4ms, application-code: 16ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/roadmap 200 in 41ms (next.js: 11ms, application-code: 30ms)
+ GET /dashboard/batches 200 in 28ms (next.js: 5ms, application-code: 22ms)
+ GET /dashboard/classes 200 in 34ms (next.js: 9ms, application-code: 25ms)
+ GET /dashboard/classes/8/grades 200 in 90ms (next.js: 8ms, application-code: 83ms)
+ GET /dashboard/classes/8/raport/62 200 in 96ms (next.js: 8ms, application-code: 87ms)
+ GET /dashboard/classes 200 in 32ms (next.js: 10ms, application-code: 22ms)
+ GET /dashboard/batches 200 in 33ms (next.js: 11ms, application-code: 22ms)
+ GET /dashboard/students 200 in 34ms (next.js: 11ms, application-code: 23ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 58ms (next.js: 4ms, application-code: 54ms)
+ GET /dashboard/classes 200 in 28ms (next.js: 4ms, application-code: 24ms)
+ GET /dashboard/classes/11/grades 200 in 60ms (next.js: 7ms, application-code: 54ms)
+ GET /dashboard/classes 200 in 32ms (next.js: 11ms, application-code: 22ms)
+ GET /dashboard/classes/8/grades 200 in 116ms (next.js: 9ms, application-code: 107ms)
+ GET /dashboard/classes 200 in 25ms (next.js: 3ms, application-code: 22ms)
+ GET /dashboard/students 200 in 31ms (next.js: 10ms, application-code: 21ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/alumni 200 in 35ms (next.js: 10ms, application-code: 25ms)
+ GET /dashboard/programs 200 in 65ms (next.js: 35ms, application-code: 29ms)
+ GET /dashboard/batches 200 in 28ms (next.js: 5ms, application-code: 23ms)
+ GET /dashboard/classes 200 in 29ms (next.js: 3ms, application-code: 26ms)
+ GET /dashboard/students 200 in 49ms (next.js: 13ms, application-code: 36ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/alumni 200 in 36ms (next.js: 3ms, application-code: 32ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/batches 200 in 35ms (next.js: 7ms, application-code: 28ms)
+ GET /dashboard/classes 200 in 32ms (next.js: 5ms, application-code: 27ms)
+ GET /dashboard/classes/8/grades 200 in 62ms (next.js: 6ms, application-code: 56ms)
+ GET /dashboard/classes/8/grades 200 in 153ms (next.js: 7ms, application-code: 146ms)
+ GET /dashboard/classes 200 in 28ms (next.js: 3ms, application-code: 25ms)
+ GET /dashboard/alumni 200 in 24ms (next.js: 5ms, application-code: 19ms)
+ GET /dashboard/students 200 in 34ms (next.js: 10ms, application-code: 24ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/roadmap 200 in 37ms (next.js: 14ms, application-code: 24ms)
+ GET /dashboard/alumni 200 in 42ms (next.js: 6ms, application-code: 36ms)
+ GET /dashboard/students 200 in 34ms (next.js: 4ms, application-code: 30ms)
+ GET /dashboard/programs 200 in 28ms (next.js: 6ms, application-code: 22ms)
+ GET /dashboard/programs 200 in 20ms (next.js: 2ms, application-code: 17ms)
+ GET /dashboard/batches 200 in 27ms (next.js: 4ms, application-code: 23ms)
+ GET /dashboard 200 in 112ms (next.js: 51ms, application-code: 61ms)
+ GET /dashboard/students 200 in 44ms (next.js: 5ms, application-code: 39ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+✓ Compiled in 742ms
+ GET /dashboard/students 200 in 450ms (next.js: 222ms, application-code: 228ms)
+ GET /dashboard/students 200 in 452ms (next.js: 328ms, application-code: 124ms)
+ GET /dashboard/students 200 in 132ms (next.js: 62ms, application-code: 70ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/SPvkZF0oEqlluxa4EYXdZBKPJz2GCCNCJUophfDu.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/vv3U8tnzBnbgNrVGrpu9x5QqPDY91iwirHdevSa3.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/KOqh3O0qMeV50TVZcXGQkQf5XZVccwTNx8xKvhJK.jpg resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/1F7nRD6K09fQMqiZxUCtjsnRtBcg5gz0vk9sqMBt.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/programs 200 in 65ms (next.js: 33ms, application-code: 31ms)
+ GET /dashboard/roadmap 200 in 78ms (next.js: 36ms, application-code: 42ms)
+ GET /dashboard/teachers 200 in 91ms (next.js: 58ms, application-code: 34ms)
+ GET /dashboard/roadmap 200 in 26ms (next.js: 3ms, application-code: 23ms)
+ GET /dashboard/alumni 200 in 58ms (next.js: 31ms, application-code: 27ms)
+ GET /dashboard/students 200 in 182ms (next.js: 8ms, application-code: 174ms)
+ GET /dashboard/alumni 200 in 92ms (next.js: 13ms, application-code: 79ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+ GET /dashboard/alumni 200 in 315ms (next.js: 2ms, application-code: 313ms)
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]
+⨯ upstream image http://localhost:8000/storage/profile_photos/42ApWrKOvbAd5RObyGtvShMA4Jz67Bri0fTZ4cGx.png resolved to private ip ["::1","127.0.0.1"]

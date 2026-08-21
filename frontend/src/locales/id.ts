@@ -9,6 +9,7 @@ export const id = {
     companies: 'Perusahaan',
     kenshusei: 'Siswa / Kenshusei',
     students: 'Daftar Siswa',
+    alumni: 'Data Alumni',
     enrollments: 'Pendaftaran Kelas',
     academic: 'Akademik',
     classes: 'Kelas',

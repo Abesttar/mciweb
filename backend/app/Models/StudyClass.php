@@ -8,7 +8,11 @@ class StudyClass extends Model
 {
     protected $table = 'study_classes';
 
-    protected $fillable = ['name', 'class_type', 'batch_id', 'subject_id', 'teacher_id', 'schedule_info'];
+    protected $fillable = ['name', 'class_type', 'batch_id', 'subject_id', 'teacher_id', 'schedule_info', 'is_archived'];
+
+    protected $casts = [
+        'is_archived' => 'boolean',
+    ];
 
     public function batch()
     {

@@ -14,7 +14,8 @@ import { Dialog, DialogContent, DialogDescription, DialogFooter, DialogHeader, D
 import { Input } from '@/components/ui/input';
 import { Label } from '@/components/ui/label';
 import { AddressSelector } from '@/components/AddressSelector';
-import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRight, Pencil } from 'lucide-react';
+import { ArrowLeft, Users, Calendar, MapPin, GraduationCap, UserPlus, FileCheck2, ArrowRight, Pencil, TrendingUp } from 'lucide-react';
+import { Checkbox } from '@/components/ui/checkbox';
 import JapaneseOrnament from '@/components/JapaneseOrnament';
 import Link from 'next/link';
 import { motion } from 'framer-motion';
@@ -28,7 +29,9 @@ export default function BatchDetail() {
     const { t } = useLanguage();
     const [activeTab, setActiveTab] = useState('siswa');
     const [batch, setBatch] = useState<any>(null);
+    const [batches, setBatches] = useState<any[]>([]);
     const [teachers, setTeachers] = useState<any[]>([]);
+    const [programs, setPrograms] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [savingLevel, setSavingLevel] = useState(false);
     const [savingTeacher, setSavingTeacher] = useState(false);
@@ -46,7 +49,17 @@ export default function BatchDetail() {
         phone: '',
         address: '',
         emergency_contact: '',
+        status: 'active',
+        class_level: '',
+        training_program_id: '',
+        batch_id: params.id ? String(params.id) : '',
     });
+
+    // === State: Dialog Kenaikan Tingkatan ===
+    const [levelUpDialogOpen, setLevelUpDialogOpen] = useState(false);
+    const [selectedStudentIds, setSelectedStudentIds] = useState<number[]>([]);
+    const [targetLevel, setTargetLevel] = useState('');
+    const [savingLevelUp, setSavingLevelUp] = useState(false);
     const [studentFiles, setStudentFiles] = useState<Record<string, File | null>>({
         ijazah: null,
         ktp: null,
@@ -85,6 +98,26 @@ export default function BatchDetail() {
             }
         };
         fetchTeachers();
+
+        const fetchPrograms = async () => {
+            try {
+                const res = await axios.get('/api/training-programs', { params: { per_page: 1000 } });
+                setPrograms(res.data.data || res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchPrograms();
+
+        const fetchAllBatches = async () => {
+            try {
+                const res = await axios.get('/api/batches', { params: { per_page: 1000 } });
+                setBatches(res.data.data || res.data);
+            } catch (err) {
+                console.error(err);
+            }
+        };
+        fetchAllBatches();
     }, []);
 
     const changeClassLevel = async (newLevel: string | null) => {
@@ -126,6 +159,10 @@ export default function BatchDetail() {
             phone: '',
             address: '',
             emergency_contact: '',
+            status: 'active',
+            class_level: '',
+            training_program_id: '',
+            batch_id: params.id ? String(params.id) : '',
         });
         setStudentFiles({
             ijazah: null,
@@ -148,10 +185,39 @@ export default function BatchDetail() {
         setStudentDialogOpen(true);
     };
 
+    const openLevelUpDialog = () => {
+        // Pre-select all students by default
+        const allIds = (batch?.enrollments || []).map((e: any) => e.student?.id).filter(Boolean);
+        setSelectedStudentIds(allIds);
+        setTargetLevel('');
+        setLevelUpDialogOpen(true);
+    };
+
+    const handleLevelUpSubmit = async () => {
+        if (!targetLevel) { toast.error('Pilih tingkatan tujuan terlebih dahulu.'); return; }
+        if (selectedStudentIds.length === 0) { toast.error('Pilih minimal 1 siswa.'); return; }
+        setSavingLevelUp(true);
+        try {
+            await axios.post('/api/students/bulk-level-update', {
+                student_ids: selectedStudentIds,
+                class_level: targetLevel,
+            });
+            toast.success(`Tingkatan ${selectedStudentIds.length} siswa berhasil diperbarui!`);
+            setLevelUpDialogOpen(false);
+            fetchBatch();
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || 'Gagal memperbarui tingkatan.');
+        } finally {
+            setSavingLevelUp(false);
+        }
+    };
+
     const openEditStudentDialog = (e: React.MouseEvent, s: any) => {
         e.preventDefault();
         e.stopPropagation();
         setEditingStudent(s);
+        const activeEnrollment = s.enrollments?.[0] || (batch?.enrollments?.find((e: any) => e.student_id === s.id));
+        
         setStudentForm({
             name: s.user.name,
             email: s.user.email,
@@ -162,6 +228,10 @@ export default function BatchDetail() {
             phone: s.phone || '',
             address: s.address || '',
             emergency_contact: s.emergency_contact || '',
+            status: s.status || 'active',
+            class_level: s.class_level || '',
+            training_program_id: s.training_program_id ? String(s.training_program_id) : '',
+            batch_id: activeEnrollment?.batch_id ? String(activeEnrollment.batch_id) : (params.id ? String(params.id) : ''),
         });
         setStudentError('');
         setStudentDialogOpen(true);
@@ -220,14 +290,54 @@ export default function BatchDetail() {
                     address: studentForm.address || null,
                     phone: studentForm.phone || null,
                     emergency_contact: studentForm.emergency_contact || null,
+                    status: studentForm.status || 'active',
+                    class_level: studentForm.class_level || null,
+                    training_program_id: studentForm.training_program_id || null,
                 });
+                
+                // Handle batch enrollment change
+                if (studentForm.batch_id && studentForm.batch_id !== 'none') {
+                    const activeEnrollment = editingStudent.enrollments?.[0] || (batch?.enrollments?.find((e: any) => e.student_id === editingStudent.id));
+                    const currentBatchId = activeEnrollment?.batch_id?.toString();
+                    
+                    if (activeEnrollment && currentBatchId !== studentForm.batch_id) {
+                        // Update existing enrollment
+                        await axios.put(`/api/enrollments/${activeEnrollment.id}`, {
+                            batch_id: parseInt(studentForm.batch_id),
+                            student_id: editingStudent.id,
+                            status: 'active',
+                        }).catch(async () => {
+                            // If update fails, create new enrollment
+                            await axios.post('/api/enrollments', {
+                                student_id: editingStudent.id,
+                                batch_id: parseInt(studentForm.batch_id),
+                                status: 'active',
+                            }).catch(() => {});
+                        });
+                    } else if (!activeEnrollment) {
+                        // Create enrollment if it didn't exist
+                        await axios.post('/api/enrollments', {
+                            student_id: editingStudent.id,
+                            batch_id: parseInt(studentForm.batch_id),
+                            status: 'active',
+                        }).catch(() => {});
+                    }
+                }
+                
+                // If they changed the batch away from the current one, redirect back to batch list or just refresh
+                // Let's just fetch the current batch data again so the student disappears from this list if moved.
             } else {
                 const payload = new FormData();
             payload.append('name', studentForm.name);
             payload.append('email', studentForm.email);
             payload.append('password', studentForm.password);
             payload.append('gender', studentForm.gender);
-            payload.append('batch_id', String(params.id));
+            
+            // Only append batch_id if it's set and not 'none'
+            if (studentForm.batch_id && studentForm.batch_id !== 'none') {
+                payload.append('batch_id', studentForm.batch_id);
+            }
+            
             payload.append('require_documents', '1');
 
             Object.entries(studentForm).forEach(([key, value]) => {
@@ -415,10 +525,18 @@ export default function BatchDetail() {
                                     <p className="text-sm font-semibold text-gray-900 dark:text-white">{students.length} dari {maxStudents} siswa terdaftar</p>
                                     <p className="text-xs text-gray-500 dark:text-gray-400">Setiap angkatan dibatasi maksimal 20 siswa.</p>
                                 </div>
-                                <Button onClick={openStudentDialog} disabled={isBatchFull}>
-                                    <UserPlus className="w-4 h-4 mr-2" />
-                                    Tambah Siswa
-                                </Button>
+                                <div className="flex gap-2">
+                                    {students.length > 0 && (
+                                        <Button variant="outline" onClick={openLevelUpDialog} className="border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-700/50 dark:text-amber-400 dark:hover:bg-amber-900/20">
+                                            <TrendingUp className="w-4 h-4 mr-2" />
+                                            Kenaikan Tingkatan
+                                        </Button>
+                                    )}
+                                    <Button onClick={openStudentDialog} disabled={isBatchFull}>
+                                        <UserPlus className="w-4 h-4 mr-2" />
+                                        Tambah Siswa
+                                    </Button>
+                                </div>
                             </div>
                             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {students.map((student: any) => (
@@ -527,6 +645,102 @@ export default function BatchDetail() {
                 </div>
             </div>
 
+            {/* ===== Dialog Kenaikan Tingkatan ===== */}
+            <Dialog open={levelUpDialogOpen} onOpenChange={setLevelUpDialogOpen}>
+                <DialogContent className="max-w-xl rounded-2xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <TrendingUp className="w-5 h-5 text-amber-600" />
+                            Kenaikan Tingkatan
+                        </DialogTitle>
+                        <DialogDescription>
+                            Pilih siswa yang akan dinaikkan tingkatannya, lalu tentukan tingkatan tujuan.
+                        </DialogDescription>
+                    </DialogHeader>
+
+                    <div className="grid gap-4 py-2">
+                        {/* Tingkatan Tujuan */}
+                        <div className="grid gap-2">
+                            <Label className="font-semibold">Tingkatan Tujuan <span className="text-red-500">*</span></Label>
+                            <Select value={targetLevel} onValueChange={setTargetLevel}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50">
+                                    <SelectValue placeholder="Pilih tingkatan tujuan..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="shou">Shou (Dasar)</SelectItem>
+                                    <SelectItem value="chuu">Chuu (Menengah)</SelectItem>
+                                    <SelectItem value="kou">Kou (Lanjutan)</SelectItem>
+                                    <SelectItem value="jft">JFT</SelectItem>
+                                    <SelectItem value="kaiwa">Kelas Kaiwa</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+
+                        {/* Daftar Siswa dengan Checkbox */}
+                        <div className="grid gap-2">
+                            <div className="flex items-center justify-between">
+                                <Label className="font-semibold">Pilih Siswa ({selectedStudentIds.length} dipilih)</Label>
+                                <button
+                                    type="button"
+                                    className="text-xs text-red-700 dark:text-red-400 hover:underline"
+                                    onClick={() => {
+                                        const allIds = (batch?.enrollments || []).map((e: any) => e.student?.id).filter(Boolean);
+                                        if (selectedStudentIds.length === allIds.length) {
+                                            setSelectedStudentIds([]);
+                                        } else {
+                                            setSelectedStudentIds(allIds);
+                                        }
+                                    }}
+                                >
+                                    {selectedStudentIds.length === (batch?.enrollments || []).length ? 'Batalkan Semua' : 'Pilih Semua'}
+                                </button>
+                            </div>
+                            <div className="max-h-64 overflow-y-auto border border-gray-200 dark:border-gray-700/50 rounded-xl divide-y divide-gray-100 dark:divide-gray-700/50">
+                                {(batch?.enrollments || []).map((enrollment: any) => {
+                                    const s = enrollment.student;
+                                    if (!s) return null;
+                                    const isSelected = selectedStudentIds.includes(s.id);
+                                    const levelLabel: Record<string, string> = { shou: 'Shou', chuu: 'Chuu', kou: 'Kou', jft: 'JFT', kaiwa: 'Kaiwa' };
+                                    return (
+                                        <label
+                                            key={s.id}
+                                            className={`flex items-center gap-3 px-4 py-3 cursor-pointer transition-colors ${isSelected ? 'bg-amber-50 dark:bg-amber-900/20' : 'hover:bg-gray-50 dark:hover:bg-gray-800/40'}`}
+                                        >
+                                            <Checkbox
+                                                checked={isSelected}
+                                                onCheckedChange={(checked) => {
+                                                    if (checked) {
+                                                        setSelectedStudentIds(prev => [...prev, s.id]);
+                                                    } else {
+                                                        setSelectedStudentIds(prev => prev.filter(id => id !== s.id));
+                                                    }
+                                                }}
+                                            />
+                                            <div className="flex-1 min-w-0">
+                                                <p className="text-sm font-medium text-gray-900 dark:text-white truncate">{s.user?.name}</p>
+                                                <p className="text-xs text-gray-400">{s.nis || 'Belum ada NIS'}</p>
+                                            </div>
+                                            {s.class_level && (
+                                                <span className="text-[11px] font-semibold px-2 py-0.5 rounded-full bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-300 shrink-0">
+                                                    {levelLabel[s.class_level] || s.class_level}
+                                                </span>
+                                            )}
+                                        </label>
+                                    );
+                                })}
+                            </div>
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setLevelUpDialogOpen(false)} className="hover:bg-gray-100 dark:bg-gray-800">Batal</Button>
+                        <Button onClick={handleLevelUpSubmit} disabled={savingLevelUp || selectedStudentIds.length === 0 || !targetLevel} className="bg-amber-600 hover:bg-amber-700 text-white">
+                            {savingLevelUp ? 'Memproses...' : `Terapkan ke ${selectedStudentIds.length} Siswa`}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
             <Dialog open={studentDialogOpen} onOpenChange={setStudentDialogOpen}>
                 <DialogContent className="max-w-2xl max-h-[90vh] overflow-y-auto rounded-3xl">
                     <DialogHeader>
@@ -538,51 +752,113 @@ export default function BatchDetail() {
                         <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                             <div className="grid gap-2">
                                 <Label>Nama Lengkap *</Label>
-                                <Input value={studentForm.name} onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })} />
+                                <Input value={studentForm.name} onChange={(e) => setStudentForm({ ...studentForm, name: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
                             </div>
                             <div className="grid gap-2">
                                 <Label>NIS</Label>
-                                <Input value={studentForm.nis} onChange={(e) => setStudentForm({ ...studentForm, nis: e.target.value })} />
+                                <Input value={studentForm.nis} onChange={(e) => setStudentForm({ ...studentForm, nis: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
                             </div>
                             <div className="grid gap-2">
                                 <Label>Email *</Label>
-                                <Input type="email" value={studentForm.email} onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })} />
+                                <Input type="email" value={studentForm.email} onChange={(e) => setStudentForm({ ...studentForm, email: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
                             </div>
                             {!editingStudent && (
                                 <div className="grid gap-2">
                                     <Label>Password Login *</Label>
-                                    <Input type="password" value={studentForm.password} onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })} />
+                                    <Input type="password" value={studentForm.password} onChange={(e) => setStudentForm({ ...studentForm, password: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
                                 </div>
                             )}
                             <div className="grid gap-2">
-                                <Label>Jenis Kelamin *</Label>
-                                <Select value={studentForm.gender} onValueChange={(value) => setStudentForm({ ...studentForm, gender: value ?? '' })}>
-                                    <SelectTrigger><SelectValue placeholder="Pilih jenis kelamin" /></SelectTrigger>
-                                    <SelectContent>
-                                        <SelectItem value="Laki-laki">Laki-laki</SelectItem>
-                                        <SelectItem value="Perempuan">Perempuan</SelectItem>
-                                    </SelectContent>
-                                </Select>
-                            </div>
-                            <div className="grid gap-2">
                                 <Label>Tanggal Lahir</Label>
-                                <Input type="date" value={studentForm.date_of_birth} onChange={(e) => setStudentForm({ ...studentForm, date_of_birth: e.target.value })} />
+                                <Input type="date" value={studentForm.date_of_birth} onChange={(e) => setStudentForm({ ...studentForm, date_of_birth: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
                             </div>
                             <div className="grid gap-2">
                                 <Label>No. Telepon</Label>
-                                <Input value={studentForm.phone} onChange={(e) => setStudentForm({ ...studentForm, phone: e.target.value })} />
+                                <Input value={studentForm.phone} onChange={(e) => setStudentForm({ ...studentForm, phone: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
                             </div>
-                            <div className="grid gap-2">
-                                <Label>Kontak Darurat</Label>
-                                <Input value={studentForm.emergency_contact} onChange={(e) => setStudentForm({ ...studentForm, emergency_contact: e.target.value })} />
-                            </div>
-                            <div className="grid gap-2 md:col-span-2">
-                                <Label>Alamat</Label>
-                                <AddressSelector 
-                                    value={studentForm.address} 
-                                    onChange={(val) => setStudentForm({ ...studentForm, address: val })} 
-                                />
-                            </div>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Jenis Kelamin *</Label>
+                            <Select value={studentForm.gender} onValueChange={(value) => setStudentForm({ ...studentForm, gender: value ?? '' })}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600"><SelectValue placeholder="Pilih jenis kelamin" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="Laki-laki">Laki-laki</SelectItem>
+                                    <SelectItem value="Perempuan">Perempuan</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Status Siswa</Label>
+                            <Select value={studentForm.status} onValueChange={(value) => setStudentForm({ ...studentForm, status: value ?? 'active' })}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600"><SelectValue placeholder="Pilih status" /></SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="active">Aktif</SelectItem>
+                                    <SelectItem value="inactive">Non-Aktif (Berhenti / Lulus tanpa Job)</SelectItem>
+                                    <SelectItem value="graduated">Alumni (Lolos Job / Berangkat)</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Alamat Tinggal</Label>
+                            <AddressSelector 
+                                value={studentForm.address} 
+                                onChange={(val) => setStudentForm({ ...studentForm, address: val })} 
+                            />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Kontak Darurat (Ortu/Wali)</Label>
+                            <Input value={studentForm.emergency_contact} onChange={(e) => setStudentForm({ ...studentForm, emergency_contact: e.target.value })} className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600" />
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Program Pelatihan <span className="text-red-500">*</span></Label>
+                            <Select value={studentForm.training_program_id ? String(studentForm.training_program_id) : ''} onValueChange={(value) => setStudentForm({ ...studentForm, training_program_id: value ?? '' })}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
+                                    <SelectValue placeholder="Pilih program...">
+                                        {studentForm.training_program_id 
+                                            ? programs.find(p => p.id.toString() === String(studentForm.training_program_id))?.name 
+                                            : "Pilih program..."}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    {programs.map(p => (
+                                        <SelectItem key={p.id} value={p.id.toString()}>{p.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Angkatan (Batch)</Label>
+                            <Select value={studentForm.batch_id ? String(studentForm.batch_id) : ''} onValueChange={(value) => setStudentForm({ ...studentForm, batch_id: value ?? '' })}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
+                                    <SelectValue placeholder="Pilih batch...">
+                                        {studentForm.batch_id && studentForm.batch_id !== 'none' 
+                                            ? batches.find(b => b.id.toString() === String(studentForm.batch_id))?.name 
+                                            : (studentForm.batch_id === 'none' ? "— Tidak ada batch —" : "Pilih batch...")}
+                                    </SelectValue>
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="none">— Tidak ada batch —</SelectItem>
+                                    {batches.map(b => (
+                                        <SelectItem key={b.id} value={b.id.toString()}>{b.name}</SelectItem>
+                                    ))}
+                                </SelectContent>
+                            </Select>
+                        </div>
+                        <div className="grid gap-2">
+                            <Label>Tingkatan Kelas</Label>
+                            <Select value={studentForm.class_level || 'none'} onValueChange={(value) => setStudentForm({ ...studentForm, class_level: value === 'none' ? '' : value })}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
+                                    <SelectValue placeholder="Pilih tingkatan..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="none">— Belum Ada Tingkatan —</SelectItem>
+                                    <SelectItem value="shou">Shou</SelectItem>
+                                    <SelectItem value="chuu">Chuu</SelectItem>
+                                    <SelectItem value="kou">Kou</SelectItem>
+                                    <SelectItem value="jft">JFT</SelectItem>
+                                    <SelectItem value="kaiwa">Kelas Kaiwa</SelectItem>
+                                </SelectContent>
+                            </Select>
                         </div>
 
                         {!editingStudent && (
@@ -619,9 +895,9 @@ export default function BatchDetail() {
 
                     </div>
                     <DialogFooter>
-                        <Button variant="outline" onClick={() => setStudentDialogOpen(false)}>Batal</Button>
-                        <Button onClick={addStudentToBatch} disabled={savingStudent || isBatchFull}>
-                            {savingStudent ? 'Menyimpan...' : 'Simpan Siswa'}
+                        <Button variant="ghost" onClick={() => setStudentDialogOpen(false)} className="hover:bg-gray-100 dark:bg-gray-800">Batal</Button>
+                        <Button onClick={addStudentToBatch} disabled={savingStudent || (!editingStudent && isBatchFull)} className="bg-red-700 hover:bg-red-800">
+                            {savingStudent ? 'Menyimpan...' : 'Simpan Data'}
                         </Button>
                     </DialogFooter>
                 </DialogContent>

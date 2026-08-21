@@ -42,7 +42,11 @@ export default function ClassGradesPage() {
             const classRes = await axios.get(`/api/study-classes/${classId}`);
             setStudyClass(classRes.data);
 
-            const enrollmentsRes = await axios.get('/api/enrollments', { params: { batch_id: classRes.data.batch_id, per_page: 500 } });
+            const params = classRes.data.class_type === 'kaiwa'
+                ? { class_level: 'kaiwa', per_page: 500 }
+                : { batch_id: classRes.data.batch_id, per_page: 500 };
+            
+            const enrollmentsRes = await axios.get('/api/enrollments', { params });
             setEnrollments(enrollmentsRes.data.data);
 
         } catch (err) {

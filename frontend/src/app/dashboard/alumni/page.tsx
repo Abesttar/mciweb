@@ -19,7 +19,7 @@ import { useLanguage } from '@/context/LanguageContext';
 import Link from 'next/link';
 import JapaneseOrnament from '@/components/JapaneseOrnament';
 import { AddressSelector } from '@/components/AddressSelector';
-
+import { Checkbox } from '@/components/ui/checkbox';
 
 interface Student {
     id: number;
@@ -93,7 +93,7 @@ function RoadmapProgress({ roadmaps }: { roadmaps?: any[] }) {
     );
 }
 
-export default function StudentsPage() {
+export default function AlumniPage() {
     const { t } = useLanguage();
     const router = useRouter();
     const [students, setStudents] = useState<Student[]>([]);
@@ -101,7 +101,6 @@ export default function StudentsPage() {
     const [search, setSearch] = useState('');
     const [sortBy, setSortBy] = useState('name_asc');
     const [viewMode, setViewMode] = useState<'grid' | 'list'>('grid');
-    const [statusFilter, setStatusFilter] = useState<'all' | 'active' | 'inactive'>('all');
     
     // Dialog states
     const [dialogOpen, setDialogOpen] = useState(false);
@@ -114,12 +113,37 @@ export default function StudentsPage() {
     const [batches, setBatches] = useState<{ id: number; name: string }[]>([]);
     const [programs, setPrograms] = useState<{ id: number; name: string }[]>([]);
 
-    // (Bulk class level update has been moved to batches page)
+    // === State: Bulk Kenaikan Tingkatan ===
+    const [selectedIds, setSelectedIds] = useState<number[]>([]);
+    const [bulkLevelDialogOpen, setBulkLevelDialogOpen] = useState(false);
+    const [bulkTargetLevel, setBulkTargetLevel] = useState('');
+    const [savingBulkLevel, setSavingBulkLevel] = useState(false);
+
+    const handleBulkLevelSubmit = async () => {
+        if (!bulkTargetLevel) { toast.error('Pilih tingkatan tujuan.'); return; }
+        if (selectedIds.length === 0) { toast.error('Pilih minimal 1 siswa.'); return; }
+        setSavingBulkLevel(true);
+        try {
+            await axios.post('/api/students/bulk-level-update', {
+                student_ids: selectedIds,
+                class_level: bulkTargetLevel,
+            });
+            toast.success(`Tingkatan ${selectedIds.length} siswa berhasil diperbarui!`);
+            setBulkLevelDialogOpen(false);
+            setSelectedIds([]);
+            setBulkTargetLevel('');
+            fetchStudents();
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || 'Gagal memperbarui tingkatan.');
+        } finally {
+            setSavingBulkLevel(false);
+        }
+    };
 
     const fetchStudents = useCallback(async () => {
         setLoading(true);
         try {
-            const res = await axios.get('/api/students', { params: { search: search || undefined, per_page: 1000 } });
+            const res = await axios.get('/api/students', { params: { search: search || undefined, per_page: 1000, status: 'graduated' } });
             setStudents(res.data.data);
         } catch (err) { console.error(err); }
         finally { setLoading(false); }
@@ -143,7 +167,7 @@ export default function StudentsPage() {
 
     const openCreate = () => {
         setEditingStudent(null);
-        setForm({ name: '', email: '', password: '', nis: '', gender: '', date_of_birth: '', address: '', phone: '', emergency_contact: '', status: 'active', batch_id: '', training_program_id: '', class_level: '' });
+        setForm({ name: '', email: '', password: '', nis: '', gender: '', date_of_birth: '', address: '', phone: '', emergency_contact: '', status: 'graduated', batch_id: '', training_program_id: '', class_level: '' });
         setError('');
         setDialogOpen(true);
     };
@@ -256,12 +280,7 @@ export default function StudentsPage() {
 
     const getCurrentBatch = (student: Student) => student.enrollments?.[0]?.batch;
 
-    // Filter out alumni, and apply status tab filter
-    const baseStudents = students.filter(s => s.status !== 'graduated');
-    const sortedStudents = baseStudents.filter(s => {
-        if (statusFilter !== 'all' && s.status !== statusFilter) return false;
-        return true;
-    }).sort((a, b) => {
+    const sortedStudents = [...students].sort((a, b) => {
         if (sortBy === 'name_asc') {
             return a.user.name.localeCompare(b.user.name);
         } else if (sortBy === 'name_desc') {
@@ -308,6 +327,16 @@ export default function StudentsPage() {
                     <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">{t.studentDataDesc}</p>
                 </div>
                 <div className="mt-4 sm:mt-0 relative z-10 flex gap-2">
+                    {selectedIds.length > 0 && (
+                        <Button
+                            variant="outline"
+                            onClick={() => setBulkLevelDialogOpen(true)}
+                            className="border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-700/50 dark:text-amber-400 dark:hover:bg-amber-900/20"
+                        >
+                            <TrendingUp className="w-4 h-4 mr-2" />
+                            Kenaikan Tingkatan ({selectedIds.length})
+                        </Button>
+                    )}
                     <Button onClick={() => openCreate()} className="bg-red-700 hover:bg-red-800 text-white rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
                         <UserPlus className="w-4 h-4 mr-2" />
                         {t.addStudent}
@@ -367,56 +396,32 @@ export default function StudentsPage() {
                 <div className="flex justify-center items-center py-20">
                     <div className="animate-spin rounded-full h-8 w-8 border-b-2 border-red-700"></div>
                 </div>
-            ) : sortedStudents.length === 0 ? (
+            ) : students.length === 0 ? (
                 <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-xl shadow-sm border border-gray-100 dark:border-gray-700/50 py-16 text-center">
-                    <div className="flex-1">
-                            <h1 className="text-3xl font-bold tracking-tight text-gray-900 dark:text-white flex items-center justify-center gap-2">
-                                <Users className="w-8 h-8 text-red-600" />
-                                {t['students']}
-                            </h1>
-                            <p className="text-gray-500 mt-1">Kelola data seluruh siswa dan pendaftaran angkatan.</p>
-                            
-                            {/* Filter Tabs for Active / Inactive */}
-                            <div className="flex space-x-1 bg-gray-100/50 dark:bg-gray-800/50 p-1 rounded-lg mt-4 w-fit mx-auto border border-gray-200 dark:border-gray-700/50">
-                                <button
-                                    onClick={() => setStatusFilter('all')}
-                                    className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${statusFilter === 'all' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-gray-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}
-                                >
-                                    Semua
-                                </button>
-                                <button
-                                    onClick={() => setStatusFilter('active')}
-                                    className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${statusFilter === 'active' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-gray-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}
-                                >
-                                    Aktif
-                                </button>
-                                <button
-                                    onClick={() => setStatusFilter('inactive')}
-                                    className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${statusFilter === 'inactive' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-gray-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}
-                                >
-                                    Non-Aktif
-                                </button>
-                            </div>
-                        </div>
-                    <div className="mx-auto w-16 h-16 bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl rounded-full flex items-center justify-center mb-4 mt-6">
+                    <div className="mx-auto w-16 h-16 bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl rounded-full flex items-center justify-center mb-4">
                         <Users className="w-8 h-8 text-gray-400" />
                     </div>
-                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">Tidak ada siswa ditemukan</h3>
-                    <p className="text-gray-500 dark:text-gray-400">Ubah kata kunci pencarian atau tambah siswa baru.</p>
+                    <h3 className="text-lg font-medium text-gray-900 dark:text-white mb-1">Tidak ada alumni ditemukan</h3>
+                    <p className="text-gray-500 dark:text-gray-400">Belum ada data alumni yang tersedia.</p>
                 </div>
             ) : (
                 <>
-                    <div className="flex space-x-1 bg-gray-100/50 dark:bg-gray-800/50 p-1 rounded-lg w-fit border border-gray-200 dark:border-gray-700/50">
-                        <button onClick={() => setStatusFilter('all')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${statusFilter === 'all' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-gray-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}>Semua</button>
-                        <button onClick={() => setStatusFilter('active')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${statusFilter === 'active' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-gray-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}>Aktif</button>
-                        <button onClick={() => setStatusFilter('inactive')} className={`px-4 py-1.5 text-sm font-medium rounded-md transition-all ${statusFilter === 'inactive' ? 'bg-white dark:bg-gray-700 text-gray-900 dark:text-white shadow-sm ring-1 ring-gray-200 dark:ring-gray-600' : 'text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-gray-200 hover:bg-gray-200/50 dark:hover:bg-gray-700/50'}`}>Non-Aktif</button>
-                    </div>
-
                     {viewMode === 'grid' ? (
                         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
                             {sortedStudents.map((s, idx) => (
                                 <Link href={`/dashboard/students/${s.id}`} key={s.id} className="group block h-full">
                                     <div className="bg-white dark:bg-card rounded-2xl sm:rounded-[2rem] border border-red-100 dark:border-red-900/50 dark:border-red-900/50 overflow-hidden hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 relative flex flex-col h-full hover:-translate-y-1">
+                                        {/* Bulk Selection Checkbox */}
+                                        <div className="absolute top-4 left-4 z-30" onClick={e => e.preventDefault()}>
+                                            <Checkbox 
+                                                checked={selectedIds.includes(s.id)} 
+                                                onCheckedChange={(checked) => {
+                                                    if (checked) setSelectedIds(prev => [...prev, s.id]);
+                                                    else setSelectedIds(prev => prev.filter(id => id !== s.id));
+                                                }}
+                                                className="bg-white/80 backdrop-blur-sm border-gray-300 data-[state=checked]:bg-red-600 data-[state=checked]:border-red-600"
+                                            />
+                                        </div>
                                         
                                         {/* Watermark Ornament */}
                                         <div className="absolute -left-12 -bottom-12 w-48 h-48 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-500 z-0 text-red-500">
@@ -489,6 +494,15 @@ export default function StudentsPage() {
                             <Table>
                                 <TableHeader className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl">
                                     <TableRow>
+                                        <TableHead className="w-[40px] text-center">
+                                            <Checkbox 
+                                                checked={sortedStudents.length > 0 && selectedIds.length === sortedStudents.length}
+                                                onCheckedChange={(checked) => {
+                                                    if (checked) setSelectedIds(sortedStudents.map(s => s.id));
+                                                    else setSelectedIds([]);
+                                                }}
+                                            />
+                                        </TableHead>
                                         <TableHead>Siswa</TableHead>
                                         <TableHead>NIS</TableHead>
                                         <TableHead>Batch</TableHead>
@@ -502,7 +516,16 @@ export default function StudentsPage() {
                                 </TableHeader>
                                 <TableBody>
                                     {sortedStudents.map((s) => (
-                                        <TableRow key={s.id} className="hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative" onClick={() => router.push(`/dashboard/students/${s.id}`)}>
+                                        <TableRow key={s.id} className={`hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative ${selectedIds.includes(s.id) ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}`} onClick={() => router.push(`/dashboard/students/${s.id}`)}>
+                                            <TableCell onClick={e => e.stopPropagation()}>
+                                                <Checkbox 
+                                                    checked={selectedIds.includes(s.id)}
+                                                    onCheckedChange={(checked) => {
+                                                        if (checked) setSelectedIds(prev => [...prev, s.id]);
+                                                        else setSelectedIds(prev => prev.filter(id => id !== s.id));
+                                                    }}
+                                                />
+                                            </TableCell>
                                             <TableCell>
                                                 <div className="flex items-center space-x-3">
                                                     <div className="w-10 h-10 rounded-full overflow-hidden bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 flex items-center justify-center font-bold text-sm">
@@ -582,6 +605,45 @@ export default function StudentsPage() {
                 </>
             )}
 
+            {/* ===== Dialog Kenaikan Tingkatan ===== */}
+            <Dialog open={bulkLevelDialogOpen} onOpenChange={setBulkLevelDialogOpen}>
+                <DialogContent className="max-w-md rounded-2xl">
+                    <DialogHeader>
+                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
+                            <TrendingUp className="w-5 h-5 text-amber-600" />
+                            Kenaikan Tingkatan Massal
+                        </DialogTitle>
+                        <DialogDescription>
+                            Tentukan tingkatan baru untuk {selectedIds.length} siswa yang Anda pilih.
+                        </DialogDescription>
+                    </DialogHeader>
+                    <div className="grid gap-4 py-4">
+                        <div className="grid gap-2">
+                            <Label className="font-semibold">Tingkatan Tujuan <span className="text-red-500">*</span></Label>
+                            <Select value={bulkTargetLevel} onValueChange={setBulkTargetLevel}>
+                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50">
+                                    <SelectValue placeholder="Pilih tingkatan tujuan..." />
+                                </SelectTrigger>
+                                <SelectContent>
+                                    <SelectItem value="shou">Shou (Dasar)</SelectItem>
+                                    <SelectItem value="chuu">Chuu (Menengah)</SelectItem>
+                                    <SelectItem value="kou">Kou (Lanjutan)</SelectItem>
+                                    <SelectItem value="jft">JFT</SelectItem>
+                                    <SelectItem value="kaiwa">Kelas Kaiwa</SelectItem>
+                                </SelectContent>
+                            </Select>
+                        </div>
+                    </div>
+                    <DialogFooter>
+                        <Button variant="ghost" onClick={() => setBulkLevelDialogOpen(false)} className="hover:bg-gray-100 dark:bg-gray-800">Batal</Button>
+                        <Button onClick={handleBulkLevelSubmit} disabled={savingBulkLevel || !bulkTargetLevel} className="bg-amber-600 hover:bg-amber-700 text-white">
+                            {savingBulkLevel ? 'Memproses...' : `Terapkan ke ${selectedIds.length} Siswa`}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
+
+            {/* Modal Edit / Create remains largely the same, just slightly modernized borders */}
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent className="sm:max-w-[550px] rounded-2xl">
                     <DialogHeader>

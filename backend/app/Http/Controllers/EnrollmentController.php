@@ -34,6 +34,12 @@ class EnrollmentController extends Controller
             $query->where('batch_id', $request->batch_id);
         }
         
+        if ($request->filled('class_level')) {
+            $query->whereHas('student', function ($q) use ($request) {
+                $q->where('class_level', $request->class_level);
+            });
+        }
+        
         if ($request->filled('student_id')) {
             $query->where('student_id', $request->student_id);
         }

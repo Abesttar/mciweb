@@ -70,6 +70,7 @@ class StudentController extends Controller
             'phone' => 'nullable|string|max:20',
             'emergency_contact' => 'nullable|string|max:255',
             'status' => 'nullable|in:active,inactive,graduated',
+            'class_level' => 'nullable|in:shou,chuu,kou,jft,kaiwa',
             'work_placement' => 'nullable|string|max:255',
             'job_type' => 'nullable|string|max:255',
             'visa_type' => 'nullable|string|max:100',
@@ -113,8 +114,9 @@ class StudentController extends Controller
                 'address' => $validated['address'] ?? null,
                 'phone' => $validated['phone'] ?? null,
                 'emergency_contact' => $validated['emergency_contact'] ?? null,
-                'status' => $validated['status'] ?? 'active',
-                'work_placement' => $validated['work_placement'] ?? null,
+                'status'               => $validated['status'] ?? 'active',
+                'class_level'          => $validated['class_level'] ?? null,
+                'work_placement'       => $validated['work_placement'] ?? null,
                 'job_type' => $validated['job_type'] ?? null,
                 'visa_type' => $validated['visa_type'] ?? null,
             ];
@@ -201,8 +203,9 @@ class StudentController extends Controller
             'address' => 'nullable|string',
             'phone' => 'nullable|string|max:20',
             'emergency_contact' => 'nullable|string|max:255',
-            'status' => 'in:active,inactive,graduated',
-            'work_placement' => 'nullable|string|max:255',
+            'status'               => 'in:active,inactive,graduated',
+            'class_level'          => 'nullable|in:shou,chuu,kou,jft,kaiwa',
+            'work_placement'       => 'nullable|string|max:255',
             'job_type' => 'nullable|string|max:255',
             'visa_type' => 'nullable|string|max:100',
             'ijazah' => 'nullable|file|max:512000',
@@ -247,13 +250,19 @@ class StudentController extends Controller
                 'address' => $validated['address'] ?? null,
                 'phone' => $validated['phone'] ?? null,
                 'emergency_contact' => $validated['emergency_contact'] ?? null,
-                'status' => $validated['status'] ?? null,
-                'work_placement' => $validated['work_placement'] ?? null,
+                'status'               => $validated['status'] ?? null,
+                'class_level'          => array_key_exists('class_level', $validated) ? $validated['class_level'] : null,
+                'work_placement'       => $validated['work_placement'] ?? null,
                 'job_type' => $validated['job_type'] ?? null,
                 'visa_type' => $validated['visa_type'] ?? null,
             ], fn($v) => $v !== null);
 
             $student->update(array_merge($updateData, $documentPaths));
+
+            // Automatically deactivate enrollments if student is no longer active
+            if (isset($validated['status']) && in_array($validated['status'], ['inactive', 'graduated'])) {
+                $student->enrollments()->update(['status' => 'inactive']);
+            }
 
             $student->load('user');
             
@@ -314,5 +323,25 @@ class StudentController extends Controller
         $fileName = "{$label} {$studentName}.{$extension}";
 
         return \Illuminate\Support\Facades\Storage::disk('public')->download($filePath, $fileName);
+    }
+
+    /**
+     * Kenaikan Tingkatan massal — update class_level beberapa siswa sekaligus.
+     */
+    public function bulkUpdateLevel(Request $request)
+    {
+        $request->validate([
+            'student_ids'  => 'required|array|min:1',
+            'student_ids.*'=> 'integer|exists:students,id',
+            'class_level'  => 'required|string|in:shou,chuu,kou,jft,kaiwa',
+        ]);
+
+        $updated = Student::whereIn('id', $request->student_ids)
+            ->update(['class_level' => $request->class_level]);
+
+        return response()->json([
+            'message' => "Tingkatan {$updated} siswa berhasil diperbarui.",
+            'updated_count' => $updated,
+        ]);
     }
 }

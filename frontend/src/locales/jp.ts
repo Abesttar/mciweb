@@ -9,6 +9,7 @@ export const jp = {
     companies: '受入企業',
     kenshusei: '実習生',
     students: '学生一覧',
+    alumni: '同窓生データ',
     enrollments: 'クラス登録',
     academic: '学務',
     classes: 'クラス',

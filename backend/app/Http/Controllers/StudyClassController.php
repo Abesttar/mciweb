@@ -12,6 +12,9 @@ class StudyClassController extends Controller
     {
         $query = StudyClass::with(['batch', 'subject', 'teacher.user']);
 
+        $isArchived = $request->boolean('is_archived', false);
+        $query->where('is_archived', $isArchived);
+
         if ($request->has('batch_id')) {
             $query->where('batch_id', $request->batch_id);
         }
@@ -38,7 +41,7 @@ class StudyClassController extends Controller
         $validated = $request->validate([
             'name' => 'required|string|max:255',
             'class_type' => 'required|in:shou,chuu,kou,jft,kaiwa',
-            'batch_id' => 'required|exists:batches,id',
+            'batch_id' => 'required_unless:class_type,kaiwa|nullable|exists:batches,id',
             'subject_id' => 'nullable|exists:subjects,id',
             'teacher_id' => 'nullable|exists:teachers,id',
             'schedule_info' => 'nullable|string|max:255',
@@ -75,10 +78,11 @@ class StudyClassController extends Controller
         $validated = $request->validate([
             'name' => 'sometimes|required|string|max:255',
             'class_type' => 'sometimes|required|in:shou,chuu,kou,jft,kaiwa',
-            'batch_id' => 'sometimes|required|exists:batches,id',
+            'batch_id' => 'sometimes|required_unless:class_type,kaiwa|nullable|exists:batches,id',
             'subject_id' => 'nullable|exists:subjects,id',
             'teacher_id' => 'sometimes|required|exists:teachers,id',
             'schedule_info' => 'nullable|string|max:255',
+            'is_archived' => 'sometimes|boolean',
         ]);
 
         if (array_key_exists('subject_id', $validated) && !$validated['subject_id']) {

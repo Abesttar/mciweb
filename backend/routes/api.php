@@ -45,6 +45,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::post('students/{student}/documents', [StudentController::class, 'uploadDocument']);
     Route::get('students/{student}/download/{field}', [StudentController::class, 'downloadDocument']);
     Route::get('students/me', [StudentController::class, 'me']);
+    Route::post('students/bulk-level-update', [StudentController::class, 'bulkUpdateLevel']);
     Route::apiResource('students', StudentController::class);
     Route::apiResource('teachers', TeacherController::class);
     Route::apiResource('subjects', SubjectController::class);
