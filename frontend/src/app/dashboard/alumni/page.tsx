@@ -411,17 +411,6 @@ export default function AlumniPage() {
                             {sortedStudents.map((s, idx) => (
                                 <Link href={`/dashboard/students/${s.id}`} key={s.id} className="group block h-full">
                                     <div className="bg-white dark:bg-card rounded-2xl sm:rounded-[2rem] border border-red-100 dark:border-red-900/50 dark:border-red-900/50 overflow-hidden hover:shadow-xl hover:shadow-red-500/5 transition-all duration-300 relative flex flex-col h-full hover:-translate-y-1">
-                                        {/* Bulk Selection Checkbox */}
-                                        <div className="absolute top-4 left-4 z-30" onClick={e => e.preventDefault()}>
-                                            <Checkbox 
-                                                checked={selectedIds.includes(s.id)} 
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) setSelectedIds(prev => [...prev, s.id]);
-                                                    else setSelectedIds(prev => prev.filter(id => id !== s.id));
-                                                }}
-                                                className="bg-white/80 backdrop-blur-sm border-gray-300 data-[state=checked]:bg-red-600 data-[state=checked]:border-red-600"
-                                            />
-                                        </div>
                                         
                                         {/* Watermark Ornament */}
                                         <div className="absolute -left-12 -bottom-12 w-48 h-48 opacity-10 pointer-events-none group-hover:scale-110 transition-transform duration-500 z-0 text-red-500">
@@ -494,15 +483,6 @@ export default function AlumniPage() {
                             <Table>
                                 <TableHeader className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl">
                                     <TableRow>
-                                        <TableHead className="w-[40px] text-center">
-                                            <Checkbox 
-                                                checked={sortedStudents.length > 0 && selectedIds.length === sortedStudents.length}
-                                                onCheckedChange={(checked) => {
-                                                    if (checked) setSelectedIds(sortedStudents.map(s => s.id));
-                                                    else setSelectedIds([]);
-                                                }}
-                                            />
-                                        </TableHead>
                                         <TableHead>Siswa</TableHead>
                                         <TableHead>NIS</TableHead>
                                         <TableHead>Batch</TableHead>
@@ -516,16 +496,7 @@ export default function AlumniPage() {
                                 </TableHeader>
                                 <TableBody>
                                     {sortedStudents.map((s) => (
-                                        <TableRow key={s.id} className={`hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative ${selectedIds.includes(s.id) ? 'bg-amber-50/50 dark:bg-amber-900/10' : ''}`} onClick={() => router.push(`/dashboard/students/${s.id}`)}>
-                                            <TableCell onClick={e => e.stopPropagation()}>
-                                                <Checkbox 
-                                                    checked={selectedIds.includes(s.id)}
-                                                    onCheckedChange={(checked) => {
-                                                        if (checked) setSelectedIds(prev => [...prev, s.id]);
-                                                        else setSelectedIds(prev => prev.filter(id => id !== s.id));
-                                                    }}
-                                                />
-                                            </TableCell>
+                                        <TableRow key={s.id} className="hover:bg-gray-50/50 dark:bg-gray-800/50 group cursor-pointer relative" onClick={() => router.push(`/dashboard/students/${s.id}`)}>
                                             <TableCell>
                                                 <div className="flex items-center space-x-3">
                                                     <div className="w-10 h-10 rounded-full overflow-hidden bg-red-100 dark:bg-red-900/40 text-red-800 dark:text-red-200 flex items-center justify-center font-bold text-sm">

@@ -2022,3 +2022,9 @@ Import traces:
 ✓ Compiled in 536ms
  GET /dashboard/alumni 200 in 204ms (next.js: 130ms, application-code: 74ms)
  GET /dashboard/alumni 200 in 37ms (next.js: 3ms, application-code: 34ms)
+[browser] Uncaught ReferenceError: Can't find variable: Checkbox
+    at forEach ([native code])
+✓ Compiled in 255ms
+⚠ Fast Refresh had to perform a full reload due to a runtime error.
+ GET /dashboard/alumni 200 in 628ms (next.js: 61ms, application-code: 568ms)
+ GET /login 200 in 318ms (next.js: 52ms, application-code: 266ms)
