@@ -661,7 +661,7 @@ export default function StudentsPage() {
                         </div>
                         <div className="grid gap-2">
                             <Label>Tingkatan Kelas</Label>
-                            <Select value={form.class_level || 'none'} onValueChange={(value) => setForm({ ...form, class_level: value === 'none' ? '' : value })}>
+                            <Select value={form.class_level || 'none'} onValueChange={(value) => setForm({ ...form, class_level: value === 'none' ? '' : (value ?? '') })}>
                                 <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
                                     <SelectValue placeholder="Pilih tingkatan..." />
                                 </SelectTrigger>

@@ -311,7 +311,7 @@ export default function ClassesPage() {
                         </div>
                         <div className="grid gap-2">
                             <Label>{t.batch} {form.class_type === 'kaiwa' ? '(Opsional)' : '*'}</Label>
-                            <Select value={form.batch_id ? String(form.batch_id) : (form.class_type === 'kaiwa' ? 'none' : '')} onValueChange={(v) => setForm({ ...form, batch_id: v === 'none' ? '' : v })}>
+                            <Select value={form.batch_id ? String(form.batch_id) : (form.class_type === 'kaiwa' ? 'none' : '')} onValueChange={(v) => setForm({ ...form, batch_id: v === 'none' ? '' : (v ?? '') })}>
                                 <SelectTrigger>
                                     <SelectValue placeholder={t.selectBatch}>
                                         {form.batch_id ? batches.find(b => b.id.toString() === String(form.batch_id))?.name : t.selectBatch}

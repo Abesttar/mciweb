@@ -113,32 +113,7 @@ export default function AlumniPage() {
     const [batches, setBatches] = useState<{ id: number; name: string }[]>([]);
     const [programs, setPrograms] = useState<{ id: number; name: string }[]>([]);
 
-    // === State: Bulk Kenaikan Tingkatan ===
-    const [selectedIds, setSelectedIds] = useState<number[]>([]);
-    const [bulkLevelDialogOpen, setBulkLevelDialogOpen] = useState(false);
-    const [bulkTargetLevel, setBulkTargetLevel] = useState('');
-    const [savingBulkLevel, setSavingBulkLevel] = useState(false);
 
-    const handleBulkLevelSubmit = async () => {
-        if (!bulkTargetLevel) { toast.error('Pilih tingkatan tujuan.'); return; }
-        if (selectedIds.length === 0) { toast.error('Pilih minimal 1 siswa.'); return; }
-        setSavingBulkLevel(true);
-        try {
-            await axios.post('/api/students/bulk-level-update', {
-                student_ids: selectedIds,
-                class_level: bulkTargetLevel,
-            });
-            toast.success(`Tingkatan ${selectedIds.length} siswa berhasil diperbarui!`);
-            setBulkLevelDialogOpen(false);
-            setSelectedIds([]);
-            setBulkTargetLevel('');
-            fetchStudents();
-        } catch (err: any) {
-            toast.error(err.response?.data?.message || 'Gagal memperbarui tingkatan.');
-        } finally {
-            setSavingBulkLevel(false);
-        }
-    };
 
     const fetchStudents = useCallback(async () => {
         setLoading(true);
@@ -327,16 +302,6 @@ export default function AlumniPage() {
                     <p className="text-gray-500 dark:text-gray-400 mt-2 font-medium">{t.studentDataDesc}</p>
                 </div>
                 <div className="mt-4 sm:mt-0 relative z-10 flex gap-2">
-                    {selectedIds.length > 0 && (
-                        <Button
-                            variant="outline"
-                            onClick={() => setBulkLevelDialogOpen(true)}
-                            className="border-amber-300 text-amber-700 hover:bg-amber-50 dark:border-amber-700/50 dark:text-amber-400 dark:hover:bg-amber-900/20"
-                        >
-                            <TrendingUp className="w-4 h-4 mr-2" />
-                            Kenaikan Tingkatan ({selectedIds.length})
-                        </Button>
-                    )}
                     <Button onClick={() => openCreate()} className="bg-red-700 hover:bg-red-800 text-white rounded-xl shadow-md hover:shadow-lg transition-all hover:-translate-y-0.5">
                         <UserPlus className="w-4 h-4 mr-2" />
                         {t.addStudent}
@@ -576,44 +541,6 @@ export default function AlumniPage() {
                 </>
             )}
 
-            {/* ===== Dialog Kenaikan Tingkatan ===== */}
-            <Dialog open={bulkLevelDialogOpen} onOpenChange={setBulkLevelDialogOpen}>
-                <DialogContent className="max-w-md rounded-2xl">
-                    <DialogHeader>
-                        <DialogTitle className="text-xl font-bold flex items-center gap-2">
-                            <TrendingUp className="w-5 h-5 text-amber-600" />
-                            Kenaikan Tingkatan Massal
-                        </DialogTitle>
-                        <DialogDescription>
-                            Tentukan tingkatan baru untuk {selectedIds.length} siswa yang Anda pilih.
-                        </DialogDescription>
-                    </DialogHeader>
-                    <div className="grid gap-4 py-4">
-                        <div className="grid gap-2">
-                            <Label className="font-semibold">Tingkatan Tujuan <span className="text-red-500">*</span></Label>
-                            <Select value={bulkTargetLevel} onValueChange={setBulkTargetLevel}>
-                                <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50">
-                                    <SelectValue placeholder="Pilih tingkatan tujuan..." />
-                                </SelectTrigger>
-                                <SelectContent>
-                                    <SelectItem value="shou">Shou (Dasar)</SelectItem>
-                                    <SelectItem value="chuu">Chuu (Menengah)</SelectItem>
-                                    <SelectItem value="kou">Kou (Lanjutan)</SelectItem>
-                                    <SelectItem value="jft">JFT</SelectItem>
-                                    <SelectItem value="kaiwa">Kelas Kaiwa</SelectItem>
-                                </SelectContent>
-                            </Select>
-                        </div>
-                    </div>
-                    <DialogFooter>
-                        <Button variant="ghost" onClick={() => setBulkLevelDialogOpen(false)} className="hover:bg-gray-100 dark:bg-gray-800">Batal</Button>
-                        <Button onClick={handleBulkLevelSubmit} disabled={savingBulkLevel || !bulkTargetLevel} className="bg-amber-600 hover:bg-amber-700 text-white">
-                            {savingBulkLevel ? 'Memproses...' : `Terapkan ke ${selectedIds.length} Siswa`}
-                        </Button>
-                    </DialogFooter>
-                </DialogContent>
-            </Dialog>
-
             {/* Modal Edit / Create remains largely the same, just slightly modernized borders */}
             <Dialog open={dialogOpen} onOpenChange={setDialogOpen}>
                 <DialogContent className="sm:max-w-[550px] rounded-2xl">
@@ -693,7 +620,7 @@ export default function AlumniPage() {
                         </div>
                         <div className="grid gap-2">
                             <Label>Tingkatan Kelas</Label>
-                            <Select value={form.class_level || 'none'} onValueChange={(value) => setForm({ ...form, class_level: value === 'none' ? '' : value })}>
+                            <Select value={form.class_level || 'none'} onValueChange={(value) => setForm({ ...form, class_level: value === 'none' ? '' : (value ?? '') })}>
                                 <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 dark:backdrop-blur-xl border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
                                     <SelectValue placeholder="Pilih tingkatan..." />
                                 </SelectTrigger>

@@ -2028,3 +2028,6 @@ Import traces:
 ⚠ Fast Refresh had to perform a full reload due to a runtime error.
  GET /dashboard/alumni 200 in 628ms (next.js: 61ms, application-code: 568ms)
  GET /login 200 in 318ms (next.js: 52ms, application-code: 266ms)
+ GET /login 200 in 255ms (next.js: 113ms, application-code: 142ms)
+ GET /login 200 in 103ms (next.js: 4ms, application-code: 99ms)
+ GET /login 200 in 84ms (next.js: 7ms, application-code: 77ms)

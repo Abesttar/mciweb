@@ -662,7 +662,7 @@ export default function BatchDetail() {
                         {/* Tingkatan Tujuan */}
                         <div className="grid gap-2">
                             <Label className="font-semibold">Tingkatan Tujuan <span className="text-red-500">*</span></Label>
-                            <Select value={targetLevel} onValueChange={setTargetLevel}>
+                            <Select value={targetLevel} onValueChange={(v) => setTargetLevel(v ?? '')}>
                                 <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50">
                                     <SelectValue placeholder="Pilih tingkatan tujuan..." />
                                 </SelectTrigger>
@@ -846,7 +846,7 @@ export default function BatchDetail() {
                         </div>
                         <div className="grid gap-2">
                             <Label>Tingkatan Kelas</Label>
-                            <Select value={studentForm.class_level || 'none'} onValueChange={(value) => setStudentForm({ ...studentForm, class_level: value === 'none' ? '' : value })}>
+                            <Select value={studentForm.class_level || 'none'} onValueChange={(value) => setStudentForm({ ...studentForm, class_level: value === 'none' ? '' : (value ?? '') })}>
                                 <SelectTrigger className="bg-gray-50 dark:bg-[#1e2532]/90 border-gray-200 dark:border-gray-600/50 focus-visible:ring-red-600">
                                     <SelectValue placeholder="Pilih tingkatan..." />
                                 </SelectTrigger>
