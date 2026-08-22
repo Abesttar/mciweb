@@ -131,7 +131,7 @@ export default function DashboardPage() {
                             <div className="absolute -top-24 -right-24 w-64 h-64 bg-indigo-400 rounded-full blur-3xl opacity-20 pointer-events-none"></div>
                             
                             <div className="relative z-10">
-                                <h2 className="text-2xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3 tracking-tight">{t.welcome}, <span className="text-indigo-300">{user?.name} {hasRole('Sachou') ? t.sachouRole : t.staffDokumenRole}</span>!</h2>
+                                <h2 className="text-2xl sm:text-4xl font-extrabold text-white mb-2 sm:mb-3 tracking-tight">{t.welcome}, <span className="text-indigo-300">{user?.name} | {user?.roles?.[0]?.name || ''}</span>!</h2>
                                 <p className="text-indigo-100 max-w-2xl text-base sm:text-lg font-medium leading-relaxed">
                                     {hasRole('Sachou') ? t.sachouWelcome : t.staffDokumenWelcome}
                                 </p>
