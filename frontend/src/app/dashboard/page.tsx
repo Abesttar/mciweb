@@ -12,6 +12,7 @@ import { Users, BookOpen, GraduationCap, ArrowRight, Activity, Calendar, Clock, 
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog";
 import AkademikSlider from '@/components/AkademikSlider';
 import StudentAssignmentCard from '@/components/StudentAssignmentCard';
+import StaffAkademikDashboard from '@/components/StaffAkademikDashboard';
 
 ChartJS.register(CategoryScale, LinearScale, BarElement, Title, Tooltip, Legend, ArcElement);
 
@@ -48,7 +49,12 @@ export default function DashboardPage() {
         );
     }
 
-    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Staff Akademik') || hasRole('Super Admin');
+    // Staff Akademik gets a completely separate dedicated dashboard
+    if (hasRole('Staff Akademik')) {
+        return <StaffAkademikDashboard stats={stats} userName={user?.name || ''} />;
+    }
+
+    const isAdmin = hasRole('Admin') || hasRole('Sachou') || hasRole('Super Admin');
 
     const statCards = [
         { 
