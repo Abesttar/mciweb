@@ -93,7 +93,12 @@ export default function DashboardPage() {
             color: 'bg-emerald-50 text-emerald-600',
             href: '/dashboard/students'
         }
-    ];
+    ].filter(card => {
+        if (hasRole('Staff Akademik') && card.title === 'Pembayaran') {
+            return false;
+        }
+        return true;
+    });
 
     // Accent colors for each card (left border + icon background)
     const cardAccents = [

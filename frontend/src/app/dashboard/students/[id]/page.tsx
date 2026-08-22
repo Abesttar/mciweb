@@ -335,7 +335,10 @@ export default function StudentDetail() {
             {/* Tabs Content */}
             <div className="mt-6 md:mt-8">
                 <div className="relative bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl backdrop-blur-sm border border-gray-200 dark:border-gray-600/50 rounded-2xl sm:rounded-full w-full sm:w-fit p-1.5 flex shadow-sm mb-6 overflow-x-auto overflow-y-hidden [&::-webkit-scrollbar]:hidden [-ms-overflow-style:none] [scrollbar-width:none]">
-                    {['biodata', 'roadmap', 'akademik', 'raport', 'pembayaran', 'dokumen'].map((tab) => (
+                    {['biodata', 'roadmap', 'akademik', 'raport', 'pembayaran', 'dokumen'].filter(tab => {
+                        if (hasRole('Staff Akademik') && tab === 'pembayaran') return false;
+                        return true;
+                    }).map((tab) => (
                         <button
                             key={tab}
                             onClick={() => {
@@ -612,7 +615,7 @@ export default function StudentDetail() {
                         </motion.div>
                     )}
                 {/* PEMBAYARAN TAB */}
-                    {activeTab === 'pembayaran' && (
+                    {activeTab === 'pembayaran' && !hasRole('Staff Akademik') && (
                         <motion.div 
                             initial={{ opacity: 0, y: 10 }} 
                             animate={{ opacity: 1, y: 0 }} 
