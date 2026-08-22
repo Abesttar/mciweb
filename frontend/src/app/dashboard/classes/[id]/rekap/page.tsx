@@ -3,7 +3,7 @@
 import { useState, useEffect, useCallback, useMemo } from 'react';
 import axios from '@/lib/axios';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, BookOpen, Download } from 'lucide-react';
+import { ArrowLeft, BookOpen, Download, Eye } from 'lucide-react';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { useLanguage } from '@/context/LanguageContext';
 
@@ -108,8 +108,79 @@ export default function ClassRekapGradesPage() {
         return { columns: sortedColumns, matrix: mat };
     }, [enrollments, grades]);
 
-    const handlePrint = () => {
+    const handlePreview = () => {
+        // Opens browser's print preview dialog which allows saving as PDF
+        const style = document.createElement('style');
+        style.id = '__rekap-print-style';
+        style.innerHTML = `
+            @media print {
+                @page { size: landscape; margin: 1cm; }
+                body { -webkit-print-color-adjust: exact; print-color-adjust: exact; background: white !important; }
+                nav, header, aside, footer, button, .sidebar { display: none !important; }
+                .sticky { position: static !important; box-shadow: none !important; }
+                .overflow-x-auto { overflow: visible !important; }
+                main { padding: 0 !important; margin: 0 !important; }
+                table { width: 100%; border-collapse: collapse; font-size: 11px; }
+                th, td { border: 1px solid #ccc; padding: 4px 8px; }
+                th { background: #f3f4f6 !important; font-weight: bold; }
+            }
+        `;
+        document.head.appendChild(style);
         window.print();
+        setTimeout(() => {
+            const el = document.getElementById('__rekap-print-style');
+            if (el) el.remove();
+        }, 2000);
+    };
+
+    const handleDownload = () => {
+        // Generate a downloadable HTML file that renders as PDF when opened
+        const rows = enrollments.map((enr, idx) => {
+            const cells = columns.map(col => {
+                const grade = matrix[enr.id]?.[col.id];
+                const score = grade?.score !== null && grade?.score !== undefined ? grade.score : '-';
+                const isWarn = grade && grade.score !== null && (grade.score < 60 || grade.is_passed === 0);
+                return `<td style="text-align:center;${isWarn ? 'background:#fee2e2;color:#b91c1c;' : ''}">${score}</td>`;
+            }).join('');
+            return `<tr><td style="text-align:center">${idx + 1}</td><td><strong>${enr.student?.user?.name || enr.student?.nis || '-'}</strong></td>${cells}</tr>`;
+        }).join('');
+
+        const headers = columns.map(col => `<th>${col.label}</th>`).join('');
+
+        const html = `<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <title>Rekap Nilai - ${studyClass?.name}</title>
+  <style>
+    body { font-family: Arial, sans-serif; font-size: 12px; margin: 20px; }
+    h1 { font-size: 18px; margin-bottom: 4px; }
+    p { color: #555; margin-bottom: 16px; font-size: 12px; }
+    table { width: 100%; border-collapse: collapse; }
+    th, td { border: 1px solid #ccc; padding: 6px 10px; }
+    th { background: #f3f4f6; font-weight: bold; text-align: center; }
+    tr:nth-child(even) { background: #f9fafb; }
+    .warn { background: #fee2e2 !important; color: #b91c1c; font-weight: bold; }
+    @media print { @page { size: landscape; margin: 1cm; } }
+  </style>
+</head>
+<body>
+  <h1>📘 Rekap Nilai: ${studyClass?.name}</h1>
+  <p>${studyClass?.class_type?.toUpperCase()} | Angkatan ${studyClass?.batch?.name || '-'}</p>
+  <table>
+    <thead><tr><th>No</th><th>Nama Siswa</th>${headers}</tr></thead>
+    <tbody>${rows}</tbody>
+  </table>
+</body>
+</html>`;
+
+        const blob = new Blob([html], { type: 'text/html;charset=utf-8' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `Rekap-Nilai-${studyClass?.name?.replace(/\s+/g, '-') || 'kelas'}.html`;
+        a.click();
+        URL.revokeObjectURL(url);
     };
 
     if (loading) {
@@ -138,11 +209,18 @@ export default function ClassRekapGradesPage() {
                 </div>
                 <div className="flex gap-2">
                     <button 
-                        onClick={handlePrint}
-                        className="px-4 py-2 bg-white dark:bg-gray-800 border border-gray-200 dark:border-gray-700 text-gray-700 dark:text-gray-200 rounded-lg shadow-sm hover:bg-gray-50 dark:hover:bg-gray-700 font-medium flex items-center gap-2 text-sm transition-colors"
+                        onClick={handlePreview}
+                        className="px-4 py-2 bg-white dark:bg-gray-800 border border-indigo-200 dark:border-indigo-700 text-indigo-700 dark:text-indigo-300 rounded-lg shadow-sm hover:bg-indigo-50 dark:hover:bg-indigo-900/30 font-medium flex items-center gap-2 text-sm transition-colors"
+                    >
+                        <Eye className="w-4 h-4" />
+                        Preview PDF
+                    </button>
+                    <button 
+                        onClick={handleDownload}
+                        className="px-4 py-2 bg-indigo-600 hover:bg-indigo-700 text-white rounded-lg shadow-sm font-medium flex items-center gap-2 text-sm transition-colors"
                     >
                         <Download className="w-4 h-4" />
-                        Cetak / PDF
+                        Download
                     </button>
                 </div>
             </div>
@@ -210,17 +288,7 @@ export default function ClassRekapGradesPage() {
                 </div>
             </div>
             
-            {/* Custom print styles to ensure table displays well on PDF/Print */}
-            <style dangerouslySetInnerHTML={{__html: `
-                @media print {
-                    @page { size: landscape; margin: 1cm; }
-                    body { -webkit-print-color-adjust: exact; print-color-adjust: exact; }
-                    nav, header, .sidebar, button { display: none !important; }
-                    .sticky { position: static !important; box-shadow: none !important; }
-                    .overflow-x-auto { overflow: visible !important; }
-                    main { padding: 0 !important; margin: 0 !important; }
-                }
-            `}} />
+
         </div>
     );
 }
