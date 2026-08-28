@@ -260,8 +260,12 @@ class StudentController extends Controller
             $student->update(array_merge($updateData, $documentPaths));
 
             // Automatically deactivate enrollments if student is no longer active
-            if (isset($validated['status']) && in_array($validated['status'], ['inactive', 'graduated'])) {
-                $student->enrollments()->update(['status' => 'inactive']);
+            if (isset($validated['status'])) {
+                if (in_array($validated['status'], ['inactive', 'graduated'])) {
+                    $student->enrollments()->update(['status' => 'inactive']);
+                } else if ($validated['status'] === 'active') {
+                    $student->enrollments()->update(['status' => 'active']);
+                }
             }
 
             $student->load('user');
