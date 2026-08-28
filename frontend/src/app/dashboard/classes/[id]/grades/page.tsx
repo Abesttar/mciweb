@@ -457,126 +457,188 @@ export default function ClassGradesPage() {
             </div>
 
             <div className="border rounded-xl bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl overflow-x-auto">
-                <Table className="min-w-max">
+                <Table>
                     <TableHeader>
-                        <TableRow>
-                            <TableHead className="sticky left-0 bg-gray-50 dark:bg-[#1a202c] z-10 w-48">Nama Siswa</TableHead>
-                            
-                            {/* Absensi shown for all grade types */}
-                            <TableHead className="w-32">Absensi</TableHead>
+                        <TableRow className="text-xs">
+                            <TableHead className="sticky left-0 bg-gray-50 dark:bg-[#1a202c] z-10 min-w-[160px] max-w-[200px]">Nama Siswa</TableHead>
+                            <TableHead className="min-w-[130px]">Absensi</TableHead>
 
-                            {/* Daily logic components */}
                             {gradeType === 'daily' && columns.map(c => (
-                                <TableHead key={c.key} className="w-32">{c.label}</TableHead>
+                                <TableHead key={c.key} className="min-w-[90px] text-center">{c.label}</TableHead>
                             ))}
 
-                            {/* Weekly or Level Exam logic */}
                             {(gradeType === 'weekly' || gradeType === 'level_exam') && (
-                                <TableHead className="w-48">Nilai (1-100)</TableHead>
+                                <TableHead className="min-w-[100px]">Nilai (0-100)</TableHead>
                             )}
 
                             {gradeType === 'level_exam' && (
-                                <TableHead className="w-48">Keterangan Lulus</TableHead>
+                                <TableHead className="min-w-[130px]">Status Lulus</TableHead>
                             )}
                             
                             {gradeType === 'daily' && (
-                                <TableHead className="w-24 text-right">Total Index</TableHead>
+                                <TableHead className="min-w-[80px] text-right">Total</TableHead>
                             )}
 
-                            <TableHead className="w-24 text-right">Aksi</TableHead>
+                            <TableHead className="min-w-[80px] text-right">Aksi</TableHead>
                         </TableRow>
                     </TableHeader>
                     <TableBody>
                         {enrollments.length === 0 ? (
-                            <TableRow><TableCell colSpan={10} className="text-center py-8 text-gray-500 dark:text-gray-400">Belum ada siswa di batch ini.</TableCell></TableRow>
-                        ) : enrollments.map((e) => (
-                            <TableRow key={e.id}>
-                                <TableCell className="sticky left-0 bg-white dark:bg-[#151a23] z-10 font-medium whitespace-nowrap">
-                                    {e.student?.user?.name || '-'}
+                            <TableRow>
+                                <TableCell colSpan={10} className="text-center py-8 text-gray-500 dark:text-gray-400">
+                                    Belum ada siswa di batch ini.
+                                </TableCell>
+                            </TableRow>
+                        ) : enrollments.map((e) => {
+                            const attStatus = attendanceData[e.id]?.status;
+                            const isAbsent = attStatus && attStatus !== 'Hadir';
+                            const absenceBadgeColor = attStatus === 'Sakit'
+                                ? 'bg-yellow-100 text-yellow-800 dark:bg-yellow-900/40 dark:text-yellow-300'
+                                : attStatus === 'Izin'
+                                ? 'bg-blue-100 text-blue-800 dark:bg-blue-900/40 dark:text-blue-300'
+                                : 'bg-red-100 text-red-800 dark:bg-red-900/40 dark:text-red-300';
+                            return (
+                            <TableRow key={e.id} className={`align-top ${isAbsent ? 'bg-gray-50/50 dark:bg-gray-800/20' : ''}`}>
+                                <TableCell className="sticky left-0 bg-white dark:bg-[#151a23] z-10 font-medium align-top pt-3">
+                                    <div className="max-w-[190px]">
+                                        <p className="truncate text-sm leading-tight">{e.student?.user?.name || '-'}</p>
+                                        {isAbsent && attendanceData[e.id]?.notes && (
+                                            <p className="text-xs text-gray-400 truncate mt-0.5" title={attendanceData[e.id]?.notes}>
+                                                {attendanceData[e.id]?.notes}
+                                            </p>
+                                        )}
+                                    </div>
                                 </TableCell>
 
-                                {/* Absensi shown for all grade types */}
-                                <TableCell>
+                                <TableCell className="align-top pt-2">
                                     <Select 
-                                        value={attendanceData[e.id]?.status || ''} 
+                                        value={attStatus || ''} 
                                         onValueChange={(val) => handleAttendanceChange(e.id, val)}
                                     >
-                                        <SelectTrigger className="w-28 h-9"><SelectValue placeholder="-" /></SelectTrigger>
+                                        <SelectTrigger className="w-[110px] h-8 text-xs">
+                                            <SelectValue placeholder="— Pilih —" />
+                                        </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Hadir">Hadir</SelectItem>
-                                            <SelectItem value="Sakit">Sakit</SelectItem>
-                                            <SelectItem value="Izin">Izin</SelectItem>
-                                            <SelectItem value="Alpa">Alpa</SelectItem>
+                                            <SelectItem value="Hadir">✅ Hadir</SelectItem>
+                                            <SelectItem value="Sakit">🤒 Sakit</SelectItem>
+                                            <SelectItem value="Izin">📋 Izin</SelectItem>
+                                            <SelectItem value="Alpa">❌ Alpa</SelectItem>
                                         </SelectContent>
                                     </Select>
-                                    {attendanceData[e.id]?.status && attendanceData[e.id]?.status !== 'Hadir' && (
-                                        <div className="mt-2 flex flex-col gap-1">
-                                            <Button variant="outline" size="sm" onClick={() => openAbsenceModal(e.id)} className="h-6 text-xs px-2 py-0 h-auto">
-                                                <Edit2 className="w-3 h-3 mr-1" />
-                                                Detail
+                                    {isAbsent && (
+                                        <div className="mt-1.5 flex flex-col gap-1">
+                                            <span className={`inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium ${absenceBadgeColor}`}>
+                                                {attStatus}
+                                            </span>
+                                            <Button
+                                                variant="ghost"
+                                                size="sm"
+                                                onClick={() => openAbsenceModal(e.id)}
+                                                className="h-5 text-[10px] px-1 py-0 text-gray-500 hover:text-gray-900 dark:hover:text-gray-100 justify-start"
+                                            >
+                                                <Edit2 className="w-2.5 h-2.5 mr-1" />
+                                                Edit Keterangan
                                             </Button>
                                             {attendanceData[e.id]?.document_path && (
-                                                <a href={`/storage/${attendanceData[e.id].document_path}`} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline flex items-center">
-                                                    <Eye className="w-3 h-3 mr-1" />
+                                                <a
+                                                    href={`/storage/${attendanceData[e.id].document_path}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="text-[10px] text-blue-500 hover:underline flex items-center gap-0.5"
+                                                >
+                                                    <Eye className="w-2.5 h-2.5" />
                                                     Lihat Surat
                                                 </a>
+                                            )}
+                                            {attendanceData[e.id]?.end_date && (
+                                                <span className="text-[10px] text-gray-400">
+                                                    s/d {attendanceData[e.id].end_date}
+                                                </span>
                                             )}
                                         </div>
                                     )}
                                 </TableCell>
                                 
                                 {gradeType === 'daily' && columns.map(c => (
-                                    <TableCell key={c.key}>
-                                        <Input 
-                                            type="number" 
-                                            min="0" max="100" 
-                                            className="w-24 h-9"
-                                            value={gradesData[e.id]?.components?.[c.key] ?? ''}
-                                            onChange={(ev) => handleComponentChange(e.id, c.key, ev.target.value)}
-                                        />
+                                    <TableCell key={c.key} className="align-top pt-2 text-center">
+                                        {isAbsent ? (
+                                            <span className="text-xs text-gray-400">—</span>
+                                        ) : (
+                                            <Input 
+                                                type="number" 
+                                                min="0" max="100" 
+                                                className="w-16 h-8 text-sm text-center px-1"
+                                                value={gradesData[e.id]?.components?.[c.key] ?? ''}
+                                                onChange={(ev) => handleComponentChange(e.id, c.key, ev.target.value)}
+                                            />
+                                        )}
                                     </TableCell>
                                 ))}
 
                                 {(gradeType === 'weekly' || gradeType === 'level_exam') && (
-                                    <TableCell>
-                                        <Input 
-                                            type="number" 
-                                            min="0" max="100" 
-                                            className="w-32"
-                                            value={gradesData[e.id]?.score ?? ''}
-                                            onChange={(ev) => handleScoreChange(e.id, ev.target.value)}
-                                        />
+                                    <TableCell className="align-top pt-2">
+                                        {isAbsent ? (
+                                            <span className="text-xs text-gray-400">—</span>
+                                        ) : (
+                                            <Input 
+                                                type="number" 
+                                                min="0" max="100" 
+                                                className="w-20 h-8 text-sm"
+                                                value={gradesData[e.id]?.score ?? ''}
+                                                onChange={(ev) => handleScoreChange(e.id, ev.target.value)}
+                                            />
+                                        )}
                                     </TableCell>
                                 )}
 
                                 {gradeType === 'level_exam' && (
-                                    <TableCell>
-                                        <Select 
-                                            value={gradesData[e.id]?.is_passed === true ? '1' : gradesData[e.id]?.is_passed === false ? '0' : ''} 
-                                            onValueChange={(val) => handleIsPassedChange(e.id, val)}
-                                        >
-                                            <SelectTrigger className="w-32"><SelectValue placeholder="-" /></SelectTrigger>
-                                            <SelectContent>
-                                                <SelectItem value="1">Lulus</SelectItem>
-                                                <SelectItem value="0">Tidak Lulus</SelectItem>
-                                            </SelectContent>
-                                        </Select>
+                                    <TableCell className="align-top pt-2">
+                                        {isAbsent ? (
+                                            <span className="text-xs text-gray-400">—</span>
+                                        ) : (
+                                            <Select 
+                                                value={gradesData[e.id]?.is_passed === true ? '1' : gradesData[e.id]?.is_passed === false ? '0' : ''} 
+                                                onValueChange={(val) => handleIsPassedChange(e.id, val)}
+                                            >
+                                                <SelectTrigger className="w-[110px] h-8 text-xs">
+                                                    <SelectValue placeholder="— Pilih —" />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    <SelectItem value="1">✅ Lulus</SelectItem>
+                                                    <SelectItem value="0">❌ Tidak Lulus</SelectItem>
+                                                </SelectContent>
+                                            </Select>
+                                        )}
                                     </TableCell>
                                 )}
 
                                 {gradeType === 'daily' && (
-                                    <TableCell className="text-right font-bold text-blue-600 dark:text-blue-400">
-                                        {Object.keys(gradesData[e.id]?.components || {}).length > 0 
-                                            ? calculateTotalScore(gradesData[e.id]?.components) 
-                                            : (gradesData[e.id]?.score ?? '-')}
+                                    <TableCell className="text-right align-top pt-3">
+                                        {isAbsent ? (
+                                            <span className="text-xs text-gray-400 font-medium">—</span>
+                                        ) : (
+                                            <span className="font-bold text-blue-600 dark:text-blue-400 text-sm">
+                                                {Object.keys(gradesData[e.id]?.components || {}).length > 0 
+                                                    ? calculateTotalScore(gradesData[e.id]?.components) 
+                                                    : (gradesData[e.id]?.score ?? '—')}
+                                            </span>
+                                        )}
                                     </TableCell>
                                 )}
 
-                                <TableCell className="text-right">
-                                    <Button variant="outline" size="sm" onClick={() => window.open(`/dashboard/classes/${classId}/raport/${e.id}`, '_blank')}>Raport</Button>
+                                <TableCell className="text-right align-top pt-2">
+                                    <Button
+                                        variant="outline"
+                                        size="sm"
+                                        className="h-7 text-xs"
+                                        onClick={() => window.open(`/dashboard/classes/${classId}/raport/${e.id}`, '_blank')}
+                                    >
+                                        Raport
+                                    </Button>
                                 </TableCell>
                             </TableRow>
-                        ))}
+                            );
+                        })}
                     </TableBody>
                 </Table>
             </div>
