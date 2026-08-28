@@ -519,10 +519,10 @@ export default function ClassGradesPage() {
                                             <SelectValue placeholder="— Pilih —" />
                                         </SelectTrigger>
                                         <SelectContent>
-                                            <SelectItem value="Hadir">✅ Hadir</SelectItem>
-                                            <SelectItem value="Sakit">🤒 Sakit</SelectItem>
-                                            <SelectItem value="Izin">📋 Izin</SelectItem>
-                                            <SelectItem value="Alpa">❌ Alpa</SelectItem>
+                                            <SelectItem value="Hadir">Hadir</SelectItem>
+                                            <SelectItem value="Sakit">Sakit</SelectItem>
+                                            <SelectItem value="Izin">Izin</SelectItem>
+                                            <SelectItem value="Alpa">Alpa</SelectItem>
                                         </SelectContent>
                                     </Select>
                                     {isAbsent && (
@@ -604,8 +604,8 @@ export default function ClassGradesPage() {
                                                     <SelectValue placeholder="— Pilih —" />
                                                 </SelectTrigger>
                                                 <SelectContent>
-                                                    <SelectItem value="1">✅ Lulus</SelectItem>
-                                                    <SelectItem value="0">❌ Tidak Lulus</SelectItem>
+                                                    <SelectItem value="1">Lulus</SelectItem>
+                                                    <SelectItem value="0">Tidak Lulus</SelectItem>
                                                 </SelectContent>
                                             </Select>
                                         )}
