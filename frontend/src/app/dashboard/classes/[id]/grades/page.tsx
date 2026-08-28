@@ -8,8 +8,10 @@ import toast from 'react-hot-toast';
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from '@/components/ui/table';
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select';
 import { useParams, useRouter } from 'next/navigation';
-import { ArrowLeft, Save, Trash2 } from 'lucide-react';
+import { ArrowLeft, Save, Trash2, FileUp, Eye, Edit2 } from 'lucide-react';
 import { Label } from '@/components/ui/label';
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogDescription } from '@/components/ui/dialog';
+import { Textarea } from '@/components/ui/textarea';
 
 export default function ClassGradesPage() {
     const params = useParams();
@@ -30,7 +32,12 @@ export default function ClassGradesPage() {
     const [gradesData, setGradesData] = useState<any>({}); 
     // gradesData structure: { [enrollment_id]: { score: number, components: {}, is_passed: boolean } }
     const [attendanceData, setAttendanceData] = useState<any>({});
-    // attendanceData structure: { [enrollment_id]: string } (e.g., 'Hadir')
+    // attendanceData structure: { [enrollment_id]: { status: string, notes?: string, document_path?: string, end_date?: string } }
+
+    const [absenceModalOpen, setAbsenceModalOpen] = useState(false);
+    const [currentAbsenceStudent, setCurrentAbsenceStudent] = useState<any>(null);
+    const [absenceForm, setAbsenceForm] = useState({ notes: '', end_date: '', document: null as File | null });
+    const [uploadingAbsence, setUploadingAbsence] = useState(false);
 
     const isShoChuKou = studyClass && ['shou', 'chuu', 'kou'].includes(studyClass.class_type);
     const isShoChuKouOrJft = studyClass && ['shou', 'chuu', 'kou', 'jft'].includes(studyClass.class_type);
@@ -84,7 +91,11 @@ export default function ClassGradesPage() {
                 if (gradeType === 'daily' || gradeType === 'weekly') attParams.date = attDate;
                 const attRes = await axios.get('/api/attendances', { params: attParams });
                 const attExisting = attRes.data.data.reduce((acc: any, att: any) => {
-                    acc[att.enrollment_id] = att.status;
+                    acc[att.enrollment_id] = {
+                        status: att.status,
+                        notes: att.notes,
+                        document_path: att.document_path,
+                    };
                     return acc;
                 }, {});
                 setAttendanceData(attExisting);
@@ -164,8 +175,56 @@ export default function ClassGradesPage() {
     const handleAttendanceChange = (enrollmentId: number, value: string) => {
         setAttendanceData((prev: any) => ({
             ...prev,
-            [enrollmentId]: value
+            [enrollmentId]: { ...prev[enrollmentId], status: value }
         }));
+        
+        if (value !== 'Hadir' && value !== '-') {
+            openAbsenceModal(enrollmentId);
+        }
+    };
+
+    const openAbsenceModal = (enrollmentId: number) => {
+        const enrollment = enrollments.find(e => e.id === enrollmentId);
+        const existingData = attendanceData[enrollmentId];
+        setCurrentAbsenceStudent(enrollment);
+        setAbsenceForm({
+            notes: existingData?.notes || '',
+            end_date: existingData?.end_date || '',
+            document: null,
+        });
+        setAbsenceModalOpen(true);
+    };
+
+    const handleAbsenceSave = async () => {
+        if (!currentAbsenceStudent) return;
+        setUploadingAbsence(true);
+        try {
+            let documentPath = attendanceData[currentAbsenceStudent.id]?.document_path;
+            
+            if (absenceForm.document) {
+                const formData = new FormData();
+                formData.append('document', absenceForm.document);
+                const res = await axios.post('/api/attendances/upload-document', formData);
+                documentPath = res.data.path;
+            }
+
+            setAttendanceData((prev: any) => ({
+                ...prev,
+                [currentAbsenceStudent.id]: {
+                    ...prev[currentAbsenceStudent.id],
+                    notes: absenceForm.notes,
+                    end_date: absenceForm.end_date,
+                    document_path: documentPath,
+                }
+            }));
+            
+            setAbsenceModalOpen(false);
+            setCurrentAbsenceStudent(null);
+        } catch (err: any) {
+            toast.error(err.response?.data?.message || 'Gagal mengunggah dokumen');
+        } finally {
+            setUploadingAbsence(false);
+        }
     };
 
     const handleSave = async () => {
@@ -174,10 +233,13 @@ export default function ClassGradesPage() {
             // 1. Save Attendances for daily, weekly, and level_exam
             if (gradeType === 'daily' || gradeType === 'weekly' || gradeType === 'level_exam') {
                 const payloadAttendances = enrollments
-                    .filter(e => attendanceData[e.id])
+                    .filter(e => attendanceData[e.id]?.status)
                     .map(e => ({
                         enrollment_id: e.id,
-                        status: attendanceData[e.id]
+                        status: attendanceData[e.id].status,
+                        notes: attendanceData[e.id].notes,
+                        document_path: attendanceData[e.id].document_path,
+                        end_date: attendanceData[e.id].end_date,
                     }));
 
                 if (payloadAttendances.length > 0) {
@@ -436,7 +498,7 @@ export default function ClassGradesPage() {
                                 {/* Absensi shown for all grade types */}
                                 <TableCell>
                                     <Select 
-                                        value={attendanceData[e.id] || ''} 
+                                        value={attendanceData[e.id]?.status || ''} 
                                         onValueChange={(val) => handleAttendanceChange(e.id, val)}
                                     >
                                         <SelectTrigger className="w-28 h-9"><SelectValue placeholder="-" /></SelectTrigger>
@@ -447,6 +509,20 @@ export default function ClassGradesPage() {
                                             <SelectItem value="Alpa">Alpa</SelectItem>
                                         </SelectContent>
                                     </Select>
+                                    {attendanceData[e.id]?.status && attendanceData[e.id]?.status !== 'Hadir' && (
+                                        <div className="mt-2 flex flex-col gap-1">
+                                            <Button variant="outline" size="sm" onClick={() => openAbsenceModal(e.id)} className="h-6 text-xs px-2 py-0 h-auto">
+                                                <Edit2 className="w-3 h-3 mr-1" />
+                                                Detail
+                                            </Button>
+                                            {attendanceData[e.id]?.document_path && (
+                                                <a href={`/storage/${attendanceData[e.id].document_path}`} target="_blank" rel="noreferrer" className="text-xs text-blue-500 hover:underline flex items-center">
+                                                    <Eye className="w-3 h-3 mr-1" />
+                                                    Lihat Surat
+                                                </a>
+                                            )}
+                                        </div>
+                                    )}
                                 </TableCell>
                                 
                                 {gradeType === 'daily' && columns.map(c => (
@@ -504,6 +580,66 @@ export default function ClassGradesPage() {
                     </TableBody>
                 </Table>
             </div>
+
+            <Dialog open={absenceModalOpen} onOpenChange={setAbsenceModalOpen}>
+                <DialogContent>
+                    <DialogHeader>
+                        <DialogTitle>Detail Ketidakhadiran - {currentAbsenceStudent?.student?.user?.name}</DialogTitle>
+                        <DialogDescription>
+                            Lengkapi keterangan ketidakhadiran siswa ini. Anda juga bisa mengatur rentang tanggal izin/sakit.
+                        </DialogDescription>
+                    </DialogHeader>
+                    
+                    <div className="space-y-4 py-4">
+                        <div className="grid gap-2">
+                            <Label>Keterangan / Alasan</Label>
+                            <Textarea 
+                                placeholder="Cth: Sakit demam berdarah..." 
+                                value={absenceForm.notes} 
+                                onChange={(e) => setAbsenceForm({ ...absenceForm, notes: e.target.value })} 
+                            />
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label>Berlaku Sampai Tanggal (Opsional)</Label>
+                            <Input 
+                                type="date" 
+                                min={date}
+                                value={absenceForm.end_date} 
+                                onChange={(e) => setAbsenceForm({ ...absenceForm, end_date: e.target.value })} 
+                            />
+                            <p className="text-xs text-gray-500">
+                                Jika diisi, sistem akan otomatis mengatur status siswa menjadi <b>{currentAbsenceStudent && attendanceData[currentAbsenceStudent.id]?.status}</b> dengan keterangan yang sama untuk jadwal kelas berikutnya hingga tanggal ini.
+                            </p>
+                        </div>
+
+                        <div className="grid gap-2">
+                            <Label>Surat Izin / Bukti Sakit (File PDF, Opsional)</Label>
+                            <Input 
+                                type="file" 
+                                accept="application/pdf"
+                                onChange={(e) => {
+                                    if (e.target.files && e.target.files.length > 0) {
+                                        setAbsenceForm({ ...absenceForm, document: e.target.files[0] });
+                                    }
+                                }} 
+                            />
+                            {currentAbsenceStudent && attendanceData[currentAbsenceStudent.id]?.document_path && !absenceForm.document && (
+                                <p className="text-xs text-green-600 flex items-center gap-1">
+                                    <FileUp className="w-3 h-3" /> Dokumen sudah ada.
+                                </p>
+                            )}
+                        </div>
+                    </div>
+
+                    <DialogFooter>
+                        <Button variant="outline" onClick={() => setAbsenceModalOpen(false)}>Batal</Button>
+                        <Button onClick={handleAbsenceSave} disabled={uploadingAbsence}>
+                            {uploadingAbsence ? 'Menyimpan...' : 'Simpan Keterangan'}
+                        </Button>
+                    </DialogFooter>
+                </DialogContent>
+            </Dialog>
         </div>
     );
 }

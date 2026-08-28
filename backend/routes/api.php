@@ -58,6 +58,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::apiResource('attendances', AttendanceController::class);
     Route::post('attendances-bulk', [AttendanceController::class, 'bulkStore']);
     Route::post('attendances/class-bulk', [AttendanceController::class, 'classBulkStore']);
+    Route::post('attendances/upload-document', [AttendanceController::class, 'uploadDocument']);
     Route::apiResource('grades', GradeController::class);
     Route::post('grades-bulk', [GradeController::class, 'batchStore']);
     Route::post('grades-bulk-delete', [GradeController::class, 'batchDestroy']);

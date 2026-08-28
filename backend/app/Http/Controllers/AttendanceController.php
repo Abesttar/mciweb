@@ -134,6 +134,8 @@ class AttendanceController extends Controller
             'attendances.*.enrollment_id' => 'required|exists:enrollments,id',
             'attendances.*.status' => 'required|string|in:Hadir,Sakit,Izin,Alpa',
             'attendances.*.notes' => 'nullable|string',
+            'attendances.*.document_path' => 'nullable|string',
+            'attendances.*.end_date' => 'nullable|date|after_or_equal:date',
         ]);
 
         $dayOfWeek = \Carbon\Carbon::parse($validated['date'])->locale('id')->isoFormat('dddd');
@@ -146,10 +148,14 @@ class AttendanceController extends Controller
             return response()->json(['message' => "Tidak ada jadwal kelas untuk hari {$dayOfWeek}."], 422);
         }
 
+        $allSchedules = \App\Models\Schedule::where('study_class_id', $validated['study_class_id'])->get();
+        $scheduleDays = $allSchedules->pluck('id', 'day_of_week')->toArray();
+
         $results = [];
         foreach ($validated['attendances'] as $item) {
             if (empty($item['status'])) continue;
             
+            // Create for the current date
             $results[] = Attendance::updateOrCreate(
                 [
                     'enrollment_id' => $item['enrollment_id'],
@@ -159,8 +165,33 @@ class AttendanceController extends Controller
                 [
                     'status' => $item['status'],
                     'notes' => $item['notes'] ?? null,
+                    'document_path' => $item['document_path'] ?? null,
                 ]
             );
+
+            // Create for future dates if end_date is provided
+            if (!empty($item['end_date']) && $item['end_date'] > $validated['date']) {
+                $startDate = \Carbon\Carbon::parse($validated['date'])->addDay();
+                $endDate = \Carbon\Carbon::parse($item['end_date']);
+                
+                for ($d = $startDate; $d->lte($endDate); $d->addDay()) {
+                    $dayName = $d->locale('id')->isoFormat('dddd');
+                    if (isset($scheduleDays[$dayName])) {
+                        $results[] = Attendance::updateOrCreate(
+                            [
+                                'enrollment_id' => $item['enrollment_id'],
+                                'schedule_id' => $scheduleDays[$dayName],
+                                'date' => $d->format('Y-m-d'),
+                            ],
+                            [
+                                'status' => $item['status'],
+                                'notes' => $item['notes'] ?? null,
+                                'document_path' => $item['document_path'] ?? null,
+                            ]
+                        );
+                    }
+                }
+            }
         }
 
         // --- Notifications ---
@@ -246,5 +277,18 @@ class AttendanceController extends Controller
                 );
             }
         }
+    }
+
+    public function uploadDocument(Request $request)
+    {
+        abort_if($request->user()?->hasRole('Siswa'), 403, 'Siswa tidak dapat mengunggah dokumen dari sini.');
+
+        $request->validate([
+            'document' => 'required|file|mimes:pdf|max:5120',
+        ]);
+
+        $path = $request->file('document')->store('attendance_documents', 'public');
+
+        return response()->json(['path' => $path], 200);
     }
 }
