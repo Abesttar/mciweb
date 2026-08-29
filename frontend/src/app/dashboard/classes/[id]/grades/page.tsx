@@ -559,57 +559,68 @@ export default function ClassGradesPage() {
                                     )}
                                 </TableCell>
                                 
-                                {gradeType === 'daily' && columns.map(c => (
-                                    <TableCell key={c.key} className="align-top pt-2 text-center">
-                                        {isAbsent ? (
-                                            <span className="text-xs text-gray-400">—</span>
-                                        ) : (
-                                            <Input 
-                                                type="number" 
-                                                min="0" max="100" 
-                                                className="w-16 h-8 text-sm text-center px-1"
-                                                value={gradesData[e.id]?.components?.[c.key] ?? ''}
-                                                onChange={(ev) => handleComponentChange(e.id, c.key, ev.target.value)}
-                                            />
-                                        )}
-                                    </TableCell>
-                                ))}
-
-                                {(gradeType === 'weekly' || gradeType === 'level_exam') && (
-                                    <TableCell className="align-top pt-2">
-                                        {isAbsent ? (
-                                            <span className="text-xs text-gray-400">—</span>
-                                        ) : (
-                                            <Input 
-                                                type="number" 
-                                                min="0" max="100" 
-                                                className="w-20 h-8 text-sm"
-                                                value={gradesData[e.id]?.score ?? ''}
-                                                onChange={(ev) => handleScoreChange(e.id, ev.target.value)}
-                                            />
-                                        )}
-                                    </TableCell>
+                                {gradeType === 'daily' && (
+                                    isAbsent ? (
+                                        <TableCell colSpan={columns.length} className="align-top pt-2">
+                                            <div className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 rounded-md py-1.5 px-3 flex items-center justify-center min-h-[32px]">
+                                                <span className="text-xs text-gray-500 dark:text-gray-400 italic">
+                                                    {attendanceData[e.id]?.notes ? `"${attendanceData[e.id].notes}"` : `Siswa ${attStatus}`}
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                    ) : (
+                                        columns.map(c => (
+                                            <TableCell key={c.key} className="align-top pt-2 text-center">
+                                                <Input 
+                                                    type="number" 
+                                                    min="0" max="100" 
+                                                    className="w-16 h-8 text-sm text-center px-1"
+                                                    value={gradesData[e.id]?.components?.[c.key] ?? ''}
+                                                    onChange={(ev) => handleComponentChange(e.id, c.key, ev.target.value)}
+                                                />
+                                            </TableCell>
+                                        ))
+                                    )
                                 )}
 
-                                {gradeType === 'level_exam' && (
-                                    <TableCell className="align-top pt-2">
-                                        {isAbsent ? (
-                                            <span className="text-xs text-gray-400">—</span>
-                                        ) : (
-                                            <Select 
-                                                value={gradesData[e.id]?.is_passed === true ? '1' : gradesData[e.id]?.is_passed === false ? '0' : ''} 
-                                                onValueChange={(val) => handleIsPassedChange(e.id, val)}
-                                            >
-                                                <SelectTrigger className="w-[110px] h-8 text-xs">
-                                                    <SelectValue placeholder="— Pilih —" />
-                                                </SelectTrigger>
-                                                <SelectContent>
-                                                    <SelectItem value="1">Lulus</SelectItem>
-                                                    <SelectItem value="0">Tidak Lulus</SelectItem>
-                                                </SelectContent>
-                                            </Select>
-                                        )}
-                                    </TableCell>
+                                {(gradeType === 'weekly' || gradeType === 'level_exam') && (
+                                    isAbsent ? (
+                                        <TableCell colSpan={gradeType === 'level_exam' ? 2 : 1} className="align-top pt-2">
+                                            <div className="w-full bg-gray-50 dark:bg-gray-800/50 border border-gray-100 dark:border-gray-700/50 rounded-md py-1.5 px-3 flex items-center justify-center min-h-[32px]">
+                                                <span className="text-xs text-gray-500 dark:text-gray-400 italic">
+                                                    {attendanceData[e.id]?.notes ? `"${attendanceData[e.id].notes}"` : `Siswa ${attStatus}`}
+                                                </span>
+                                            </div>
+                                        </TableCell>
+                                    ) : (
+                                        <>
+                                            <TableCell className="align-top pt-2">
+                                                <Input 
+                                                    type="number" 
+                                                    min="0" max="100" 
+                                                    className="w-20 h-8 text-sm"
+                                                    value={gradesData[e.id]?.score ?? ''}
+                                                    onChange={(ev) => handleScoreChange(e.id, ev.target.value)}
+                                                />
+                                            </TableCell>
+                                            {gradeType === 'level_exam' && (
+                                                <TableCell className="align-top pt-2">
+                                                    <Select 
+                                                        value={gradesData[e.id]?.is_passed === true ? '1' : gradesData[e.id]?.is_passed === false ? '0' : ''} 
+                                                        onValueChange={(val) => handleIsPassedChange(e.id, val)}
+                                                    >
+                                                        <SelectTrigger className="w-[110px] h-8 text-xs">
+                                                            <SelectValue placeholder="— Pilih —" />
+                                                        </SelectTrigger>
+                                                        <SelectContent>
+                                                            <SelectItem value="1">Lulus</SelectItem>
+                                                            <SelectItem value="0">Tidak Lulus</SelectItem>
+                                                        </SelectContent>
+                                                    </Select>
+                                                </TableCell>
+                                            )}
+                                        </>
+                                    )
                                 )}
 
                                 {gradeType === 'daily' && (
