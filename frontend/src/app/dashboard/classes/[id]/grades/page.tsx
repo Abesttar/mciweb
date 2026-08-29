@@ -541,7 +541,7 @@ export default function ClassGradesPage() {
                                             </Button>
                                             {attendanceData[e.id]?.document_path && (
                                                 <a
-                                                    href={`/storage/${attendanceData[e.id].document_path}`}
+                                                    href={`${process.env.NEXT_PUBLIC_BACKEND_URL}/storage/${attendanceData[e.id].document_path}`}
                                                     target="_blank"
                                                     rel="noreferrer"
                                                     className="text-[10px] text-blue-500 hover:underline flex items-center gap-0.5"

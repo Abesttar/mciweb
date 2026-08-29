@@ -111,25 +111,45 @@ export default function StaffAkademikDashboard({ stats, userName }: Props) {
 
             {/* Student Bar Chart */}
             {stats?.chart && (
-                <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 p-6">
+            <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl rounded-2xl shadow-sm border border-gray-100 dark:border-gray-700/50 p-6">
                     <h2 className="text-lg font-bold text-gray-900 dark:text-white flex items-center mb-1">
                         <BarChart2 className="w-5 h-5 mr-2 text-indigo-500" />
                         Statistik Siswa per Angkatan
                     </h2>
                     <p className="text-sm text-gray-500 dark:text-gray-400 mb-6">Distribusi jumlah siswa berdasarkan angkatan/batch aktif</p>
-                    <div className="flex items-end gap-2 h-40 overflow-x-auto">
-                        {stats.chart.labels.map((label: string, i: number) => {
-                            const max = Math.max(...stats.chart.data);
-                            const pct = max > 0 ? Math.round((stats.chart.data[i] / max) * 100) : 0;
-                            return (
-                                <div key={i} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
-                                    <span className="text-xs font-semibold text-gray-700 dark:text-gray-300">{stats.chart.data[i]}</span>
-                                    <div className="w-full bg-indigo-500 dark:bg-indigo-600 rounded-t-lg hover:bg-indigo-400 transition-colors" style={{ height: `${pct}%`, minHeight: pct > 0 ? '8px' : '0px' }} />
-                                    <span className="text-[9px] text-gray-400 text-center leading-tight truncate w-full">{label}</span>
+                    {(() => {
+                        const MAX_BAR_HEIGHT = 128; // px
+                        const maxVal = Math.max(...stats.chart.data, 1);
+                        return (
+                            <div className="relative">
+                                {/* horizontal guide lines */}
+                                <div className="absolute inset-x-0 top-0 bottom-6 flex flex-col justify-between pointer-events-none">
+                                    {[100, 75, 50, 25, 0].map(pct => (
+                                        <div key={pct} className="flex items-center gap-2">
+                                            <span className="text-[9px] text-gray-300 dark:text-gray-600 w-4 text-right shrink-0">{Math.round(maxVal * pct / 100)}</span>
+                                            <div className="flex-1 border-t border-dashed border-gray-100 dark:border-gray-700/40" />
+                                        </div>
+                                    ))}
                                 </div>
-                            );
-                        })}
-                    </div>
+                                {/* bars */}
+                                <div className="flex items-end gap-2 ml-6 overflow-x-auto" style={{ height: `${MAX_BAR_HEIGHT + 32}px` }}>
+                                    {stats.chart.labels.map((label: string, i: number) => {
+                                        const barHeight = Math.round((stats.chart.data[i] / maxVal) * MAX_BAR_HEIGHT);
+                                        return (
+                                            <div key={i} className="flex flex-col items-center gap-1 min-w-[48px] flex-1">
+                                                <span className="text-xs font-bold text-indigo-600 dark:text-indigo-400">{stats.chart.data[i]}</span>
+                                                <div
+                                                    className="w-full bg-indigo-500 dark:bg-indigo-600 rounded-t-lg hover:bg-indigo-400 transition-all duration-500"
+                                                    style={{ height: `${barHeight}px`, minHeight: stats.chart.data[i] > 0 ? '4px' : '0px' }}
+                                                />
+                                                <span className="text-[9px] text-gray-400 text-center leading-tight truncate w-full">{label}</span>
+                                            </div>
+                                        );
+                                    })}
+                                </div>
+                            </div>
+                        );
+                    })()}
                 </div>
             )}
 
