@@ -17,6 +17,14 @@ const nextConfig: NextConfig = {
             },
         ],
     },
+    async rewrites() {
+        return [
+            {
+                source: '/storage/:path*',
+                destination: 'https://backend.miraicrownindonesia.online/storage/:path*',
+            },
+        ];
+    },
 };
 
 export default nextConfig;
