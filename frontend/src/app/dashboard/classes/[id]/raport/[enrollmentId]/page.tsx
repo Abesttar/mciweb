@@ -15,8 +15,8 @@ export default function RaportPage() {
     const enrollmentId = params.enrollmentId as string;
 
     const { hasRole } = useAuth();
-    const isSensei  = hasRole('Sensei') || hasRole('Admin') || hasRole('Super Admin');
-    const isSiswa   = hasRole('Siswa');
+    const isSensei = hasRole('Sensei') || hasRole('Admin') || hasRole('Super Admin');
+    const isSiswa = hasRole('Siswa');
 
     const [studyClass, setStudyClass] = useState<any>(null);
     const [enrollment, setEnrollment] = useState<any>(null);
@@ -208,20 +208,38 @@ export default function RaportPage() {
 
             // 4b. Ujian Tingkatan - KETERANGAN LULUS / TIDAK LULUS (Bold)
             if (examGrade) {
-                const examKetX = 350; const examKetY = 30;
                 const ketLulus = examGrade.is_passed === true || examGrade.is_passed === 1 ? 'Lulus'
                     : examGrade.is_passed === false || examGrade.is_passed === 0 ? 'Tidak Lulus'
                         : (examGrade.remarks || '');
-                if (ketLulus) page.drawText(ketLulus, { x: examKetX, y: examKetY, size: 13, color: black, font: boldFont });
+                if (ketLulus) {
+                    const fontSize = 13;
+                    const textWidth = boldFont.widthOfTextAtSize(ketLulus, fontSize);
+                    const boxCenterX = 366; // Titik tengah kotak (estimasi dari posisi 'Lulus' sebelumnya di 350)
+                    const examKetX = boxCenterX - (textWidth / 2);
+                    const examKetY = 30;
+                    page.drawText(ketLulus, { x: examKetX, y: examKetY, size: fontSize, color: black, font: boldFont });
+                }
             }
 
             // 5a. Tanda Tangan - NAMA PENGAJAR
-            const ttdPengajarX = 719; const ttdPengajarY = 28;
-            page.drawText(studyClass.teacher?.user?.name || '', { x: ttdPengajarX, y: ttdPengajarY, size: 10, color: black });
+            const pengajarName = studyClass.teacher?.user?.name || '';
+            const ttdPengajarY = 28;
+            if (pengajarName) {
+                const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                const pWidth = normalFont.widthOfTextAtSize(pengajarName, 10);
+                const pCenterX = 758; // Titik tengah estimasi untuk area tanda tangan pengajar
+                page.drawText(pengajarName, { x: pCenterX - (pWidth / 2), y: ttdPengajarY, size: 10, color: black });
+            }
 
             // 5b. Tanda Tangan - NAMA KEPALA LPK
-            const ttdKepalaMCIX = 574; const ttdKepalaMCIY = 28;
-            page.drawText('Faisal Maulana', { x: ttdKepalaMCIX, y: ttdKepalaMCIY, size: 10, color: black });
+            const kepalaName = 'Faisal Maulana';
+            const ttdKepalaMCIY = 28;
+            if (kepalaName) {
+                const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                const kWidth = normalFont.widthOfTextAtSize(kepalaName, 10);
+                const kCenterX = 612; // Titik tengah estimasi untuk area tanda tangan kepala LPK
+                page.drawText(kepalaName, { x: kCenterX - (kWidth / 2), y: ttdKepalaMCIY, size: 10, color: black });
+            }
 
             // =====================================================================
             // ====================== PENGATURAN KELAS JFT =========================
@@ -304,20 +322,38 @@ export default function RaportPage() {
 
             // 4b. Ujian Tingkatan - KETERANGAN LULUS / TIDAK LULUS (Bold)
             if (examGrade) {
-                const examKetX = 350; const examKetY = 30;
                 const ketLulus = examGrade.is_passed === true || examGrade.is_passed === 1 ? 'Lulus'
                     : examGrade.is_passed === false || examGrade.is_passed === 0 ? 'Tidak Lulus'
                         : (examGrade.remarks || '');
-                if (ketLulus) page.drawText(ketLulus, { x: examKetX, y: examKetY, size: 13, color: black, font: boldFont });
+                if (ketLulus) {
+                    const fontSize = 13;
+                    const textWidth = boldFont.widthOfTextAtSize(ketLulus, fontSize);
+                    const boxCenterX = 373; // Titik tengah kotak
+                    const examKetX = boxCenterX - (textWidth / 2);
+                    const examKetY = 30;
+                    page.drawText(ketLulus, { x: examKetX, y: examKetY, size: fontSize, color: black, font: boldFont });
+                }
             }
 
             // 5a. Tanda Tangan - NAMA PENGAJAR
-            const ttdPengajarX = 719; const ttdPengajarY = 20;
-            page.drawText(studyClass.teacher?.user?.name || '', { x: ttdPengajarX, y: ttdPengajarY, size: 10, color: black });
+            const pengajarName = studyClass.teacher?.user?.name || '';
+            const ttdPengajarY = 20;
+            if (pengajarName) {
+                const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                const pWidth = normalFont.widthOfTextAtSize(pengajarName, 10);
+                const pCenterX = 755; // Titik tengah estimasi area tanda tangan pengajar
+                page.drawText(pengajarName, { x: pCenterX - (pWidth / 2), y: ttdPengajarY, size: 10, color: black });
+            }
 
             // 5b. Tanda Tangan - NAMA KEPALA LPK
-            const ttdKepalaMCIX = 574; const ttdKepalaMCIY = 20;
-            page.drawText('Faisal Maulana', { x: ttdKepalaMCIX, y: ttdKepalaMCIY, size: 10, color: black });
+            const kepalaName = 'Faisal Maulana';
+            const ttdKepalaMCIY = 20;
+            if (kepalaName) {
+                const normalFont = await pdfDoc.embedFont(StandardFonts.Helvetica);
+                const kWidth = normalFont.widthOfTextAtSize(kepalaName, 10);
+                const kCenterX = 612; // Titik tengah estimasi area tanda tangan kepala LPK
+                page.drawText(kepalaName, { x: kCenterX - (kWidth / 2), y: ttdKepalaMCIY, size: 10, color: black });
+            }
 
             // =====================================================================
             // ====================== PENGATURAN KELAS KAIWA ========================
@@ -474,7 +510,7 @@ export default function RaportPage() {
                         >
                             {publishing ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> :
                                 enrollment?.raport_published_at
-                                    ? <><CheckCircle2 className="w-4 h-4 mr-2" /> Diterbitkan — Batalkan</>  
+                                    ? <><CheckCircle2 className="w-4 h-4 mr-2" /> Diterbitkan — Batalkan</>
                                     : <><Send className="w-4 h-4 mr-2" /> Terbitkan ke Siswa</>}
                         </Button>
                     )}
