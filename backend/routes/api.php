@@ -122,4 +122,17 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::put('invoices/{id}', [InvoiceController::class, 'update']);
     Route::delete('invoices/{id}', [InvoiceController::class, 'destroy']);
     Route::get('me/payments', [\App\Http\Controllers\PaymentController::class, 'myPayments']);
+
+    // CBT Exams
+    Route::apiResource('question-banks', \App\Http\Controllers\QuestionBankController::class);
+    Route::apiResource('exams', \App\Http\Controllers\ExamController::class);
+    
+    // Exam Sessions
+    Route::get('exams/{id}/results', [\App\Http\Controllers\ExamController::class, 'results']);
+    Route::get('exam-sessions/my-exams', [\App\Http\Controllers\ExamSessionController::class, 'myExams']);
+    Route::post('exam-sessions/start/{exam_id}', [\App\Http\Controllers\ExamSessionController::class, 'start']);
+    Route::get('exam-sessions/play/{session_id}', [\App\Http\Controllers\ExamSessionController::class, 'play']);
+    Route::get('exam-sessions/{session_id}/details', [\App\Http\Controllers\ExamSessionController::class, 'details']);
+    Route::post('exam-sessions/{session_id}/submit', [\App\Http\Controllers\ExamSessionController::class, 'submitAnswer']);
+    Route::post('exam-sessions/{session_id}/finish', [\App\Http\Controllers\ExamSessionController::class, 'finish']);
 });

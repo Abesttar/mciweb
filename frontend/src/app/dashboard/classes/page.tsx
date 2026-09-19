@@ -218,12 +218,15 @@ export default function ClassesPage() {
                             </div>
                             
                             <div className="pt-4 border-t border-gray-100 dark:border-gray-700/50 flex items-center justify-between gap-2 mt-auto flex-wrap">
-                                <div className="flex gap-2 flex-1 min-w-[140px]">
+                                <div className="flex gap-2 flex-1 min-w-[140px] flex-wrap">
                                     <Button className="flex-1 bg-blue-600 hover:bg-blue-700 text-white" size="sm" onClick={() => window.location.href = `/dashboard/classes/${c.id}/grades`}>
                                         {t.inputGrades}
                                     </Button>
                                     <Button className="flex-1 bg-indigo-600 hover:bg-indigo-700 text-white" size="sm" onClick={() => window.location.href = `/dashboard/classes/${c.id}/rekap`} title="Rekap Nilai Kelas">
                                         📊 Rekap
+                                    </Button>
+                                    <Button className="flex-1 bg-emerald-600 hover:bg-emerald-700 text-white" size="sm" onClick={() => window.location.href = `/dashboard/classes/${c.id}/exams`} title="Kelola Ujian CBT">
+                                        📝 Ujian
                                     </Button>
                                 </div>
                                 

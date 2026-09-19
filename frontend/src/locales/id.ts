@@ -17,6 +17,8 @@ export const id = {
     assignments: 'Tugas',
     attendances: 'Kehadiran',
     riwayatMengajar: 'Riwayat Mengajar',
+    questionBanks: 'Bank Soal',
+    ujianSaya: 'Ujian Saya',
     placement: 'Penempatan Kerja',
     matching: 'Matching & Interview',
     departures: 'Keberangkatan',

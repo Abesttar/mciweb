@@ -59,7 +59,7 @@ export default function Sidebar() {
         {
             nameKey: 'academic',
             icon: GraduationCap,
-            show: hasPermission('manage classes') || hasPermission('input attendance') || hasRole('Sensei'),
+            show: hasPermission('manage classes') || hasPermission('input attendance') || hasRole('Sensei') || hasRole('Siswa'),
             items: [
                 { nameKey: 'classes', href: '/dashboard/classes', show: hasPermission('manage classes') || hasRole('Sensei') },
 
@@ -67,6 +67,8 @@ export default function Sidebar() {
                 // Admin doesn't need to see global grades/attendance in sidebar, they go through Student Detail.
                 // Siswa sees it on their dashboard and profile. Sensei needs it.
                 { nameKey: 'riwayatMengajar', href: '/dashboard/history', show: hasRole('Sensei') },
+                { nameKey: 'questionBanks', href: '/dashboard/question-banks', show: hasPermission('manage classes') || hasRole('Sensei') },
+                { nameKey: 'ujianSaya', href: '/dashboard/exams', show: hasRole('Siswa') },
             ]
         },
         {

@@ -17,6 +17,8 @@ export const jp = {
     assignments: '課題',
     attendances: '出席',
     riwayatMengajar: '指導履歴',
+    questionBanks: '問題バンク',
+    ujianSaya: '私の試験',
     placement: '配属先',
     matching: '面接・マッチング',
     departures: '出発',
