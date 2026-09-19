@@ -337,7 +337,8 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
                         </p>
                     )}
                 </div>
-            </div>
+                </div>{/* end sticky inner div */}
+            </div>{/* end right column mt-4 */}
             </div>{/* end desktop two-column */}
 
             {/* Custom Confirm Dialog */}
