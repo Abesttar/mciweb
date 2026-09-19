@@ -173,8 +173,8 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         <div className="max-w-2xl mx-auto px-2 sm:px-4 pb-24 pt-2 animate-in fade-in">
 
             {/* ── Sticky Header ── */}
-            <div className="sticky top-0 z-20 bg-gray-50 dark:bg-[#111827] pt-2 pb-3">
-                <div className="bg-white dark:bg-[#151a23] rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3">
+            <div className="sticky top-0 z-20 pt-2 pb-3 backdrop-blur-md -mx-2 px-2 sm:mx-0 sm:px-0">
+                <div className="bg-white/95 dark:bg-[#151a23]/95 rounded-2xl p-3 sm:p-4 shadow-sm border border-gray-100 dark:border-gray-800 flex items-center gap-3">
                     <div className="flex-1 min-w-0">
                         <h1 className="font-bold text-gray-900 dark:text-white text-sm sm:text-base line-clamp-1">{session.exam?.title}</h1>
                         <p className="text-xs text-gray-400 mt-0.5">Soal {currentIndex + 1} / {questions.length} · {totalAnswered} terjawab</p>
@@ -198,11 +198,11 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-white dark:bg-[#151a23] mt-4">
                 <CardContent className="p-5 sm:p-7">
                     {/* Question number & text */}
-                    <div className="flex items-start gap-3 mb-7">
+                    <div className="flex flex-col items-center justify-center gap-4 mb-8">
                         <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
                             {currentIndex + 1}
                         </div>
-                        <p className="text-base sm:text-lg text-gray-900 dark:text-gray-100 font-medium leading-relaxed whitespace-pre-wrap">
+                        <p className="text-5xl sm:text-7xl text-center text-gray-900 dark:text-gray-100 font-bold leading-tight whitespace-pre-wrap">
                             {currentQ.question_text}
                         </p>
                     </div>
@@ -233,11 +233,11 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
                             })}
                         </div>
                     ) : (
-                        <div className="pt-6 pb-2 relative">
+                        <div className="pt-6 pb-2 relative max-w-sm mx-auto">
                             <input
-                                className="w-full text-2xl sm:text-3xl font-medium text-center bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 focus:ring-0 focus:border-red-500 transition-colors px-2 py-3 outline-none dark:text-white"
+                                className="w-full text-lg sm:text-xl font-medium text-center bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 focus:ring-0 focus:border-red-500 transition-colors px-2 py-3 outline-none dark:text-white"
                                 value={answers[currentQ.id] || ''}
-                                placeholder="Ketik di sini..."
+                                placeholder="Ketik jawaban..."
                                 onChange={e => handleTextChange(currentQ.id, e.target.value)}
                                 autoFocus
                             />

@@ -8,6 +8,31 @@ import { ArrowLeft, User, Clock, CheckCircle2, ChevronRight } from 'lucide-react
 import { Badge } from '@/components/ui/badge';
 import { Card, CardContent } from '@/components/ui/card';
 
+function SessionTimer({ startedAt, durationMinutes }: { startedAt: string, durationMinutes: number }) {
+    const [timeLeft, setTimeLeft] = useState<number>(0);
+
+    useEffect(() => {
+        const calculateTimeLeft = () => {
+            const start = new Date(startedAt).getTime();
+            const durationMs = durationMinutes * 60 * 1000;
+            const remaining = Math.max(0, Math.floor((start + durationMs - Date.now()) / 1000));
+            setTimeLeft(remaining);
+        };
+
+        calculateTimeLeft();
+        const interval = setInterval(calculateTimeLeft, 1000);
+        return () => clearInterval(interval);
+    }, [startedAt, durationMinutes]);
+
+    if (timeLeft <= 0) return <span className="text-red-500 font-medium">Waktu Habis</span>;
+
+    const m = Math.floor(timeLeft / 60);
+    const s = timeLeft % 60;
+    const timeStr = `${String(m).padStart(2, '0')}:${String(s).padStart(2, '0')}`;
+    
+    return <span className="text-orange-600 dark:text-orange-400 font-semibold animate-pulse">{timeStr} tersisa</span>;
+}
+
 export default function ExamResultsPage({ params }: { params: Promise<{ id: string, examId: string }> }) {
     const { id, examId } = use(params);
     const router = useRouter();
@@ -81,9 +106,14 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                                                 <Clock className="w-3.5 h-3.5" /> 
                                                 {new Date(session.started_at).toLocaleString('id-ID')}
                                             </span>
-                                            {session.status === 'finished' && (
+                                            {session.status === 'finished' ? (
                                                 <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-500">
                                                     <CheckCircle2 className="w-3.5 h-3.5" /> Selesai
+                                                </span>
+                                            ) : (
+                                                <span className="flex items-center gap-1">
+                                                    <Clock className="w-3.5 h-3.5 text-orange-500" /> 
+                                                    <SessionTimer startedAt={session.started_at} durationMinutes={exam.duration_minutes} />
                                                 </span>
                                             )}
                                         </div>
