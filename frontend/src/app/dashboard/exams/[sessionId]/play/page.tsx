@@ -169,8 +169,18 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
 
     const totalAnswered = questions.filter(q => answers[q.id] && answers[q.id].trim() !== '').length;
 
+    // Adaptive question text size based on question length
+    const qLen = currentQ.question_text?.length || 0;
+    const questionTextClass = qLen <= 3
+        ? 'text-5xl sm:text-7xl lg:text-8xl font-bold text-center'
+        : qLen <= 10
+        ? 'text-4xl sm:text-5xl lg:text-6xl font-bold text-center'
+        : qLen <= 30
+        ? 'text-2xl sm:text-3xl lg:text-4xl font-semibold text-center'
+        : 'text-base sm:text-lg lg:text-xl font-medium text-left';
+
     return (
-        <div className="max-w-2xl mx-auto px-2 sm:px-4 pb-24 pt-2 animate-in fade-in">
+        <div className="max-w-2xl lg:max-w-5xl mx-auto px-2 sm:px-4 pb-24 pt-2 animate-in fade-in">
 
             {/* ── Sticky Header ── */}
             <div className="sticky top-0 z-20 pt-2 pb-3 backdrop-blur-md -mx-2 px-2 sm:mx-0 sm:px-0">
@@ -194,90 +204,97 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
                 </div>
             </div>
 
-            {/* ── Question Card ── */}
-            <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-white dark:bg-[#151a23] mt-4">
-                <CardContent className="p-5 sm:p-7">
-                    {/* Question number & text */}
-                    <div className="flex flex-col items-center justify-center gap-4 mb-8">
-                        <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold text-sm flex items-center justify-center shrink-0 mt-0.5">
-                            {currentIndex + 1}
-                        </div>
-                        <p className="text-5xl sm:text-7xl text-center text-gray-900 dark:text-gray-100 font-bold leading-tight whitespace-pre-wrap">
-                            {currentQ.question_text}
-                        </p>
-                    </div>
+            {/* ── Desktop Two-Column Layout Wrapper ── */}
+            <div className="lg:grid lg:grid-cols-[1fr_320px] lg:gap-6 lg:items-start">
 
-                    {/* Answer area */}
-                    {currentQ.type === 'multiple_choice' ? (
-                        <div className="flex flex-col gap-3">
-                            {currentQ.options?.map((opt: string, i: number) => {
-                                const isSelected = answers[currentQ.id] === opt;
-                                return (
-                                    <button
-                                        key={i}
-                                        onClick={() => handleAnswerChange(currentQ.id, opt)}
-                                        className={`flex items-center text-left w-full p-3.5 sm:p-4 rounded-xl border-2 transition-all duration-150 active:scale-[0.99] ${isSelected
-                                                ? 'border-red-500 bg-red-50 dark:bg-red-900/15'
-                                                : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#1e2532] hover:border-gray-300 dark:hover:border-gray-600'
-                                            }`}
-                                    >
-                                        <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center mr-3.5 shrink-0 transition-all ${isSelected ? 'border-red-500 bg-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
-                                            {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
-                                        </div>
-                                        <span className={`text-sm sm:text-base ${isSelected ? 'text-red-700 dark:text-red-300 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
-                                            <span className="font-bold mr-2">{String.fromCharCode(65 + i)}.</span>
-                                            {opt}
-                                        </span>
-                                    </button>
-                                );
-                            })}
+            {/* ── Question + Answer (left column on desktop) ── */}
+            <div>
+                <Card className="border-0 shadow-lg rounded-2xl overflow-hidden bg-white dark:bg-[#151a23] mt-4">
+                    <CardContent className="p-5 sm:p-7">
+                        {/* Question number & text */}
+                        <div className="flex flex-col items-center justify-center gap-4 mb-8">
+                            <div className="w-8 h-8 rounded-full bg-red-100 dark:bg-red-900/30 text-red-600 dark:text-red-400 font-bold text-sm flex items-center justify-center shrink-0">
+                                {currentIndex + 1}
+                            </div>
+                            <p className={`${questionTextClass} text-gray-900 dark:text-gray-100 leading-snug whitespace-pre-wrap w-full`}>
+                                {currentQ.question_text}
+                            </p>
                         </div>
+
+                        {/* Answer area */}
+                        {currentQ.type === 'multiple_choice' ? (
+                            <div className="flex flex-col gap-3">
+                                {currentQ.options?.map((opt: string, i: number) => {
+                                    const isSelected = answers[currentQ.id] === opt;
+                                    return (
+                                        <button
+                                            key={i}
+                                            onClick={() => handleAnswerChange(currentQ.id, opt)}
+                                            className={`flex items-center text-left w-full p-3.5 sm:p-4 rounded-xl border-2 transition-all duration-150 active:scale-[0.99] ${isSelected
+                                                    ? 'border-red-500 bg-red-50 dark:bg-red-900/15'
+                                                    : 'border-gray-100 dark:border-gray-800 bg-gray-50 dark:bg-[#1e2532] hover:border-gray-300 dark:hover:border-gray-600'
+                                                }`}
+                                        >
+                                            <div className={`w-7 h-7 rounded-full border-2 flex items-center justify-center mr-3.5 shrink-0 transition-all ${isSelected ? 'border-red-500 bg-red-500' : 'border-gray-300 dark:border-gray-600'}`}>
+                                                {isSelected && <Check className="w-3.5 h-3.5 text-white" />}
+                                            </div>
+                                            <span className={`text-sm sm:text-base ${isSelected ? 'text-red-700 dark:text-red-300 font-semibold' : 'text-gray-700 dark:text-gray-300'}`}>
+                                                <span className="font-bold mr-2">{String.fromCharCode(65 + i)}.</span>
+                                                {opt}
+                                            </span>
+                                        </button>
+                                    );
+                                })}
+                            </div>
+                        ) : (
+                            <div className="pt-6 pb-2 relative max-w-sm mx-auto">
+                                <input
+                                    className="w-full text-lg sm:text-xl font-medium text-center bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 focus:ring-0 focus:border-red-500 transition-colors px-2 py-3 outline-none dark:text-white"
+                                    value={answers[currentQ.id] || ''}
+                                    placeholder="Ketik jawaban..."
+                                    onChange={e => handleTextChange(currentQ.id, e.target.value)}
+                                    autoFocus
+                                />
+                                {saving && <p className="text-xs text-gray-400 absolute right-0 -bottom-4 animate-pulse">Menyimpan...</p>}
+                            </div>
+                        )}
+                    </CardContent>
+                </Card>
+
+                {/* ── Navigation ── */}
+                <div className="flex justify-between items-center mt-4 gap-3">
+                    <Button
+                        variant="outline"
+                        onClick={() => setCurrentIndex(p => p - 1)}
+                        disabled={currentIndex === 0}
+                        className="rounded-full px-5 bg-white dark:bg-[#151a23] gap-1"
+                    >
+                        <ChevronLeft className="w-4 h-4" /> Sebelumnya
+                    </Button>
+
+                    {currentIndex === questions.length - 1 ? (
+                        <Button
+                            onClick={() => setIsConfirmOpen(true)}
+                            disabled={submitting}
+                            className="rounded-full px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-lg shadow-emerald-600/25"
+                        >
+                            {submitting ? 'Mengumpulkan...' : '✓ Selesai & Kumpul'}
+                        </Button>
                     ) : (
-                        <div className="pt-6 pb-2 relative max-w-sm mx-auto">
-                            <input
-                                className="w-full text-lg sm:text-xl font-medium text-center bg-transparent border-0 border-b-2 border-gray-300 dark:border-gray-700 hover:border-gray-400 dark:hover:border-gray-500 focus:ring-0 focus:border-red-500 transition-colors px-2 py-3 outline-none dark:text-white"
-                                value={answers[currentQ.id] || ''}
-                                placeholder="Ketik jawaban..."
-                                onChange={e => handleTextChange(currentQ.id, e.target.value)}
-                                autoFocus
-                            />
-                            {saving && <p className="text-xs text-gray-400 absolute right-0 -bottom-4 animate-pulse">Menyimpan...</p>}
-                        </div>
+                        <Button
+                            onClick={() => setCurrentIndex(p => p + 1)}
+                            className="rounded-full px-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 gap-1"
+                        >
+                            Selanjutnya <ChevronRight className="w-4 h-4" />
+                        </Button>
                     )}
-                </CardContent>
-            </Card>
-
-            {/* ── Navigation ── */}
-            <div className="flex justify-between items-center mt-4 gap-3">
-                <Button
-                    variant="outline"
-                    onClick={() => setCurrentIndex(p => p - 1)}
-                    disabled={currentIndex === 0}
-                    className="rounded-full px-5 bg-white dark:bg-[#151a23] gap-1"
-                >
-                    <ChevronLeft className="w-4 h-4" /> Sebelumnya
-                </Button>
-
-                {currentIndex === questions.length - 1 ? (
-                    <Button
-                        onClick={() => setIsConfirmOpen(true)}
-                        disabled={submitting}
-                        className="rounded-full px-6 bg-emerald-600 hover:bg-emerald-700 text-white font-bold shadow-lg shadow-emerald-600/25"
-                    >
-                        {submitting ? 'Mengumpulkan...' : '✓ Selesai & Kumpul'}
-                    </Button>
-                ) : (
-                    <Button
-                        onClick={() => setCurrentIndex(p => p + 1)}
-                        className="rounded-full px-5 bg-gray-900 dark:bg-white text-white dark:text-gray-900 gap-1"
-                    >
-                        Selanjutnya <ChevronRight className="w-4 h-4" />
-                    </Button>
-                )}
+                </div>
             </div>
 
-            {/* ── Question Navigator (Number pad) ── */}
-            <div className="mt-6 bg-white dark:bg-[#151a23] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800">
+            {/* ── Right Column: Navigation Grid (desktop only sticks to right) ── */}
+            <div className="mt-4 lg:mt-4">
+                <div className="bg-white dark:bg-[#151a23] rounded-2xl p-5 shadow-sm border border-gray-100 dark:border-gray-800 lg:sticky lg:top-28">
+
                 <h3 className="text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider mb-3">Navigasi Soal</h3>
                 <div className="flex flex-wrap gap-2">
                     {questions.map((q, i) => {
@@ -303,7 +320,25 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
                     <span className="inline-block w-3 h-3 rounded-sm bg-red-100 border border-red-200 dark:bg-red-900/30 dark:border-red-800 mr-1 align-middle" />Terjawab &nbsp;
                     <span className="inline-block w-3 h-3 rounded-sm bg-gray-50 border border-gray-200 dark:bg-[#1e2532] dark:border-gray-800 mr-1 align-middle" />Belum dijawab
                 </p>
+
+                {/* Desktop: finish button also in sidebar */}
+                <div className="hidden lg:block mt-4 pt-4 border-t border-gray-100 dark:border-gray-800">
+                    {currentIndex === questions.length - 1 ? (
+                        <Button
+                            onClick={() => setIsConfirmOpen(true)}
+                            disabled={submitting}
+                            className="w-full rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-bold"
+                        >
+                            {submitting ? 'Mengumpulkan...' : '✓ Selesai & Kumpul'}
+                        </Button>
+                    ) : (
+                        <p className="text-xs text-center text-gray-400">
+                            {questions.length - totalAnswered} soal belum dijawab
+                        </p>
+                    )}
+                </div>
             </div>
+            </div>{/* end desktop two-column */}
 
             {/* Custom Confirm Dialog */}
             <AlertDialog open={isConfirmOpen} onOpenChange={setIsConfirmOpen}>
