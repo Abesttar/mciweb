@@ -67,7 +67,7 @@ export default function QuestionBanksPage() {
     const [deleteTarget, setDeleteTarget] = useState<QuestionBank | null>(null);
 
     // Expand/collapse detail
-    const [expandedBank, setExpandedBank] = useState<number | null>(null);
+    const [expandedBanks, setExpandedBanks] = useState<number[]>([]);
 
     // ── Fetch ─────────────────────────────────────────────────────────────────
     const fetchBanks = useCallback(async () => {
@@ -249,7 +249,7 @@ export default function QuestionBanksPage() {
                     <p className="text-sm text-gray-500 mt-1">Klik "Buat Paket Soal" untuk mulai menambahkan.</p>
                 </div>
             ) : (
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5">
+                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-5 items-start">
                     {filtered.map(bank => (
                         <Card key={bank.id} className="relative overflow-hidden bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-800 shadow-sm hover:shadow-md transition-all flex flex-col">
                             <CardContent className="p-6 flex flex-col h-full">
@@ -279,12 +279,12 @@ export default function QuestionBanksPage() {
                                 <div className="mt-auto pt-3 border-t border-gray-100 dark:border-gray-800 relative z-10">
                                     <button
                                         className="flex items-center gap-1 text-xs text-gray-500 hover:text-red-600 transition-colors"
-                                        onClick={() => setExpandedBank(expandedBank === bank.id ? null : bank.id)}
+                                        onClick={() => setExpandedBanks(prev => prev.includes(bank.id) ? prev.filter(id => id !== bank.id) : [...prev, bank.id])}
                                     >
-                                        {expandedBank === bank.id ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
-                                        {expandedBank === bank.id ? 'Sembunyikan soal' : 'Lihat daftar soal'}
+                                        {expandedBanks.includes(bank.id) ? <ChevronUp className="w-3.5 h-3.5" /> : <ChevronDown className="w-3.5 h-3.5" />}
+                                        {expandedBanks.includes(bank.id) ? 'Sembunyikan soal' : 'Lihat daftar soal'}
                                     </button>
-                                    {expandedBank === bank.id && (
+                                    {expandedBanks.includes(bank.id) && (
                                         <div className="mt-3 space-y-2 max-h-60 overflow-y-auto pr-1">
                                             {bank.questions?.map((q: any, i: number) => (
                                                 <div key={q.id} className="flex items-start gap-2 text-sm p-2 rounded-lg bg-gray-50 dark:bg-gray-800/50">
@@ -298,8 +298,6 @@ export default function QuestionBanksPage() {
                                         </div>
                                     )}
                                 </div>
-
-                                <div className="mt-2 text-xs text-gray-400">Oleh: {bank.creator?.name ?? '-'}</div>
                             </CardContent>
                         </Card>
                     ))}
