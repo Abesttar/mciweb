@@ -151,6 +151,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     useEffect(() => {
         if (isLocked && !autoFinished) {
             pollIntervalRef.current = setInterval(async () => {
+                if (isViolatingRef.current) return; // Wait until violation request completes
                 try {
                     const res = await axios.get(`/api/exam-sessions/play/${sessionId}`);
                     const data = res.data;
@@ -192,11 +193,34 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         if (!session || session.status !== 'in_progress') return;
 
         isViolatingRef.current = true;
+        setIsLocked(true); // Lock locally immediately
+
         try {
-            const res = await axios.post(`/api/exam-sessions/${sessionId}/violation`);
-            const data = res.data;
+            // Use fetch with keepalive to ensure request completes even if page unloads
+            const getCookie = (name: string) => {
+                const value = `; ${document.cookie}`;
+                const parts = value.split(`; ${name}=`);
+                if (parts.length === 2) return parts.pop()?.split(';').shift();
+            };
+            const xsrfCookie = getCookie('XSRF-TOKEN');
+            const csrfToken = xsrfCookie ? decodeURIComponent(xsrfCookie) : '';
+            
+            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/exam-sessions/${sessionId}/violation`, {
+                method: 'POST',
+                headers: {
+                    'Accept': 'application/json',
+                    'Content-Type': 'application/json',
+                    'X-Requested-With': 'XMLHttpRequest',
+                    'X-XSRF-TOKEN': csrfToken
+                },
+                credentials: 'include',
+                keepalive: true
+            });
+            
+            if (!res.ok) throw new Error('API failed');
+            
+            const data = await res.json();
             setViolations(data.violations);
-            setIsLocked(true);
 
             if (data.auto_finished) {
                 setAutoFinished(true);
@@ -204,10 +228,15 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
                 try { await document.exitFullscreen(); } catch { }
                 setTimeout(() => router.push('/dashboard/exams'), 4000);
             }
-        } catch {
-            setIsLocked(true); // Lock locally even if API fails
-        } finally {
+            
+            // Release lock on violation state
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
+        } catch {
+            // Kept locked locally. We must retry so the backend knows!
+            setTimeout(() => { 
+                isViolatingRef.current = false; 
+                handleViolation(); // Retry!
+            }, 3000);
         }
     }, [session, sessionId, router]);
 
@@ -224,19 +253,29 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         const handleFullscreenChange = () => {
             if (!document.fullscreenElement) handleViolationTrigger();
         };
+        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
+            if (examStartedRef.current && !isLocked && timeLeft > 0) {
+                handleViolationTrigger();
+            }
+        };
 
         document.addEventListener('visibilitychange', handleVisibility);
         window.addEventListener('blur', handleViolationTrigger);
         window.addEventListener('pagehide', handleViolationTrigger);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
+        window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
+            if (examStartedRef.current && !isLocked && !autoFinished && timeLeft > 0) {
+                handleViolationTrigger(); // Trigger if navigating away via Next.js router
+            }
             document.removeEventListener('visibilitychange', handleVisibility);
             window.removeEventListener('blur', handleViolationTrigger);
             window.removeEventListener('pagehide', handleViolationTrigger);
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, [handleViolation, isLocked]);
+    }, [handleViolation, isLocked, autoFinished, timeLeft]);
 
     // ── Enter fullscreen & start exam ─────────────────────────────────────────
     const handleEnterFullscreen = async () => {
