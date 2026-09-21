@@ -211,29 +211,29 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         }
     }, [session, sessionId, router]);
 
-    // ── Anti-cheat listeners (only active when exam started & not locked) ─────
+    // ── Anti-cheat listeners ──────────────────────────────────────────────────
     useEffect(() => {
-        if (!examStartedRef.current) return;
+        const handleViolationTrigger = () => {
+            if (!examStartedRef.current || isLocked) return;
+            handleViolation();
+        };
 
         const handleVisibility = () => {
-            if (document.hidden && !isLocked) handleViolation();
-        };
-        const handleBlur = () => {
-            if (!isLocked) handleViolation();
+            if (document.hidden) handleViolationTrigger();
         };
         const handleFullscreenChange = () => {
-            if (!document.fullscreenElement && !isLocked && examStartedRef.current) {
-                handleViolation();
-            }
+            if (!document.fullscreenElement) handleViolationTrigger();
         };
 
         document.addEventListener('visibilitychange', handleVisibility);
-        window.addEventListener('blur', handleBlur);
+        window.addEventListener('blur', handleViolationTrigger);
+        window.addEventListener('pagehide', handleViolationTrigger);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
 
         return () => {
             document.removeEventListener('visibilitychange', handleVisibility);
-            window.removeEventListener('blur', handleBlur);
+            window.removeEventListener('blur', handleViolationTrigger);
+            window.removeEventListener('pagehide', handleViolationTrigger);
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
         };
     }, [handleViolation, isLocked]);
@@ -338,6 +338,23 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
 
     return (
         <>
+            {/* Global style to hide layout elements during exam */}
+            <style dangerouslySetInnerHTML={{ __html: `
+                /* Hide sidebar */
+                aside { display: none !important; }
+                /* Hide hamburger menu */
+                header button:has(svg.lucide-menu) { display: none !important; }
+                header button.lg\\:hidden { display: none !important; }
+                /* Hide notification bell */
+                header button:has(svg.lucide-bell) { display: none !important; }
+                header button:has(.lucide-bell) { display: none !important; }
+                /* Disable profile link */
+                header a[href="/dashboard/profile"] { pointer-events: none !important; }
+                /* Adjust main padding since sidebar is gone */
+                main { padding: 0 !important; }
+                .flex-1.flex.overflow-hidden { display: block !important; overflow: auto !important; }
+            `}} />
+
             {/* Fullscreen prompt overlay (before exam starts) */}
             {showFullscreenPrompt && <FullscreenPrompt onEnter={handleEnterFullscreen} />}
 
