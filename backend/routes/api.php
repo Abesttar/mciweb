@@ -135,4 +135,6 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::get('exam-sessions/{session_id}/details', [\App\Http\Controllers\ExamSessionController::class, 'details']);
     Route::post('exam-sessions/{session_id}/submit', [\App\Http\Controllers\ExamSessionController::class, 'submitAnswer']);
     Route::post('exam-sessions/{session_id}/finish', [\App\Http\Controllers\ExamSessionController::class, 'finish']);
+    Route::post('exam-sessions/{session_id}/violation', [\App\Http\Controllers\ExamSessionController::class, 'violation']);
+    Route::post('exam-sessions/{session_id}/unlock', [\App\Http\Controllers\ExamSessionController::class, 'unlock']);
 });

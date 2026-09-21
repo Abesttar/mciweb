@@ -7,13 +7,15 @@ use Illuminate\Database\Eloquent\Model;
 class ExamSession extends Model
 {
     protected $fillable = [
-        'exam_id', 'student_id', 'questions_snapshot', 'started_at', 'finished_at', 'status', 'score'
+        'exam_id', 'student_id', 'questions_snapshot', 'started_at', 'finished_at', 'status', 'score', 'violations', 'is_locked'
     ];
 
     protected $casts = [
         'questions_snapshot' => 'array',
         'started_at' => 'datetime',
         'finished_at' => 'datetime',
+        'is_locked' => 'boolean',
+        'violations' => 'integer',
     ];
 
     public function exam()

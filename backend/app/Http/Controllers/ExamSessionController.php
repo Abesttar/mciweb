@@ -139,6 +139,10 @@ class ExamSessionController extends Controller
             return response()->json(['message' => 'Ujian sudah selesai.'], 403);
         }
 
+        if ($session->is_locked) {
+            return response()->json(['message' => 'Ujian sedang terkunci. Tunggu izin pengawas.', 'is_locked' => true], 403);
+        }
+
         $endTime = $session->started_at->addMinutes($session->exam->duration_minutes);
         if (now()->greaterThan($endTime)) {
             $this->finishSession($session);
@@ -195,7 +199,78 @@ class ExamSessionController extends Controller
                 'status'      => 'finished',
                 'finished_at' => now(),
                 'score'       => $totalScore,
+                'is_locked'   => false,
             ]);
         }
+    }
+
+    // POST /api/exam-sessions/{session_id}/violation  (Siswa — deteksi kecurangan)
+    public function violation(Request $request, $sessionId)
+    {
+        $session = ExamSession::findOrFail($sessionId);
+
+        // Hanya session yang sedang berjalan
+        if ($session->status !== 'in_progress') {
+            return response()->json(['message' => 'Ujian sudah selesai.'], 403);
+        }
+
+        $newViolations = $session->violations + 1;
+
+        if ($newViolations >= 3) {
+            // Pelanggaran ke-3: kunci permanen + auto-finish
+            $session->update([
+                'violations' => $newViolations,
+                'is_locked'  => true,
+            ]);
+            $this->finishSession($session);
+            return response()->json([
+                'violations' => $newViolations,
+                'is_locked'  => true,
+                'auto_finished' => true,
+                'message' => 'Ujian otomatis diselesaikan karena 3 pelanggaran.',
+            ]);
+        }
+
+        // Pelanggaran 1 atau 2: kunci, tunggu unlock dari sensei
+        $session->update([
+            'violations' => $newViolations,
+            'is_locked'  => true,
+        ]);
+
+        return response()->json([
+            'violations' => $newViolations,
+            'is_locked'  => true,
+            'auto_finished' => false,
+            'message' => "Pelanggaran ke-{$newViolations}. Ujian terkunci, hubungi pengawas.",
+        ]);
+    }
+
+    // POST /api/exam-sessions/{session_id}/unlock  (Sensei — buka kunci)
+    public function unlock(Request $request, $sessionId)
+    {
+        $user = $request->user();
+
+        // Hanya sensei/admin/super admin
+        $allowedRoles = ['Sensei', 'Admin', 'Super Admin', 'Staff Akademik'];
+        $hasRole = collect($user->roles)->contains(fn($r) => in_array(
+            is_object($r) ? $r->name : $r,
+            $allowedRoles
+        ));
+        if (!$hasRole) {
+            return response()->json(['message' => 'Tidak diizinkan.'], 403);
+        }
+
+        $session = ExamSession::findOrFail($sessionId);
+
+        if ($session->violations >= 3) {
+            return response()->json(['message' => 'Sudah 3 pelanggaran, tidak bisa dibuka.'], 403);
+        }
+
+        $session->update(['is_locked' => false]);
+
+        return response()->json([
+            'message' => 'Sesi ujian berhasil dibuka.',
+            'session' => $session->fresh(),
+        ]);
     }
 }

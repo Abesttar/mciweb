@@ -4,8 +4,7 @@ import { useState, useEffect, use } from 'react';
 import axios from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
-import { ArrowLeft, User, Clock, CheckCircle2, ChevronRight } from 'lucide-react';
-import { Badge } from '@/components/ui/badge';
+import { ArrowLeft, User, Clock, CheckCircle2, ChevronRight, AlertTriangle, Lock, LockOpen } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
 
 function SessionTimer({ startedAt, durationMinutes }: { startedAt: string, durationMinutes: number }) {
@@ -40,12 +39,23 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
     const [exam, setExam] = useState<any>(null);
     const [sessions, setSessions] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [unlockingId, setUnlockingId] = useState<number | null>(null);
 
+    // Fetch initial data
     useEffect(() => {
         fetchResults();
     }, [examId]);
 
-    const fetchResults = async () => {
+    // Polling every 10 seconds for real-time updates
+    useEffect(() => {
+        const interval = setInterval(() => {
+            fetchResults(false);
+        }, 10000);
+        return () => clearInterval(interval);
+    }, [examId]);
+
+    const fetchResults = async (showLoading = true) => {
+        if (showLoading) setLoading(true);
         try {
             const res = await axios.get(`/api/exams/${examId}/results`);
             setExam(res.data.exam);
@@ -53,7 +63,21 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
         } catch (e) {
             console.error(e);
         } finally {
-            setLoading(false);
+            if (showLoading) setLoading(false);
+        }
+    };
+
+    const handleUnlock = async (sessionId: number) => {
+        if (confirm('Buka kunci ujian untuk siswa ini?')) {
+            setUnlockingId(sessionId);
+            try {
+                await axios.post(`/api/exam-sessions/${sessionId}/unlock`);
+                await fetchResults(false);
+            } catch (e: any) {
+                alert(e.response?.data?.message || 'Gagal membuka kunci ujian.');
+            } finally {
+                setUnlockingId(null);
+            }
         }
     };
 
@@ -68,7 +92,7 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                     <ArrowLeft className="w-4 h-4" />
                 </Button>
                 <div>
-                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Hasil Ujian</h1>
+                    <h1 className="text-2xl font-bold text-gray-900 dark:text-white">Hasil & Pengawasan Ujian</h1>
                     <p className="text-gray-500 dark:text-gray-400 text-sm mt-0.5">
                         <span className="font-medium text-gray-700 dark:text-gray-200">{exam.title}</span> 
                         {' • '}{exam.study_class?.name}
@@ -80,6 +104,13 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                 <div>
                     <p className="text-sm text-gray-500 dark:text-gray-400">Total Peserta Ujian</p>
                     <p className="text-2xl font-bold text-gray-900 dark:text-white">{sessions.length} Siswa</p>
+                </div>
+                <div className="flex items-center gap-2 text-xs text-gray-500">
+                    <span className="relative flex h-2.5 w-2.5">
+                      <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+                      <span className="relative inline-flex rounded-full h-2.5 w-2.5 bg-emerald-500"></span>
+                    </span>
+                    Live Update (10s)
                 </div>
             </div>
 
@@ -100,11 +131,29 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                                         <User className="w-5 h-5 text-gray-500 dark:text-gray-400" />
                                     </div>
                                     <div>
-                                        <h3 className="font-bold text-gray-900 dark:text-white">{session.student?.name}</h3>
-                                        <div className="flex gap-3 text-xs text-gray-500 mt-1">
+                                        <div className="flex items-center gap-2">
+                                            <h3 className="font-bold text-gray-900 dark:text-white">{session.student?.name}</h3>
+                                            
+                                            {/* Anti-cheat Badges */}
+                                            {session.violations >= 3 ? (
+                                                <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-red-900/20 text-red-600 dark:text-red-400 border border-red-200 dark:border-red-900/50">
+                                                    <Lock className="w-3 h-3" /> Dikunci Permanen
+                                                </span>
+                                            ) : session.is_locked ? (
+                                                <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-orange-100 dark:bg-orange-900/30 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800">
+                                                    <Lock className="w-3 h-3" /> Terkunci
+                                                </span>
+                                            ) : session.violations > 0 ? (
+                                                <span className="flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded bg-yellow-100 dark:bg-yellow-900/30 text-yellow-600 dark:text-yellow-400">
+                                                    <AlertTriangle className="w-3 h-3" /> {session.violations} Pelanggaran
+                                                </span>
+                                            ) : null}
+                                        </div>
+                                        
+                                        <div className="flex flex-wrap gap-3 text-xs text-gray-500 mt-1">
                                             <span className="flex items-center gap-1">
                                                 <Clock className="w-3.5 h-3.5" /> 
-                                                {new Date(session.started_at).toLocaleString('id-ID')}
+                                                Mulai: {new Date(session.started_at).toLocaleTimeString('id-ID', {hour: '2-digit', minute:'2-digit'})}
                                             </span>
                                             {session.status === 'finished' ? (
                                                 <span className="flex items-center gap-1 text-emerald-600 dark:text-emerald-500">
@@ -120,19 +169,40 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                                     </div>
                                 </div>
 
-                                <div className="flex items-center gap-6 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 border-gray-100 dark:border-gray-800 pt-3 sm:pt-0 mt-2 sm:mt-0">
-                                    <div className="text-left sm:text-right">
-                                        <p className="text-xs text-gray-500 uppercase tracking-wider">Total Nilai</p>
-                                        <p className="text-xl font-bold text-gray-900 dark:text-white">
-                                            {session.score} <span className="text-sm text-gray-500 font-normal">Poin</span>
+                                <div className="flex items-center gap-4 w-full sm:w-auto justify-between sm:justify-end border-t sm:border-0 border-gray-100 dark:border-gray-800 pt-3 sm:pt-0 mt-2 sm:mt-0">
+                                    
+                                    {/* Action Buttons */}
+                                    <div className="flex gap-2">
+                                        {session.is_locked && session.violations < 3 && session.status === 'in_progress' && (
+                                            <Button 
+                                                size="sm"
+                                                variant="outline"
+                                                onClick={() => handleUnlock(session.id)}
+                                                disabled={unlockingId === session.id}
+                                                className="border-orange-500 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
+                                            >
+                                                {unlockingId === session.id ? 'Membuka...' : (
+                                                    <><LockOpen className="w-4 h-4 mr-1" /> Buka Kunci</>
+                                                )}
+                                            </Button>
+                                        )}
+                                        
+                                        <Button 
+                                            size="sm"
+                                            onClick={() => router.push(`/dashboard/classes/${id}/exams/${examId}/results/${session.id}`)}
+                                            className="bg-blue-600 hover:bg-blue-700 text-white rounded-lg px-4"
+                                        >
+                                            Detail <ChevronRight className="w-4 h-4 ml-1" />
+                                        </Button>
+                                    </div>
+                                    
+                                    {/* Score */}
+                                    <div className="text-right ml-2 border-l border-gray-100 dark:border-gray-800 pl-4">
+                                        <p className="text-[10px] text-gray-500 uppercase tracking-wider">Nilai</p>
+                                        <p className="text-lg font-bold text-gray-900 dark:text-white">
+                                            {session.score}
                                         </p>
                                     </div>
-                                    <Button 
-                                        onClick={() => router.push(`/dashboard/classes/${id}/exams/${examId}/results/${session.id}`)}
-                                        className="bg-blue-600 hover:bg-blue-700 text-white rounded-full px-5"
-                                    >
-                                        Detail Jawaban <ChevronRight className="w-4 h-4 ml-1" />
-                                    </Button>
                                 </div>
                             </CardContent>
                         </Card>
