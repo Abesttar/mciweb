@@ -97,6 +97,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     const [autoFinished, setAutoFinished] = useState(false);
     const isViolatingRef = useRef(false); // prevent duplicate calls
     const examStartedRef = useRef(false);
+    const isEnteringFullscreenRef = useRef(false); // ignore blur during fullscreen transition
     const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
     // ── Fetch session ─────────────────────────────────────────────────────────
@@ -146,6 +147,15 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             setViolations(session.violations ?? 0);
         }
     }, [session]);
+
+    // ── If session already locked on page load, skip fullscreen prompt ────────
+    useEffect(() => {
+        if (session && session.is_locked && showFullscreenPrompt) {
+            setShowFullscreenPrompt(false);
+            examStartedRef.current = true; // polling requires this to be true
+        }
+    }, [session, showFullscreenPrompt]);
+
 
     // ── Poll when locked (every 5s, check if unlocked by sensei) ─────────────
     useEffect(() => {
@@ -221,12 +231,12 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     // ── Anti-cheat listeners ──────────────────────────────────────────────────
     useEffect(() => {
         const handleViolationTrigger = () => {
-            if (!examStartedRef.current || isLocked) return;
+            if (!examStartedRef.current || isLocked || isEnteringFullscreenRef.current) return;
             handleViolation();
         };
 
         const handleVisibility = () => {
-            if (document.hidden) handleViolationTrigger();
+            if (document.hidden && !isEnteringFullscreenRef.current) handleViolationTrigger();
         };
         const handleFullscreenChange = () => {
             const isFullscreen = document.fullscreenElement || 
@@ -269,6 +279,8 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
 
     // ── Enter fullscreen & start exam ─────────────────────────────────────────
     const handleEnterFullscreen = async () => {
+        // Set flag: ignore blur/fullscreenchange events during this transition
+        isEnteringFullscreenRef.current = true;
         try {
             const el = document.documentElement as any;
             if (el.requestFullscreen) {
@@ -285,6 +297,10 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         }
         examStartedRef.current = true;
         setShowFullscreenPrompt(false);
+        // Give browser 1.5s to settle fullscreen transition before enabling anti-cheat
+        setTimeout(() => {
+            isEnteringFullscreenRef.current = false;
+        }, 1500);
     };
 
     // ── Save answer ───────────────────────────────────────────────────────────

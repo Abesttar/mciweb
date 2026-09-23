@@ -173,7 +173,7 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                                     
                                     {/* Action Buttons */}
                                     <div className="flex gap-2">
-                                        {session.is_locked && session.violations < 3 && session.status === 'in_progress' && (
+                                        {session.is_locked && Number(session.violations) < 3 && (
                                             <Button 
                                                 size="sm"
                                                 variant="outline"
@@ -186,6 +186,7 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                                                 )}
                                             </Button>
                                         )}
+
                                         
                                         <Button 
                                             size="sm"
