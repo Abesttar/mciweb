@@ -196,30 +196,8 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         setIsLocked(true); // Lock locally immediately
 
         try {
-            // Use fetch with keepalive to ensure request completes even if page unloads
-            const getCookie = (name: string) => {
-                const value = `; ${document.cookie}`;
-                const parts = value.split(`; ${name}=`);
-                if (parts.length === 2) return parts.pop()?.split(';').shift();
-            };
-            const xsrfCookie = getCookie('XSRF-TOKEN');
-            const csrfToken = xsrfCookie ? decodeURIComponent(xsrfCookie) : '';
-            
-            const res = await fetch(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/exam-sessions/${sessionId}/violation`, {
-                method: 'POST',
-                headers: {
-                    'Accept': 'application/json',
-                    'Content-Type': 'application/json',
-                    'X-Requested-With': 'XMLHttpRequest',
-                    'X-XSRF-TOKEN': csrfToken
-                },
-                credentials: 'include',
-                keepalive: true
-            });
-            
-            if (!res.ok) throw new Error('API failed');
-            
-            const data = await res.json();
+            const res = await axios.post(`/api/exam-sessions/${sessionId}/violation`);
+            const data = res.data;
             setViolations(data.violations);
 
             if (data.auto_finished) {
@@ -251,10 +229,16 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             if (document.hidden) handleViolationTrigger();
         };
         const handleFullscreenChange = () => {
-            if (!document.fullscreenElement) handleViolationTrigger();
+            const isFullscreen = document.fullscreenElement || 
+                                 (document as any).webkitFullscreenElement || 
+                                 (document as any).mozFullScreenElement || 
+                                 (document as any).msFullscreenElement;
+            if (!isFullscreen) handleViolationTrigger();
         };
         const handleBeforeUnload = (e: BeforeUnloadEvent) => {
             if (examStartedRef.current && !isLocked && timeLeft > 0) {
+                // Try to send violation synchronously before unload
+                navigator.sendBeacon(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/exam-sessions/${sessionId}/violation`);
                 handleViolationTrigger();
             }
         };
@@ -263,6 +247,9 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         window.addEventListener('blur', handleViolationTrigger);
         window.addEventListener('pagehide', handleViolationTrigger);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
+        document.addEventListener('mozfullscreenchange', handleFullscreenChange);
+        document.addEventListener('MSFullscreenChange', handleFullscreenChange);
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
@@ -273,6 +260,9 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             window.removeEventListener('blur', handleViolationTrigger);
             window.removeEventListener('pagehide', handleViolationTrigger);
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
+            document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
+            document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [handleViolation, isLocked, autoFinished, timeLeft]);
@@ -280,7 +270,16 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     // ── Enter fullscreen & start exam ─────────────────────────────────────────
     const handleEnterFullscreen = async () => {
         try {
-            await document.documentElement.requestFullscreen();
+            const el = document.documentElement as any;
+            if (el.requestFullscreen) {
+                await el.requestFullscreen();
+            } else if (el.webkitRequestFullscreen) {
+                await el.webkitRequestFullscreen();
+            } else if (el.mozRequestFullScreen) {
+                await el.mozRequestFullScreen();
+            } else if (el.msRequestFullscreen) {
+                await el.msRequestFullscreen();
+            }
         } catch {
             // Mobile fallback: fullscreen not supported but continue anyway
         }
