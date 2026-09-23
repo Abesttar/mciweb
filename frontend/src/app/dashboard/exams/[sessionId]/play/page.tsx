@@ -263,9 +263,8 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            if (examStartedRef.current && !isLocked && !autoFinished && timeLeft > 0) {
-                handleViolationTrigger(); // Trigger if navigating away via Next.js router
-            }
+            // Only remove listeners — do NOT trigger violation here.
+            // Cleanup runs on every re-render when deps change, not just unmount!
             document.removeEventListener('visibilitychange', handleVisibility);
             window.removeEventListener('blur', handleViolationTrigger);
             window.removeEventListener('pagehide', handleViolationTrigger);
@@ -276,6 +275,19 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
     }, [handleViolation, isLocked, autoFinished, timeLeft]);
+
+    // ── On TRUE unmount (Next.js navigation) — trigger violation ───────────────
+    const handleViolationRef = useRef(handleViolation);
+    useEffect(() => { handleViolationRef.current = handleViolation; }, [handleViolation]);
+
+    useEffect(() => {
+        return () => {
+            // This cleanup ONLY runs on true component unmount (navigation away)
+            if (examStartedRef.current && !isViolatingRef.current) {
+                handleViolationRef.current();
+            }
+        };
+    }, []); // empty deps = only on unmount
 
     // ── Enter fullscreen & start exam ─────────────────────────────────────────
     const handleEnterFullscreen = async () => {
