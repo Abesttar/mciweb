@@ -203,11 +203,12 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         if (!session || session.status !== 'in_progress') return;
 
         isViolatingRef.current = true;
-        setIsLocked(true); // Lock locally immediately
 
         try {
             const res = await axios.post(`/api/exam-sessions/${sessionId}/violation`);
             const data = res.data;
+            // Only lock AFTER backend confirms - prevents ghost lock
+            setIsLocked(true);
             setViolations(data.violations);
 
             if (data.auto_finished) {
@@ -220,13 +221,15 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             // Release lock on violation state
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
         } catch {
-            // Kept locked locally. We must retry so the backend knows!
+            // API failed — do NOT lock locally (would trap student with no escape)
+            // Silently retry after 5s
             setTimeout(() => { 
                 isViolatingRef.current = false; 
-                handleViolation(); // Retry!
-            }, 3000);
+                handleViolation(); // Retry
+            }, 5000);
         }
     }, [session, sessionId, router]);
+
 
     // ── Anti-cheat listeners ──────────────────────────────────────────────────
     useEffect(() => {
