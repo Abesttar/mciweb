@@ -220,7 +220,10 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             // Release lock on violation state
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
 
-        } catch {
+        } catch (error: any) {
+            // Debug alert for user to screenshot
+            alert('Error API: ' + (error.response?.data?.message || error.message));
+
             // API failed: revert local lock so they don't get stuck without teacher seeing it
             setIsLocked(false);
             
