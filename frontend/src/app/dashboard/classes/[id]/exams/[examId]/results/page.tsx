@@ -224,8 +224,8 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                     ))}
                 </div>
             )}
-        </div>
             
+
             <AlertDialog open={unlockTarget !== null} onOpenChange={(open) => !open && setUnlockTarget(null)}>
                 <AlertDialogContent>
                     <AlertDialogHeader>
