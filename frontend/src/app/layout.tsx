@@ -17,8 +17,12 @@ const plusJakartaSans = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  title: "LPK Mirai Crown Indonesia MIS",
-  description: "Management Information System",
+  title: "Mirai Crown Indonesia",
+  description: "LPK Mirai Crown Indonesia - Management Information System",
+  icons: {
+    icon: "/favicon.ico",
+    apple: "/favicon.ico",
+  },
 };
 
 export default function RootLayout({
