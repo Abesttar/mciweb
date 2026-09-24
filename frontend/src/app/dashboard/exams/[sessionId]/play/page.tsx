@@ -5,6 +5,7 @@ import axios from '@/lib/axios';
 import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'react-hot-toast';
 import { Clock, CheckCircle2, ChevronLeft, ChevronRight, Check, AlertCircle, Lock, Shield, Maximize } from 'lucide-react';
 import {
     AlertDialog,
@@ -131,7 +132,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             setTimeLeft(remaining);
 
         } catch (e: any) {
-            alert(e.response?.data?.message || 'Gagal memuat ujian.');
+            toast.error(e.response?.data?.message || 'Gagal memuat ujian.');
             router.push('/dashboard/exams');
         } finally {
             setLoading(false);
@@ -221,8 +222,8 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
 
         } catch (error: any) {
-            // Debug alert for user to screenshot
-            alert('Error API: ' + (error.response?.data?.message || error.message));
+            // Use toast instead of browser alert for better UI
+            toast.error(error.response?.data?.message || 'Gagal terhubung ke server');
 
             // API failed: revert local lock so they don't get stuck without teacher seeing it
             setIsLocked(false);

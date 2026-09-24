@@ -6,6 +6,17 @@ import { useRouter } from 'next/navigation';
 import { Button } from '@/components/ui/button';
 import { ArrowLeft, User, Clock, CheckCircle2, ChevronRight, AlertTriangle, Lock, LockOpen } from 'lucide-react';
 import { Card, CardContent } from '@/components/ui/card';
+import { toast } from 'react-hot-toast';
+import {
+    AlertDialog,
+    AlertDialogAction,
+    AlertDialogCancel,
+    AlertDialogContent,
+    AlertDialogDescription,
+    AlertDialogFooter,
+    AlertDialogHeader,
+    AlertDialogTitle,
+} from "@/components/ui/alert-dialog";
 
 function SessionTimer({ startedAt, durationMinutes }: { startedAt: string, durationMinutes: number }) {
     const [timeLeft, setTimeLeft] = useState<number>(0);
@@ -67,17 +78,20 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
         }
     };
 
-    const handleUnlock = async (sessionId: number) => {
-        if (confirm('Buka kunci ujian untuk siswa ini?')) {
-            setUnlockingId(sessionId);
-            try {
-                await axios.post(`/api/exam-sessions/${sessionId}/unlock`);
-                await fetchResults(false);
-            } catch (e: any) {
-                alert(e.response?.data?.message || 'Gagal membuka kunci ujian.');
-            } finally {
-                setUnlockingId(null);
-            }
+    const [unlockTarget, setUnlockTarget] = useState<number | null>(null);
+
+    const handleUnlockConfirm = async () => {
+        if (!unlockTarget) return;
+        setUnlockingId(unlockTarget);
+        try {
+            await axios.post(`/api/exam-sessions/${unlockTarget}/unlock`);
+            toast.success('Kunci ujian berhasil dibuka!');
+            await fetchResults(false);
+        } catch (e: any) {
+            toast.error(e.response?.data?.message || 'Gagal membuka kunci ujian.');
+        } finally {
+            setUnlockingId(null);
+            setUnlockTarget(null);
         }
     };
 
@@ -177,7 +191,7 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                                             <Button 
                                                 size="sm"
                                                 variant="outline"
-                                                onClick={() => handleUnlock(session.id)}
+                                                onClick={() => setUnlockTarget(session.id)}
                                                 disabled={unlockingId === session.id}
                                                 className="border-orange-500 text-orange-600 hover:bg-orange-50 dark:hover:bg-orange-900/20"
                                             >
@@ -210,6 +224,24 @@ export default function ExamResultsPage({ params }: { params: Promise<{ id: stri
                     ))}
                 </div>
             )}
+        </div>
+            
+            <AlertDialog open={unlockTarget !== null} onOpenChange={(open) => !open && setUnlockTarget(null)}>
+                <AlertDialogContent>
+                    <AlertDialogHeader>
+                        <AlertDialogTitle>Konfirmasi Buka Kunci</AlertDialogTitle>
+                        <AlertDialogDescription>
+                            Apakah Anda yakin ingin membuka kunci ujian untuk siswa ini? Siswa akan dapat melanjutkan ujiannya dari bagian terakhir yang ditinggalkan.
+                        </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                        <AlertDialogCancel disabled={unlockingId !== null}>Batal</AlertDialogCancel>
+                        <AlertDialogAction onClick={handleUnlockConfirm} disabled={unlockingId !== null}>
+                            {unlockingId !== null ? 'Membuka...' : 'Buka Kunci'}
+                        </AlertDialogAction>
+                    </AlertDialogFooter>
+                </AlertDialogContent>
+            </AlertDialog>
         </div>
     );
 }
