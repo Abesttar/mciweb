@@ -203,12 +203,11 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         if (!session || session.status !== 'in_progress') return;
 
         isViolatingRef.current = true;
+        setIsLocked(true); // Lock immediately for instant feedback!
 
         try {
             const res = await axios.post(`/api/exam-sessions/${sessionId}/violation`);
             const data = res.data;
-            // Only lock AFTER backend confirms - prevents ghost lock
-            setIsLocked(true);
             setViolations(data.violations);
 
             if (data.auto_finished) {
@@ -220,9 +219,12 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             
             // Release lock on violation state
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
+
         } catch {
-            // API failed — do NOT lock locally (would trap student with no escape)
-            // Silently retry after 5s
+            // API failed: revert local lock so they don't get stuck without teacher seeing it
+            setIsLocked(false);
+            
+            // Silently retry after 5s to sync with server
             setTimeout(() => { 
                 isViolatingRef.current = false; 
                 handleViolation(); // Retry
