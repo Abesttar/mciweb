@@ -222,8 +222,20 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
 
         } catch (error: any) {
+            const errorMessage = error.response?.data?.message || '';
+            
+            // If the server says the exam is already finished, don't show an error loop! Just redirect them out.
+            if (errorMessage.toLowerCase().includes('selesai') || error.response?.status === 403 || error.response?.status === 400) {
+                setAutoFinished(true);
+                examStartedRef.current = false; // Prevent unmount hook from firing
+                isViolatingRef.current = false;
+                try { await document.exitFullscreen(); } catch { }
+                router.push('/dashboard/exams');
+                return;
+            }
+
             // Use toast instead of browser alert for better UI
-            toast.error(error.response?.data?.message || 'Gagal terhubung ke server');
+            toast.error(errorMessage || 'Gagal terhubung ke server');
 
             // API failed: revert local lock so they don't get stuck without teacher seeing it
             setIsLocked(false);
@@ -231,7 +243,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             // Silently retry after 5s to sync with server
             setTimeout(() => { 
                 isViolatingRef.current = false; 
-                handleViolation(); // Retry
+                if (examStartedRef.current) handleViolation(); // Retry
             }, 5000);
         }
     }, [session, sessionId, router]);
@@ -349,6 +361,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     // ── Finish ────────────────────────────────────────────────────────────────
     const handleAutoFinish = async () => {
         try {
+            examStartedRef.current = false; // Disable anti-cheat unmount trigger
             await axios.post(`/api/exam-sessions/${sessionId}/finish`);
             try { await document.exitFullscreen(); } catch { }
             router.push('/dashboard/exams');
@@ -358,6 +371,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     const handleFinish = async () => {
         setSubmitting(true);
         try {
+            examStartedRef.current = false; // Disable anti-cheat unmount trigger
             await axios.post(`/api/exam-sessions/${sessionId}/finish`);
             try { await document.exitFullscreen(); } catch { }
             router.push('/dashboard/exams');
