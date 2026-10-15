@@ -40,7 +40,7 @@ export default function RaportPage() {
             setGrades(gradesRes.data.data);
 
             const attendancesRes = await axios.get('/api/attendances', {
-                params: { enrollment_id: enrollmentId, per_page: 200 }
+                params: { enrollment_id: enrollmentId, study_class_id: classId, per_page: 200 }
             });
             setAttendances(attendancesRes.data.data);
         } catch (err) {
