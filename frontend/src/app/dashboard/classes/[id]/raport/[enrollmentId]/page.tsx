@@ -276,43 +276,43 @@ export default function RaportPage() {
 
             // Kolom 1: Tanggal
             const xTanggal = 32;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(formatDate(allEntries[i].date), xTanggal, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(formatDate(allEntries[i].date), xTanggal, i, startY, rowHeight);
 
             // Kolom 2: Deskripsi Nilai / Keterangan
             const xKet = 110;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].remarks || 'Nilai harian', xKet, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].remarks || 'Nilai harian', xKet, i, startY, rowHeight);
 
             // Kolom 3: Kosa Kata / Kotoba
             const xKotoba = 274;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kotoba ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKotoba, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kotoba ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKotoba, i, startY, rowHeight);
 
             // Kolom 4: Huruf Kanji
             const xKanji = 346;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kanji ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKanji, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kanji ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKanji, i, startY, rowHeight);
 
             // Kolom 5: Tata Bahasa / Bunpou
             const xBunpou = 428;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.bunpou ?? (allEntries[i].type === 'weekly' ? '-' : ''), xBunpou, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.bunpou ?? (allEntries[i].type === 'weekly' ? '-' : ''), xBunpou, i, startY, rowHeight);
 
             // Kolom 6: Mendengarkan / Choukai
             const xChoukai = 524;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.choukai ?? (allEntries[i].type === 'weekly' ? '-' : ''), xChoukai, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.choukai ?? (allEntries[i].type === 'weekly' ? '-' : ''), xChoukai, i, startY, rowHeight);
 
             // Kolom 7: Percakapan / Kaiwa
             const xKaiwa = 619;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kaiwa ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKaiwa, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kaiwa ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKaiwa, i, startY, rowHeight);
 
             // Kolom 8: Sikap
             const xSikap = 696;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.sikap ?? (allEntries[i].type === 'weekly' ? '-' : ''), xSikap, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.sikap ?? (allEntries[i].type === 'weekly' ? '-' : ''), xSikap, i, startY, rowHeight);
 
             // Kolom 9: Total Score (Angka)
             const xTotal = 755;
-            for (let i = 0; i < 17; i++) if (allEntries[i] && allEntries[i].score) tulisKolom(allEntries[i].score, xTotal, i, startY, rowHeight);
+            for (let i = 0; i < 20; i++) if (allEntries[i] && allEntries[i].score) tulisKolom(allEntries[i].score, xTotal, i, startY, rowHeight);
 
             // Kolom 10: Grade Letter (Huruf Bobot Merah)
             const xGradeLetter = 810;
-            for (let i = 0; i < 17; i++) if (allEntries[i] && allEntries[i].grade_letter) tulisKolom(allEntries[i].grade_letter, xGradeLetter, i, startY, rowHeight, letterColor);
+            for (let i = 0; i < 20; i++) if (allEntries[i] && allEntries[i].grade_letter) tulisKolom(allEntries[i].grade_letter, xGradeLetter, i, startY, rowHeight, letterColor);
 
             // 4a. Ujian Tingkatan - NILAI ANGKA (Bold)
             if (examGrade) {
@@ -385,8 +385,8 @@ export default function RaportPage() {
             page.drawText(attendanceStats.Izin.toString(), { x: izinX, y: izinY, size: 11, color: black });
 
             // 3. Tabel Nilai Kaiwa
-            const startY = height - 182; // Posisi Y baris pertama
-            const rowHeight = 16.3; // Jarak antar baris
+            const startY = height - 183; // Posisi Y baris pertama (diukur dari template PNG)
+            const rowHeight = 15.9; // Jarak antar baris (14.41pt baris + 1.48pt border = 15.89pt)
 
             // Kolom 1: Tanggal
             const xTanggal = 32.5;
