@@ -5,6 +5,8 @@ const nextConfig: NextConfig = {
     generateBuildId: async () => {
         return `build-${Date.now()}-${randomBytes(4).toString('hex')}`;
     },
+    // Force webpack bundler - Turbopack causes PostCSS panic on some hosting environments
+    bundlePagesRouterDependencies: true,
     images: {
         remotePatterns: [
             {
