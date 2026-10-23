@@ -341,46 +341,45 @@ export default function DashboardPage() {
                     )}
 
                     {/* Payment Progress - Siswa */}
-                    {stats?.payment_progress && (
+                    {stats?.payment_progress && Object.keys(stats.payment_progress).length > 0 && (
                         <div className="bg-white dark:bg-[#151a23]/90 dark:backdrop-blur-xl border border-gray-100 dark:border-gray-700/50 rounded-2xl p-6 shadow-sm mt-8">
                             <h3 className="text-lg font-bold text-gray-900 dark:text-white mb-6 flex items-center">
                                 <CreditCard className="w-5 h-5 mr-2 text-emerald-600" />
                                 Progress Pembayaran Saya
                             </h3>
-                            <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                                {[1, 2, 3].map((stage) => {
-                                    const data = stats.payment_progress[stage];
-                                    if (!data) return null;
-                                    return (
-                                        <div key={stage} className={`border rounded-xl p-5 ${data.is_complete ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/50 dark:bg-emerald-900/10' : 'border-gray-100 dark:border-gray-700/50'}`}>
-                                            <div className="flex justify-between items-center mb-4">
-                                                <h4 className="font-bold text-gray-900 dark:text-white">Tahap {stage}</h4>
-                                                {data.is_complete ? (
-                                                    <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-semibold">Lunas</span>
-                                                ) : (
-                                                    <span className="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-semibold">Belum Lunas</span>
-                                                )}
-                                            </div>
-                                            <div className="space-y-3">
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-500 dark:text-gray-400">Dibayar:</span>
-                                                    <span className="font-medium text-gray-900 dark:text-white">Rp {data.paid.toLocaleString('id-ID')}</span>
-                                                </div>
-                                                <div className="flex justify-between text-sm">
-                                                    <span className="text-gray-500 dark:text-gray-400">Kekurangan:</span>
-                                                    <span className={`font-medium ${data.remaining > 0 ? 'text-red-600' : 'text-emerald-600'}`}>Rp {data.remaining.toLocaleString('id-ID')}</span>
-                                                </div>
-                                                <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2.5 mt-2">
-                                                    <div className={`h-2.5 rounded-full transition-all duration-1000 ${data.is_complete ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${data.percentage}%` }}></div>
-                                                </div>
-                                                <p className="text-xs text-right text-gray-500 dark:text-gray-400">{data.percentage}%</p>
-                                            </div>
+                            <div className={`grid grid-cols-1 gap-4 ${Object.keys(stats.payment_progress).length <= 3 ? 'md:grid-cols-3' : Object.keys(stats.payment_progress).length <= 4 ? 'md:grid-cols-2 lg:grid-cols-4' : 'md:grid-cols-2 lg:grid-cols-3'}`}>
+                                {Object.entries(stats.payment_progress).map(([stageKey, stageData]: [string, any]) => (
+                                    <div key={stageKey} className={`border rounded-xl p-4 ${stageData.is_complete ? 'border-emerald-200 bg-emerald-50/50 dark:border-emerald-900/50 dark:bg-emerald-900/10' : 'border-gray-100 dark:border-gray-700/50'}`}>
+                                        <div className="flex justify-between items-start mb-3 gap-2">
+                                            <h4 className="font-bold text-gray-900 dark:text-white text-sm leading-tight">
+                                                {stageData.name || `Tahap ${stageKey}`}
+                                            </h4>
+                                            {stageData.is_complete ? (
+                                                <span className="bg-emerald-100 text-emerald-700 text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap flex-shrink-0">Lunas</span>
+                                            ) : (
+                                                <span className="bg-amber-100 text-amber-700 text-xs px-2 py-1 rounded-full font-semibold whitespace-nowrap flex-shrink-0">Belum Lunas</span>
+                                            )}
                                         </div>
-                                    );
-                                })}
+                                        <div className="space-y-2">
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500 dark:text-gray-400">Dibayar:</span>
+                                                <span className="font-medium text-gray-900 dark:text-white">Rp {stageData.paid.toLocaleString('id-ID')}</span>
+                                            </div>
+                                            <div className="flex justify-between text-sm">
+                                                <span className="text-gray-500 dark:text-gray-400">Kekurangan:</span>
+                                                <span className={`font-medium ${stageData.remaining > 0 ? 'text-red-600' : 'text-emerald-600'}`}>Rp {stageData.remaining.toLocaleString('id-ID')}</span>
+                                            </div>
+                                            <div className="w-full bg-gray-200 dark:bg-gray-700 rounded-full h-2 mt-2">
+                                                <div className={`h-2 rounded-full transition-all duration-1000 ${stageData.is_complete ? 'bg-emerald-500' : 'bg-amber-500'}`} style={{ width: `${stageData.percentage}%` }}></div>
+                                            </div>
+                                            <p className="text-xs text-right text-gray-500 dark:text-gray-400">{stageData.percentage}%</p>
+                                        </div>
+                                    </div>
+                                ))}
                             </div>
                         </div>
                     )}
+
                 </div>
             )}
 

@@ -17,8 +17,6 @@ use Illuminate\Support\Facades\DB;
 
 class DashboardController extends Controller
 {
-    /** Target pembayaran per tahap (dalam rupiah). */
-    private const PAYMENT_TARGETS = [1 => 500000, 2 => 3500000, 3 => 3000000];
 
     public function index(Request $request)
     {
@@ -171,20 +169,40 @@ class DashboardController extends Controller
                     ->take(8)
                     ->get();
 
-                // Payment progress for this student
-                $paymentTargets = self::PAYMENT_TARGETS;
+                // Payment progress for this student - dynamic stages from training program
                 $payments = Payment::where('student_id', $student->id)->get();
-
                 $paymentProgress = [];
-                foreach ($paymentTargets as $stage => $target) {
-                    $paid = $payments->where('stage', $stage)->sum('amount');
-                    $paymentProgress[$stage] = [
-                        'target'      => $target,
-                        'paid'        => $paid,
-                        'remaining'   => max(0, $target - $paid),
-                        'percentage'  => $target > 0 ? min(100, round(($paid / $target) * 100)) : 0,
-                        'is_complete' => $paid >= $target,
-                    ];
+
+                if ($student->trainingProgram && !empty($student->trainingProgram->stages)) {
+                    $index = 1;
+                    foreach ($student->trainingProgram->stages as $stage) {
+                        $target = (float) $stage['amount'];
+                        $paid   = (float) $payments->where('stage', $index)->sum('amount');
+                        $paymentProgress[$index] = [
+                            'name'        => $stage['name'],
+                            'target'      => $target,
+                            'paid'        => $paid,
+                            'remaining'   => max(0, $target - $paid),
+                            'percentage'  => $target > 0 ? min(100, round(($paid / $target) * 100)) : 0,
+                            'is_complete' => $paid >= $target,
+                        ];
+                        $index++;
+                    }
+                } else {
+                    // Fallback for students without training program (old 3-stage system)
+                    $fallbackTargets = [1 => 500000, 2 => 3500000, 3 => 3000000];
+                    $fallbackNames   = [1 => 'Pendaftaran', 2 => 'Biaya Pendidikan Tahap 1', 3 => 'Biaya Pendidikan Tahap 2'];
+                    foreach ($fallbackTargets as $stage => $target) {
+                        $paid = (float) $payments->where('stage', $stage)->sum('amount');
+                        $paymentProgress[$stage] = [
+                            'name'        => $fallbackNames[$stage],
+                            'target'      => $target,
+                            'paid'        => $paid,
+                            'remaining'   => max(0, $target - $paid),
+                            'percentage'  => $target > 0 ? min(100, round(($paid / $target) * 100)) : 0,
+                            'is_complete' => $paid >= $target,
+                        ];
+                    }
                 }
                 $data['payment_progress'] = $paymentProgress;
             }
