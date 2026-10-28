@@ -30,6 +30,19 @@ function getRomanMonth() {
     return romanMonths[new Date().getMonth()];
 }
 
+// Parse invoice number: deteksi apakah bagian pertama adalah angka (format baru)
+function parseInvoiceNumber(invoiceNo: string): { seq: string, suffix: string } {
+    if (!invoiceNo) return { seq: '', suffix: '' };
+    const dashIdx = invoiceNo.indexOf('-');
+    if (dashIdx !== -1) {
+        const firstPart = invoiceNo.substring(0, dashIdx);
+        if (/^\d+$/.test(firstPart)) {
+            return { seq: firstPart, suffix: invoiceNo.substring(dashIdx + 1) };
+        }
+    }
+    return { seq: '', suffix: invoiceNo };
+}
+
 function terbilang(angka: number): string {
     const huruf = ["", "satu", "dua", "tiga", "empat", "lima", "enam", "tujuh", "delapan", "sembilan", "sepuluh", "sebelas"];
     let hasil = "";
@@ -130,12 +143,24 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
         payment_type: '',
         tax: '',
     });
+
+    // State terpisah untuk dua bagian nomor invoice: [invSeq]-[invSuffix]
+    const [invSeq, setInvSeq] = useState('');      // contoh: "001"
+    const [invSuffix, setInvSuffix] = useState(''); // contoh: "INV-X-2026"
+
+    // Sync kombinasi ke invoiceForm.invoice_number agar semua kode lain tetap berjalan
+    useEffect(() => {
+        const combined = invSeq.trim() ? `${invSeq.trim()}-${invSuffix}` : invSuffix;
+        setInvoiceForm(prev => ({ ...prev, invoice_number: combined }));
+    }, [invSeq, invSuffix]);
     
     useEffect(() => {
+        const defaultSuffix = `INV-${getRomanMonth()}-${new Date().getFullYear()}`;
+        setInvSeq('');
+        setInvSuffix(defaultSuffix);
         setInvoiceForm(prev => ({
             ...prev,
             due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
-            invoice_number: `INV-${new Date().getFullYear()}-${getRomanMonth()}-`
         }));
     }, []);
 
@@ -311,8 +336,11 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
 
     const handleOpenInvoiceDialog = () => {
         setEditingInvoice(null);
+        const defaultSuffix = `INV-${getRomanMonth()}-${new Date().getFullYear()}`;
+        setInvSeq('');
+        setInvSuffix(defaultSuffix);
         setInvoiceForm({
-            invoice_number: `INV-${new Date().getFullYear()}-${getRomanMonth()}-`,
+            invoice_number: defaultSuffix,
             due_date: new Date(Date.now() + 7 * 24 * 60 * 60 * 1000).toISOString().split('T')[0],
             order_date: new Date().toISOString().split('T')[0],
             payment_type: '',
@@ -324,6 +352,10 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
 
     const handleEditInvoice = (inv: any) => {
         setEditingInvoice(inv);
+        // Parse nomor invoice yang sudah ada
+        const parsed = parseInvoiceNumber(inv.invoice_number || '');
+        setInvSeq(parsed.seq);
+        setInvSuffix(parsed.suffix);
         setInvoiceForm({
             invoice_number: inv.invoice_number,
             due_date: new Date(inv.due_date).toISOString().split('T')[0],
@@ -963,14 +995,29 @@ export default function StudentPaymentTab({ studentId, studentInfo }: { studentI
                         <div className="flex flex-col gap-4 overflow-y-auto pr-2">
                             <div className="grid gap-2">
                                 <Label>Nomor Invoice</Label>
-                                <div className="flex items-center gap-2">
+                                <div className="flex items-center gap-1">
                                     <Input
-                                        value={invoiceForm.invoice_number}
-                                        onChange={(e) => setInvoiceForm({ ...invoiceForm, invoice_number: e.target.value })}
-                                        placeholder="INV-2026-VIII-102"
-                                        className="flex-1"
+                                        autoFocus
+                                        value={invSeq}
+                                        onChange={(e) => setInvSeq(e.target.value)}
+                                        placeholder="001"
+                                        className="w-20 text-center font-mono"
+                                        title="Nomor urut invoice"
+                                    />
+                                    <span className="text-gray-400 font-bold select-none">-</span>
+                                    <Input
+                                        value={invSuffix}
+                                        onChange={(e) => setInvSuffix(e.target.value)}
+                                        placeholder={`INV-${getRomanMonth()}-${new Date().getFullYear()}`}
+                                        className="flex-1 font-mono"
+                                        title="Kode invoice (bisa diedit)"
                                     />
                                 </div>
+                                {(invSeq || invSuffix) && (
+                                    <p className="text-xs text-gray-400">
+                                        Hasil: <span className="font-mono text-gray-600 dark:text-gray-300">{invoiceForm.invoice_number}</span>
+                                    </p>
+                                )}
                             </div>
 
                             <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
