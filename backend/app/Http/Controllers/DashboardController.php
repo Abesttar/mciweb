@@ -62,9 +62,17 @@ class DashboardController extends Controller
                 ->orderBy('student_roadmaps.updated_at', 'desc')
                 ->get();
 
-            // Payment summary for admin dashboard
-            $paymentTargets = self::PAYMENT_TARGETS;
-            $totalTarget = array_sum($paymentTargets);
+            // Payment summary for admin dashboard - dynamic dari training program tiap siswa
+            $fallbackPerStudent = 500000 + 3500000 + 3000000; // 7,000,000
+            $allStudentsForPayment = Student::with('trainingProgram')->get();
+            $totalTarget = 0;
+            foreach ($allStudentsForPayment as $s) {
+                if ($s->trainingProgram && !empty($s->trainingProgram->stages)) {
+                    $totalTarget += array_sum(array_column($s->trainingProgram->stages, 'amount'));
+                } else {
+                    $totalTarget += $fallbackPerStudent;
+                }
+            }
 
             $paymentStats = DB::table('payments')
                 ->select('stage', DB::raw('SUM(amount) as total_paid'))
@@ -72,30 +80,18 @@ class DashboardController extends Controller
                 ->pluck('total_paid', 'stage');
 
             $totalPaid = $paymentStats->sum();
-            $studentCount = Student::count();
+            $studentCount = $allStudentsForPayment->count();
 
             $data['payment_summary'] = [
                 'total_paid'    => (float) $totalPaid,
-                'total_target'  => $totalTarget * max($studentCount, 1),
+                'total_target'  => (float) $totalTarget,
                 'student_count' => $studentCount,
-                'percentage'    => $studentCount > 0
-                    ? min(100, round(($totalPaid / ($totalTarget * $studentCount)) * 100))
+                'percentage'    => $totalTarget > 0
+                    ? min(100, round(($totalPaid / $totalTarget) * 100))
                     : 0,
-                'by_stage' => [
-                    1 => [
-                        'target' => $paymentTargets[1] * $studentCount,
-                        'paid'   => (float)($paymentStats[1] ?? 0),
-                    ],
-                    2 => [
-                        'target' => $paymentTargets[2] * $studentCount,
-                        'paid'   => (float)($paymentStats[2] ?? 0),
-                    ],
-                    3 => [
-                        'target' => $paymentTargets[3] * $studentCount,
-                        'paid'   => (float)($paymentStats[3] ?? 0),
-                    ],
-                ],
+                'by_stage' => [],
             ];
+
         } else if ($isSensei) {
             // Teacher specific dashboard
             $teacher = $user->teacher;
