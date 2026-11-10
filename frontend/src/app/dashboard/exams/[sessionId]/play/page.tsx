@@ -101,6 +101,47 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
     const isEnteringFullscreenRef = useRef(false); // ignore blur during fullscreen transition
     const pollIntervalRef = useRef<NodeJS.Timeout | null>(null);
 
+    const requestFullscreenSafely = useCallback(async () => {
+        if (typeof document === 'undefined') return;
+
+        const el = document.documentElement as any;
+        const isFullscreen = !!(document.fullscreenElement ||
+            (document as any).webkitFullscreenElement ||
+            (document as any).mozFullScreenElement ||
+            (document as any).msFullscreenElement);
+
+        if (isFullscreen) return;
+
+        try {
+            if (el.requestFullscreen) await el.requestFullscreen();
+            else if (el.webkitRequestFullscreen) await el.webkitRequestFullscreen();
+            else if (el.mozRequestFullScreen) await el.mozRequestFullScreen();
+            else if (el.msRequestFullscreen) await el.msRequestFullscreen();
+        } catch {
+            // ignore fullscreen permission errors; the user can still proceed without breaking the exam flow
+        }
+    }, []);
+
+    const exitFullscreenSafely = useCallback(async () => {
+        if (typeof document === 'undefined') return;
+
+        try {
+            if (document.fullscreenElement) {
+                await document.exitFullscreen();
+                return;
+            }
+        } catch {
+            // ignore if browser refuses to exit fullscreen
+        }
+
+        const el = document as any;
+        try {
+            if (el.webkitFullscreenElement) await el.webkitCancelFullScreen?.();
+        } catch {
+            // ignore
+        }
+    }, []);
+
     // ── Fetch session ─────────────────────────────────────────────────────────
     const fetchSession = useCallback(async () => {
         setLoading(true);
@@ -213,70 +254,76 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
 
             if (data.auto_finished) {
                 setAutoFinished(true);
-                // Exit fullscreen before redirecting
-                try { await document.exitFullscreen(); } catch { }
+                await exitFullscreenSafely();
                 setTimeout(() => router.push('/dashboard/exams'), 4000);
             }
-            
-            // Release lock on violation state
+
             setTimeout(() => { isViolatingRef.current = false; }, 3000);
 
         } catch (error: any) {
             const errorMessage = error.response?.data?.message || '';
-            
-            // If the server says the exam is already finished, don't show an error loop! Just redirect them out.
+
             if (errorMessage.toLowerCase().includes('selesai') || error.response?.status === 403 || error.response?.status === 400) {
                 setAutoFinished(true);
-                examStartedRef.current = false; // Prevent unmount hook from firing
+                examStartedRef.current = false;
                 isViolatingRef.current = false;
-                try { await document.exitFullscreen(); } catch { }
+                await exitFullscreenSafely();
                 router.push('/dashboard/exams');
                 return;
             }
 
-            // Use toast instead of browser alert for better UI
             toast.error(errorMessage || 'Gagal terhubung ke server');
-
-            // API failed: revert local lock so they don't get stuck without teacher seeing it
             setIsLocked(false);
-            
-            // Silently retry after 5s to sync with server
-            setTimeout(() => { 
-                isViolatingRef.current = false; 
-                if (examStartedRef.current) handleViolation(); // Retry
+
+            setTimeout(() => {
+                isViolatingRef.current = false;
+                if (examStartedRef.current) {
+                    void handleViolation();
+                }
             }, 5000);
         }
-    }, [session, sessionId, router]);
+    }, [session, sessionId, router, exitFullscreenSafely]);
 
 
     // ── Anti-cheat listeners ──────────────────────────────────────────────────
     useEffect(() => {
         const handleViolationTrigger = () => {
             if (!examStartedRef.current || isLocked || isEnteringFullscreenRef.current) return;
-            handleViolation();
+            if (!showFullscreenPrompt && session && session.status === 'in_progress') {
+                if (!document.fullscreenElement && !showFullscreenPrompt) {
+                    void requestFullscreenSafely();
+                    return;
+                }
+                void handleViolation();
+            }
         };
 
         const handleVisibility = () => {
-            if (document.hidden && !isEnteringFullscreenRef.current) handleViolationTrigger();
-        };
-        const handleFullscreenChange = () => {
-            const isFullscreen = document.fullscreenElement || 
-                                 (document as any).webkitFullscreenElement || 
-                                 (document as any).mozFullScreenElement || 
-                                 (document as any).msFullscreenElement;
-            if (!isFullscreen) handleViolationTrigger();
-        };
-        const handleBeforeUnload = (e: BeforeUnloadEvent) => {
-            if (examStartedRef.current && !isLocked && timeLeft > 0) {
-                // Try to send violation synchronously before unload
-                navigator.sendBeacon(`${process.env.NEXT_PUBLIC_BACKEND_URL || 'http://localhost:8000'}/api/exam-sessions/${sessionId}/violation`);
+            if (document.hidden && !isEnteringFullscreenRef.current && !showFullscreenPrompt) {
                 handleViolationTrigger();
+            }
+        };
+
+        const handleFullscreenChange = () => {
+            const isFullscreen = document.fullscreenElement ||
+                (document as any).webkitFullscreenElement ||
+                (document as any).mozFullScreenElement ||
+                (document as any).msFullscreenElement;
+
+            if (!isFullscreen && !showFullscreenPrompt && examStartedRef.current && !isLocked) {
+                void requestFullscreenSafely();
+            }
+        };
+
+        const handleBeforeUnload = () => {
+            if (examStartedRef.current && !isLocked && timeLeft > 0) {
+                void requestFullscreenSafely();
             }
         };
 
         document.addEventListener('visibilitychange', handleVisibility);
         window.addEventListener('blur', handleViolationTrigger);
-        window.addEventListener('pagehide', handleViolationTrigger);
+        window.addEventListener('pagehide', handleBeforeUnload);
         document.addEventListener('fullscreenchange', handleFullscreenChange);
         document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('mozfullscreenchange', handleFullscreenChange);
@@ -284,18 +331,16 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         window.addEventListener('beforeunload', handleBeforeUnload);
 
         return () => {
-            // Only remove listeners — do NOT trigger violation here.
-            // Cleanup runs on every re-render when deps change, not just unmount!
             document.removeEventListener('visibilitychange', handleVisibility);
             window.removeEventListener('blur', handleViolationTrigger);
-            window.removeEventListener('pagehide', handleViolationTrigger);
+            window.removeEventListener('pagehide', handleBeforeUnload);
             document.removeEventListener('fullscreenchange', handleFullscreenChange);
             document.removeEventListener('webkitfullscreenchange', handleFullscreenChange);
             document.removeEventListener('mozfullscreenchange', handleFullscreenChange);
             document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, [handleViolation, isLocked, autoFinished, timeLeft]);
+    }, [handleViolation, isLocked, autoFinished, timeLeft, session, showFullscreenPrompt, requestFullscreenSafely]);
 
     // ── On TRUE unmount (Next.js navigation) — trigger violation ───────────────
     const handleViolationRef = useRef(handleViolation);
@@ -312,25 +357,10 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
 
     // ── Enter fullscreen & start exam ─────────────────────────────────────────
     const handleEnterFullscreen = async () => {
-        // Set flag: ignore blur/fullscreenchange events during this transition
         isEnteringFullscreenRef.current = true;
-        try {
-            const el = document.documentElement as any;
-            if (el.requestFullscreen) {
-                await el.requestFullscreen();
-            } else if (el.webkitRequestFullscreen) {
-                await el.webkitRequestFullscreen();
-            } else if (el.mozRequestFullScreen) {
-                await el.mozRequestFullScreen();
-            } else if (el.msRequestFullscreen) {
-                await el.msRequestFullscreen();
-            }
-        } catch {
-            // Mobile fallback: fullscreen not supported but continue anyway
-        }
+        await requestFullscreenSafely();
         examStartedRef.current = true;
         setShowFullscreenPrompt(false);
-        // Give browser 1.5s to settle fullscreen transition before enabling anti-cheat
         setTimeout(() => {
             isEnteringFullscreenRef.current = false;
         }, 1500);
@@ -363,7 +393,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         try {
             examStartedRef.current = false; // Disable anti-cheat unmount trigger
             await axios.post(`/api/exam-sessions/${sessionId}/finish`);
-            try { await document.exitFullscreen(); } catch { }
+            await exitFullscreenSafely();
             router.push('/dashboard/exams');
         } catch { }
     };
@@ -373,7 +403,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         try {
             examStartedRef.current = false; // Disable anti-cheat unmount trigger
             await axios.post(`/api/exam-sessions/${sessionId}/finish`);
-            try { await document.exitFullscreen(); } catch { }
+            await exitFullscreenSafely();
             router.push('/dashboard/exams');
         } catch {
             setSubmitting(false);
