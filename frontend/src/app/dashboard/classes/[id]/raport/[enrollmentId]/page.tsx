@@ -155,50 +155,51 @@ export default function RaportPage() {
             // 3. Tabel Nilai
             const startY = height - 173; // Posisi Y baris pertama
             const rowHeight = 16; // Jarak antar baris
+            const maxGradeRows = 20;
 
             // Kolom 1: Tanggal
             const xTanggal = 32;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(formatDate(allEntries[i].date), xTanggal, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(formatDate(allEntries[i].date), xTanggal, i, startY, rowHeight);
 
             // Kolom 2: Bab
             const xBab = 116.5;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].chapter, xBab, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].chapter, xBab, i, startY, rowHeight);
 
             // Kolom 3: Deskripsi Nilai / Keterangan
             const xKet = 159;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].remarks || 'Nilai harian', xKet, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].remarks || 'Nilai harian', xKet, i, startY, rowHeight);
 
             // Kolom 4: Kosa Kata / Kotoba
             const xKotoba = 294;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kotoba ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKotoba, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kotoba ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKotoba, i, startY, rowHeight);
 
             // Kolom 5: Huruf Kanji
             const xKanji = 365;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kanji ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKanji, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kanji ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKanji, i, startY, rowHeight);
 
             // Kolom 6: Tata Bahasa / Bunpou
             const xBunpou = 444;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.bunpou ?? (allEntries[i].type === 'weekly' ? '-' : ''), xBunpou, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.bunpou ?? (allEntries[i].type === 'weekly' ? '-' : ''), xBunpou, i, startY, rowHeight);
 
             // Kolom 7: Mendengarkan / Choukai
             const xChoukai = 535;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.choukai ?? (allEntries[i].type === 'weekly' ? '-' : ''), xChoukai, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.choukai ?? (allEntries[i].type === 'weekly' ? '-' : ''), xChoukai, i, startY, rowHeight);
 
             // Kolom 8: Percakapan / Kaiwa
             const xKaiwa = 623;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kaiwa ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKaiwa, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.kaiwa ?? (allEntries[i].type === 'weekly' ? '-' : ''), xKaiwa, i, startY, rowHeight);
 
             // Kolom 9: Sikap
             const xSikap = 696;
-            for (let i = 0; i < 17; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.sikap ?? (allEntries[i].type === 'weekly' ? '-' : ''), xSikap, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i]) tulisKolom(allEntries[i].components?.sikap ?? (allEntries[i].type === 'weekly' ? '-' : ''), xSikap, i, startY, rowHeight);
 
             // Kolom 10: Total Score (Angka)
             const xTotal = 755;
-            for (let i = 0; i < 17; i++) if (allEntries[i] && allEntries[i].score) tulisKolom(allEntries[i].score, xTotal, i, startY, rowHeight);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i] && allEntries[i].score) tulisKolom(allEntries[i].score, xTotal, i, startY, rowHeight);
 
             // Kolom 11: Grade Letter (Huruf Bobot Merah)
             const xGradeLetter = 811;
-            for (let i = 0; i < 17; i++) if (allEntries[i] && allEntries[i].grade_letter) tulisKolom(allEntries[i].grade_letter, xGradeLetter, i, startY, rowHeight, letterColor);
+            for (let i = 0; i < maxGradeRows; i++) if (allEntries[i] && allEntries[i].grade_letter) tulisKolom(allEntries[i].grade_letter, xGradeLetter, i, startY, rowHeight, letterColor);
 
             // 4a. Ujian Tingkatan - NILAI ANGKA (Bold)
             if (examGrade) {
