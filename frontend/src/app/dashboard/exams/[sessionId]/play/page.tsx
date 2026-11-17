@@ -290,10 +290,6 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
         const handleViolationTrigger = () => {
             if (!examStartedRef.current || isLocked || isEnteringFullscreenRef.current) return;
             if (!showFullscreenPrompt && session && session.status === 'in_progress') {
-                if (!document.fullscreenElement && !showFullscreenPrompt) {
-                    void requestFullscreenSafely();
-                    return;
-                }
                 void handleViolation();
             }
         };
@@ -310,8 +306,14 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
                 (document as any).mozFullScreenElement ||
                 (document as any).msFullscreenElement;
 
-            if (!isFullscreen && !showFullscreenPrompt && examStartedRef.current && !isLocked) {
-                void requestFullscreenSafely();
+            if (
+                !isFullscreen &&
+                !showFullscreenPrompt &&
+                examStartedRef.current &&
+                !isLocked &&
+                !isEnteringFullscreenRef.current
+            ) {
+                void handleViolation();
             }
         };
 
@@ -340,7 +342,7 @@ export default function ExamPlayPage({ params }: { params: Promise<{ sessionId: 
             document.removeEventListener('MSFullscreenChange', handleFullscreenChange);
             window.removeEventListener('beforeunload', handleBeforeUnload);
         };
-    }, [handleViolation, isLocked, autoFinished, timeLeft, session, showFullscreenPrompt, requestFullscreenSafely]);
+    }, [handleViolation, isLocked, autoFinished, timeLeft, session, showFullscreenPrompt]);
 
     // ── On TRUE unmount (Next.js navigation) — trigger violation ───────────────
     const handleViolationRef = useRef(handleViolation);
